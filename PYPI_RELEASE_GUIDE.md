@@ -39,7 +39,7 @@ twine upload dist/*
 ### 3️⃣ 验证发布
 ```bash
 # 从PyPI安装验证
-pip install myconfig
+pip install myconfig-osx
 
 # 测试安装
 myconfig --version
@@ -62,7 +62,7 @@ myconfig --help
 
 ```bash
 # Install from PyPI
-pip install myconfig
+pip install myconfig-osx
 
 # Verify installation
 myconfig --version
@@ -89,15 +89,15 @@ git push origin v1.0.0
 ## 🎯 PyPI项目信息
 
 ### 项目页面
-- **PyPI URL**: https://pypi.org/project/myconfig/
-- **项目名称**: myconfig
+- **PyPI URL**: https://pypi.org/project/myconfig-osx/
+- **项目名称**: myconfig-osx
 - **版本**: 1.0.0
 - **许可证**: GPL-2.0
 
 ### 安装命令
 ```bash
 # 基本安装
-pip install myconfig
+pip install myconfig-osx
 
 # 升级安装
 pip install --upgrade myconfig
@@ -115,7 +115,7 @@ pip uninstall myconfig
 ## 📊 预期效果
 
 ### 安装便利性
-- ✅ 用户可以直接 `pip install myconfig`
+- ✅ 用户可以直接 `pip install myconfig-osx`
 - ✅ 不需要Git clone和本地安装
 - ✅ 自动处理依赖关系
 - ✅ 支持虚拟环境

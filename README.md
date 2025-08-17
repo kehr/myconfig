@@ -1,7 +1,7 @@
 # MyConfig
 
-[![PyPI version](https://badge.fury.io/py/myconfig.svg)](https://badge.fury.io/py/myconfig)
-[![Downloads](https://pepy.tech/badge/myconfig)](https://pepy.tech/project/myconfig)
+[![PyPI version](https://badge.fury.io/py/myconfig-osx.svg)](https://badge.fury.io/py/myconfig-osx)
+[![Downloads](https://pepy.tech/badge/myconfig-osx)](https://pepy.tech/project/myconfig-osx)
 [![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![macOS](https://img.shields.io/badge/platform-macOS-lightgrey.svg)](https://www.apple.com/macos/)

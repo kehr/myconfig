@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "myconfig"
+name = "myconfig-osx"
 version = "1.0.0"
 description = "macOS configuration backup and restore tool"
 readme = "README.md"

@@ -50,7 +50,7 @@ The simplest and fastest way to install MyConfig:
 
 ```bash
 # Install from PyPI
-pip install myconfig
+pip install myconfig-osx
 
 # Verify installation
 myconfig --version
@@ -60,7 +60,7 @@ myconfig --help
 **Advantages:**
 - ✅ One-command installation
 - ✅ Automatic dependency management  
-- ✅ Easy updates with `pip install --upgrade myconfig`
+- ✅ Easy updates with `pip install --upgrade myconfig-osx`
 - ✅ Works in virtual environments
 - ✅ Official stable releases only
 

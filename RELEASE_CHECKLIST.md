@@ -55,7 +55,7 @@ git push origin v1.0.0
 ### 4️⃣ 发布验证
 ```bash
 # 从 PyPI 安装测试
-pip install myconfig
+pip install myconfig-osx
 
 # 功能验证
 myconfig --version  # 应该显示 1.0.0
@@ -66,7 +66,7 @@ myconfig doctor     # 应该运行健康检查
 ## 📊 发布信息
 
 ### 包详情
-- **包名**: myconfig
+- **包名**: myconfig-osx
 - **版本**: 1.0.0
 - **平台**: macOS
 - **Python**: 3.8+
@@ -74,8 +74,8 @@ myconfig doctor     # 应该运行健康检查
 - **大小**: ~38KB (wheel), ~55KB (source)
 
 ### PyPI 链接
-- **主页**: https://pypi.org/project/myconfig/
-- **安装命令**: `pip install myconfig`
+- **主页**: https://pypi.org/project/myconfig-osx/
+- **安装命令**: `pip install myconfig-osx`
 
 ### 功能亮点
 - 🔄 完整的 macOS 系统配置备份
