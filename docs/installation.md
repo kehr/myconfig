@@ -1,364 +1,509 @@
-# 安装指南
+# Installation Guide
 
-本文档详细说明了 MyConfig 的各种安装方式和使用方法。
+This document provides detailed instructions for installing and setting up MyConfig.
 
-## 📋 目录
+## 📋 Table of Contents
 
-- [系统要求](#系统要求)
-- [安装方式](#安装方式)
-- [验证安装](#验证安装)
-- [卸载](#卸载)
-- [开发安装](#开发安装)
-- [故障排除](#故障排除)
+- [System Requirements](#system-requirements)
+- [Installation Methods](#installation-methods)
+- [Verification](#verification)
+- [Uninstallation](#uninstallation)
+- [Development Installation](#development-installation)
+- [Troubleshooting](#troubleshooting)
 
-## 系统要求
+## System Requirements
 
-### 必需
-- **操作系统**: macOS 10.14 或更高版本
-- **Python**: 3.8 或更高版本
-- **pip**: Python 包管理器
+### Required
 
-### 推荐
-- **Homebrew**: macOS 包管理器
-- **Git**: 版本控制系统
-- **VS Code**: 代码编辑器 (如需要 VS Code 功能)
+- **Operating System**: macOS 10.14 or later
+- **Python**: 3.8 or later
+- **pip**: Python package manager
 
-### 检查系统要求
+### Optional
+
+- **Homebrew**: For package management features
+- **Git**: For version control integration
+- **VS Code**: For extension management features
+- **mas**: For Mac App Store application management
+
+### Recommended Tools
 
 ```bash
-# 检查 macOS 版本
-sw_vers
+# Install Xcode Command Line Tools
+xcode-select --install
 
-# 检查 Python 版本
-python3 --version
+# Install Homebrew (if not already installed)
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-# 检查 pip
-pip3 --version
+# Install Python via Homebrew (optional, but recommended)
+brew install python3
 
-# 检查 Homebrew (可选)
-brew --version
-
-# 检查 Git (可选)
-git --version
+# Install mas for Mac App Store management
+brew install mas
 ```
 
-## 安装方式
+## Installation Methods
 
-### 方式一：自动安装脚本 (推荐)
+### Method 1: Interactive Installation (Recommended)
 
-**交互式安装**
+The easiest way to install MyConfig is using the interactive installer:
+
 ```bash
+# Clone the repository
 git clone <repository-url>
 cd myconfig
+
+# Run interactive installer
 ./install.sh
 ```
 
-**用户安装 (推荐)**
-```bash
-./install.sh --user
-```
-- 安装到 `~/.local/bin/myconfig`
-- 不需要管理员权限
-- 只对当前用户可用
+The installer will guide you through the process and offer these options:
 
-**系统安装**
-```bash
-./install.sh --system
-```
-- 安装到系统路径 (如 `/usr/local/bin/myconfig`)
-- 需要管理员权限 (sudo)
-- 对所有用户可用
+1. **User Installation** (Recommended) - Installs to current user
+2. **System Installation** - Installs system-wide (requires sudo)
+3. **Development Installation** - Editable installation for development
+4. **Cancel** - Exit without installing
 
-**开发模式安装**
-```bash
-./install.sh --dev
-```
-- 可编辑安装，修改代码立即生效
-- 包含开发工具和依赖
+### Method 2: Direct Installation Commands
 
-### 方式二：使用 Makefile
+#### User Installation (Recommended)
 
 ```bash
-# 用户安装
-make install-user
-
-# 系统安装
-make install-system
-
-# 开发安装
-make install-dev
-
-# 查看所有选项
-make help
-```
-
-### 方式三：使用 pip 直接安装
-
-```bash
-# 用户安装
-pip3 install --user -e .
-
-# 系统安装
-sudo pip3 install -e .
-
-# 开发安装 (包含开发依赖)
-pip3 install --user -e ".[dev]"
-```
-
-### 方式四：直接运行 (无需安装)
-
-```bash
+# Clone and navigate
 git clone <repository-url>
 cd myconfig
-chmod +x bin/myconfig
-./bin/myconfig doctor
-```
 
-## 验证安装
+# Install for current user
+pip3 install --user .
 
-### 检查命令可用性
-
-```bash
-# 检查命令是否可用
-which myconfig
-
-# 查看版本
-myconfig --version
-
-# 运行系统检查
-myconfig doctor
-```
-
-### 预期输出
-
-```
-$ myconfig --version
-myconfig 3.0.0
-
-$ myconfig doctor
-系统体检
-────────────────────────────────────────────────────────────
-✔ Xcode CLT 已安装
-✔ Homebrew 4.x.x
-✔ code 命令可用
-✔ App Store 登录：your@email.com
-✔ defaults 域清单检查通过
-────────────────────────────────────────────────────────────
-✔ 体检完成
-```
-
-## PATH 配置
-
-### 用户安装的 PATH 设置
-
-如果用户安装后命令不可用，需要添加 `~/.local/bin` 到 PATH：
-
-**对于 Zsh (默认)**
-```bash
+# Add to PATH (if needed)
 echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc
 source ~/.zshrc
 ```
 
-**对于 Bash**
+#### System Installation
+
 ```bash
-echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
-source ~/.bashrc
+# Clone and navigate
+git clone <repository-url>
+cd myconfig
+
+# Install system-wide (requires admin privileges)
+sudo pip3 install .
 ```
 
-**验证 PATH**
+#### Using Makefile
+
 ```bash
-echo $PATH | grep -o "$HOME/.local/bin"
+# User installation
+make install-user
+
+# System installation
+make install-system
+
+# Development installation
+make install-dev
 ```
 
-## 卸载
+### Method 3: Direct Usage (No Installation)
 
-### 使用卸载脚本
+You can use MyConfig without installing it:
 
 ```bash
-# 交互式卸载
+# Clone the repository
+git clone <repository-url>
+cd myconfig
+
+# Set execution permissions
+chmod +x bin/myconfig
+
+# Use directly
+./bin/myconfig --help
+./bin/myconfig doctor
+./bin/myconfig export my-backup
+```
+
+### Method 4: Package Installation (Future)
+
+When available through package managers:
+
+```bash
+# Via Homebrew (future)
+brew install myconfig
+
+# Via PyPI (future)
+pip3 install myconfig
+```
+
+## Verification
+
+### Basic Verification
+
+After installation, verify that MyConfig is working correctly:
+
+```bash
+# Check if command is available
+which myconfig
+
+# Check version
+myconfig --version
+
+# Run system check
+myconfig doctor
+
+# Test basic functionality
+myconfig --help
+```
+
+### Comprehensive Testing
+
+```bash
+# Test export preview (safe, doesn't create files)
+myconfig --preview export
+
+# Test with dry run
+myconfig --dry-run export test-backup
+
+# Create actual test backup
+myconfig export test-backup
+
+# Verify backup contents
+ls -la test-backup/
+cat test-backup/README.md
+
+# Clean up test
+rm -rf test-backup
+```
+
+### Expected Output
+
+**Successful Installation:**
+```bash
+$ myconfig --version
+myconfig 2.0
+
+$ myconfig doctor
+▸ System health check
+▸ ────────────────────────────────────────────────────────────
+▸ ✔ Xcode CLT installed
+▸ ✔ Homebrew 4.6.3
+▸ ✔ code command available
+⚠ mas not installed
+▸ ────────────────────────────────────────────────────────────
+▸ ✔ Health check completed
+```
+
+## Uninstallation
+
+### Using Uninstall Script
+
+```bash
+# Navigate to MyConfig directory
+cd myconfig
+
+# Run uninstall script
 ./uninstall.sh
 
-# 强制卸载
-./uninstall.sh --force
-
-# 仅卸载用户安装
-./uninstall.sh --user
-
-# 仅卸载系统安装
-./uninstall.sh --system
+# Follow the prompts for complete removal
 ```
 
-### 使用 pip 卸载
+### Manual Uninstallation
+
+#### User Installation
 
 ```bash
-# 标准卸载
+# Uninstall package
 pip3 uninstall myconfig
 
-# 系统安装的卸载
-sudo pip3 uninstall myconfig
-```
-
-### 使用 Makefile 卸载
-
-```bash
-make uninstall
-```
-
-### 手动清理
-
-如果自动卸载不完整，可以手动删除：
-
-```bash
-# 用户安装路径
+# Remove user binary (if exists)
 rm -f ~/.local/bin/myconfig
-rm -rf ~/.local/lib/python*/site-packages/myconfig*
 
-# 系统安装路径
+# Clean up PATH (edit your shell config)
+vim ~/.zshrc  # Remove MyConfig PATH additions
+```
+
+#### System Installation
+
+```bash
+# Uninstall package (requires admin privileges)
+sudo pip3 uninstall myconfig
+
+# Remove system binary (if exists)
 sudo rm -f /usr/local/bin/myconfig
-sudo rm -rf /usr/local/lib/python*/site-packages/myconfig*
 ```
 
-## 开发安装
-
-### 开发环境设置
+### Complete Cleanup
 
 ```bash
-# 开发模式安装
-make install-dev
+# Remove configuration files (optional)
+rm -rf ~/.config/myconfig
 
-# 或者手动安装
-pip3 install --user -e ".[dev]"
+# Remove log files (optional)
+rm -rf ~/.local/share/myconfig/logs
+
+# Remove cached data (optional)
+rm -rf ~/.cache/myconfig
 ```
 
-### 开发工具
+## Development Installation
 
-开发安装会包含以下工具：
+For developers who want to modify MyConfig:
 
-- **pytest**: 测试框架
-- **black**: 代码格式化
-- **flake8**: 代码检查
-- **mypy**: 类型检查
-
-### 开发工作流
+### Setup Development Environment
 
 ```bash
-# 代码格式化
-make format
+# Clone the repository
+git clone <repository-url>
+cd myconfig
 
-# 代码检查
-make lint
+# Create virtual environment (recommended)
+python3 -m venv venv
+source venv/bin/activate
 
-# 运行测试
-make test
+# Install in editable mode
+pip3 install -e .
 
-# 完整检查
+# Install development dependencies
+pip3 install -e ".[dev]"
+
+# Or use the development installer
+./install.sh --dev
+```
+
+### Development Dependencies
+
+The development installation includes:
+
+- **pytest**: Testing framework
+- **black**: Code formatting
+- **flake8**: Code linting
+- **mypy**: Type checking
+- **pre-commit**: Git hooks
+
+### Development Workflow
+
+```bash
+# Activate virtual environment
+source venv/bin/activate
+
+# Run tests
+pytest
+
+# Format code
+black src/
+
+# Check code quality
+flake8 src/
+mypy src/
+
+# Install pre-commit hooks
+pre-commit install
+
+# Run all checks
 make check
-
-# 构建包
-make build
-
-# 清理
-make clean
 ```
 
-## 故障排除
+## Troubleshooting
 
-### 常见问题
+### Common Installation Issues
 
-**1. Python 版本过低**
-```
-错误: myconfig requires Python 3.8 or higher
-解决: brew install python
-```
-
-**2. 命令未找到**
-```
-错误: command not found: myconfig
-解决: 检查 PATH 设置，添加 ~/.local/bin 到 PATH
-```
-
-**3. 权限错误**
-```
-错误: Permission denied
-解决: 使用 --user 安装或检查文件权限
-```
-
-**4. 依赖冲突**
-```
-错误: Conflicting dependencies
-解决: 使用虚拟环境或升级 pip
-```
-
-### 诊断命令
+#### Issue: "Python command not found"
 
 ```bash
-# 检查安装状态
-./install.sh --help
+# Check Python installation
+python3 --version
 
-# 查看详细信息
-make info
+# Install Python via Homebrew
+brew install python3
 
-# 验证安装
-make verify
-
-# 检查系统环境
-myconfig doctor  # 或 ./bin/myconfig doctor
+# Or download from python.org
 ```
 
-### 重新安装
+#### Issue: "pip command not found"
 
 ```bash
-# 完全重新安装
-./uninstall.sh --force
-./install.sh --user
+# Install pip
+python3 -m ensurepip --upgrade
+
+# Or via Homebrew
+brew install python3  # includes pip3
 ```
 
-## 高级配置
-
-### 自定义安装路径
+#### Issue: "Permission denied"
 
 ```bash
-# 指定安装路径
-pip3 install --user --install-option="--prefix=/custom/path" -e .
+# For user installation
+pip3 install --user .
+
+# Or fix permissions
+sudo chown -R $(whoami) ~/.local
 ```
 
-### 虚拟环境安装
+#### Issue: "Command not found after installation"
 
 ```bash
-# 创建虚拟环境
-python3 -m venv myconfig-env
-source myconfig-env/bin/activate
+# Check if binary exists
+ls ~/.local/bin/myconfig
+ls /usr/local/bin/myconfig
 
-# 在虚拟环境中安装
-pip install -e .
+# Add to PATH
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc
+source ~/.zshrc
 
-# 使用
+# Or create symlink
+ln -s ~/.local/bin/myconfig /usr/local/bin/myconfig
+```
+
+#### Issue: "ModuleNotFoundError"
+
+```bash
+# Reinstall with dependencies
+pip3 install --force-reinstall .
+
+# Or install missing dependencies
+pip3 install -r requirements.txt
+```
+
+### Platform-Specific Issues
+
+#### macOS Big Sur / Monterey / Ventura
+
+```bash
+# If installation fails due to system restrictions
+pip3 install --user --break-system-packages .
+
+# Or use virtual environment
+python3 -m venv venv
+source venv/bin/activate
+pip3 install .
+```
+
+#### Apple Silicon (M1/M2) Macs
+
+```bash
+# Install Rosetta if needed for compatibility
+softwareupdate --install-rosetta
+
+# Use native Python
+arch -arm64 brew install python3
+arch -arm64 pip3 install .
+```
+
+### Debug Installation
+
+#### Enable Verbose Installation
+
+```bash
+# Verbose pip installation
+pip3 install -v .
+
+# Debug installer
+bash -x ./install.sh
+```
+
+#### Check Installation Details
+
+```bash
+# Show installed package info
+pip3 show myconfig
+
+# List installed files
+pip3 show -f myconfig
+
+# Check package location
+python3 -c "import myconfig; print(myconfig.__file__)"
+```
+
+### Getting Help
+
+#### Check System Health
+
+```bash
+# Run comprehensive system check
 myconfig doctor
+
+# Check with verbose output
+myconfig -v doctor
 ```
 
-### 系统服务 (高级)
-
-如果需要作为系统服务运行：
+#### Log Files
 
 ```bash
-# 创建服务文件 (示例)
-sudo tee /Library/LaunchDaemons/com.myconfig.plist << EOF
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-    <key>Label</key>
-    <string>com.myconfig</string>
-    <key>ProgramArguments</key>
-    <array>
-        <string>/usr/local/bin/myconfig</string>
-        <string>doctor</string>
-    </array>
-</dict>
-</plist>
-EOF
+# Check installation logs
+tail -f ~/.pip/pip.log
+
+# Check MyConfig logs
+tail -f logs/myconfig.log
 ```
 
----
+#### Community Support
 
-如果遇到任何安装问题，请查看项目的 Issue 页面或创建新的 Issue。
+- **Issues**: Report bugs on GitHub
+- **Discussions**: Join community discussions
+- **Documentation**: Check docs/ directory
+- **Examples**: See examples/ directory
+
+## Advanced Installation
+
+### Custom Installation Paths
+
+```bash
+# Install to custom directory
+pip3 install --target /custom/path .
+
+# Set PYTHONPATH
+export PYTHONPATH="/custom/path:$PYTHONPATH"
+```
+
+### Network-Restricted Environments
+
+```bash
+# Download dependencies offline
+pip3 download -r requirements.txt -d deps/
+
+# Install from local files
+pip3 install --find-links deps/ --no-index .
+```
+
+### Container Installation
+
+```dockerfile
+# Dockerfile example
+FROM python:3.9-slim
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y git
+
+# Copy and install MyConfig
+COPY . /app/myconfig
+WORKDIR /app/myconfig
+RUN pip3 install .
+
+# Set entrypoint
+ENTRYPOINT ["myconfig"]
+```
+
+### Automated Installation
+
+```bash
+#!/bin/bash
+# automated-install.sh
+
+set -e
+
+# Check prerequisites
+command -v python3 >/dev/null 2>&1 || { echo "Python 3 required" >&2; exit 1; }
+command -v pip3 >/dev/null 2>&1 || { echo "pip3 required" >&2; exit 1; }
+
+# Clone and install
+git clone <repository-url> /tmp/myconfig
+cd /tmp/myconfig
+pip3 install --user .
+
+# Verify installation
+myconfig --version
+
+echo "MyConfig installed successfully!"
+```
+
+For additional support, please refer to the [Usage Guide](usage.md) or check the project's issue tracker.

@@ -1,348 +1,542 @@
-# 配置参考
+# Configuration Reference
 
-## 📋 目录
+## 📋 Table of Contents
 
-- [配置文件结构](#配置文件结构)
-- [主配置选项](#主配置选项)
-- [域配置文件](#域配置文件)
-- [配置档案系统](#配置档案系统)
-- [环境变量](#环境变量)
+- [Configuration File Structure](#configuration-file-structure)
+- [Main Configuration Options](#main-configuration-options)
+- [Domain Configuration Files](#domain-configuration-files)
+- [Configuration Profile System](#configuration-profile-system)
+- [Template Configuration](#template-configuration)
+- [Environment Variables](#environment-variables)
+- [Advanced Configuration](#advanced-configuration)
 
-## 配置文件结构
+## Configuration File Structure
 
-MyConfig 使用 TOML 格式的配置文件，主要配置文件位于 `config/config.toml`。
+MyConfig uses TOML format configuration files, with the main configuration located at `config/config.toml`.
 
 ```
 myconfig/
 ├── config/
-│   ├── config.toml          # 主配置文件
+│   ├── config.toml          # Main configuration file
 │   ├── defaults/
-│   │   ├── domains.txt      # defaults 域清单
-│   │   └── exclude.txt      # defaults 排除清单
-│   └── profiles/
-│       ├── minimal.toml     # 最小配置档案
-│       └── dev-full.toml    # 完整开发环境配置
-└── src/                     # Python 源码包
-    ├── actions/             # 核心功能模块
-    ├── plugins/             # 插件扩展
-    ├── cli.py               # 命令行接口
-    └── utils.py             # 工具函数
+│   │   ├── domains.txt      # defaults domain list
+│   │   └── exclude.txt      # excluded domains list
+│   └── profiles/            # Configuration profiles
+│       ├── dev-full.toml    # Full development profile
+│       └── minimal.toml     # Minimal profile
+├── src/
+│   └── templates/           # Template files
+│       ├── README.md.template
+│       ├── ENVIRONMENT.txt.template
+│       └── MANIFEST.json.template
 ```
 
-## 主配置选项
+## Main Configuration Options
 
-### config/config.toml
+### Basic Settings
 
 ```toml
-# 主开关
-interactive = true          # 是否启用交互模式
-enable_npm = false         # 是否导出 npm 全局包
-enable_pip_user = false    # 是否导出 pip 用户包
-enable_pipx = false        # 是否导出 pipx 包
-enable_defaults = true     # 是否导出系统偏好设置
-enable_vscode = true       # 是否导出 VS Code 扩展
-enable_launchagents = true # 是否导出 LaunchAgents
-enable_mas = true          # 是否导出 Mac App Store 应用
+# config/config.toml
 
-# 增量备份设置
-enable_incremental = false # 是否启用增量备份
-base_backup_dir = ""       # 基础备份目录，用于增量比较
+# Interactive mode - prompt for user confirmation
+interactive = true
 
-# defaults 清单文件路径
-defaults_domains_file = "config/defaults/domains.txt"   # 精选域清单
-defaults_exclude_file = "config/defaults/exclude.txt"   # 排除域清单
+# Component enablement
+enable_homebrew = true      # Homebrew packages and casks
+enable_vscode = true        # VS Code extensions
+enable_defaults = true      # System preferences (defaults)
+enable_launchagents = true  # LaunchAgents services
+enable_mas = true          # Mac App Store applications
 
-# dotfiles 采集路径白名单（相对用户HOME；支持目录/文件）
-# 空行或以#开头为注释
+# Package managers
+enable_npm = false         # npm global packages
+enable_pip_user = false    # pip user packages
+enable_pipx = false        # pipx packages
+
+# Advanced features
+enable_incremental = false # Incremental backups (future feature)
 ```
 
-### 配置选项详解
+### File Paths
 
-#### 交互模式
 ```toml
-interactive = true   # 每个操作前询问用户确认
-interactive = false  # 自动执行所有操作（等同于 -y 参数）
+# Base backup directory (empty = auto-generate)
+base_backup_dir = ""
+
+# System defaults configuration
+defaults_domains_file = "config/defaults/domains.txt"
+defaults_exclude_file = "config/defaults/exclude.txt"
 ```
 
-#### 功能模块开关
+### Template Settings
 
-**npm 全局包**
 ```toml
-enable_npm = true    # 导出/恢复 npm -g list 的全局包
+# Template system configuration
+[templates]
+# Template directory (relative to src/)
+template_dir = "templates"
+
+# Enable template processing
+enable_templates = true
+
+# Template variables (custom context)
+[templates.variables]
+company_name = "Your Company"
+department = "IT Department"
+contact_email = "admin@company.com"
 ```
 
-**Python 包管理**
+### Export Options
+
 ```toml
-enable_pip_user = true   # 导出/恢复 pip --user 安装的包
-enable_pipx = true       # 导出/恢复 pipx 管理的工具
+[export]
+# Default compression format
+default_compression = "gzip"  # gzip, bzip2, xz
+
+# Compression level (1-9 for gzip)
+compression_level = 6
+
+# Include hidden files in dotfiles
+include_hidden = true
+
+# Maximum archive size (MB, 0 = unlimited)
+max_archive_size = 1000
 ```
 
-**应用和扩展**
+### Security Settings
+
 ```toml
-enable_vscode = true     # VS Code 扩展列表
-enable_mas = true        # Mac App Store 应用
+[security]
+# Automatically skip sensitive files
+skip_sensitive = true
+
+# Additional patterns to exclude (regex)
+exclude_patterns = [
+    ".*\\.key$",
+    ".*\\.pem$",
+    ".*password.*",
+    ".*secret.*"
+]
+
+# Directories to always exclude
+exclude_directories = [
+    ".ssh",
+    ".gnupg",
+    ".aws"
+]
 ```
 
-**系统配置**
-```toml
-enable_defaults = true       # macOS 系统偏好设置
-enable_launchagents = true   # 用户自定义服务
-```
+## Domain Configuration Files
 
-**增量备份**
-```toml
-enable_incremental = true
-base_backup_dir = "./backups/backup-base"  # 用于比较的基础备份
-```
+### Defaults Domains (`config/defaults/domains.txt`)
 
-## 域配置文件
-
-### config/defaults/domains.txt
-
-这个文件定义了要导出的 macOS defaults 域。每行一个域名，支持注释。
+List of macOS defaults domains to export:
 
 ```txt
-# 系统核心设置
-NSGlobalDomain
-com.apple.finder
+# System domains
 com.apple.dock
+com.apple.finder
+com.apple.Safari
 com.apple.screencapture
+com.apple.symbolichotkeys
 
-# 可访问性
+# Accessibility
 com.apple.Accessibility
 com.apple.universalaccess
 
-# 输入设备
+# Hardware
 com.apple.AppleMultitouchTrackpad
-com.apple.symbolichotkeys
+com.apple.AppleMultitouchMouse
 
-# 应用程序
-com.apple.Safari
-com.googlecode.iterm2
-
-# 系统服务
-com.apple.controlcenter
+# Window management
 com.apple.WindowManager
 com.apple.spaces
+com.apple.controlcenter
+
+# Software Update
 com.apple.SoftwareUpdate
-com.apple.HIToolbox
 com.apple.loginwindow
+
+# Third-party applications
+com.googlecode.iterm2
 ```
 
-**常用域说明：**
+### Exclude Domains (`config/defaults/exclude.txt`)
 
-| 域名 | 用途 |
-|------|------|
-| `NSGlobalDomain` | 全局系统设置 |
-| `com.apple.finder` | 访达设置 |
-| `com.apple.dock` | 程序坞设置 |
-| `com.apple.screencapture` | 截图设置 |
-| `com.apple.Accessibility` | 辅助功能 |
-| `com.apple.Safari` | Safari 浏览器 |
-| `com.googlecode.iterm2` | iTerm2 终端 |
-
-### config/defaults/exclude.txt
-
-定义不需要导出的 defaults 域（用于全量导出时排除）。
+Domains to explicitly exclude from export:
 
 ```txt
-# 排除示例：iCloud/照片/安全沙盒/WebKit缓存/临时/统计类
-com.apple.iCloudHelper
-com.apple.cloudphotod
-com.apple.cmfsyncagent
-com.apple.WebKit
-com.apple.Siri
-com.apple.ctkplugin
-com.apple.parsec-fbf
-com.apple.telemetry
-com.apple.diagnosticd
-com.apple.quicklook
-com.apple.touristd
-com.apple.sidecar
-com.apple.GameController
-com.apple.Music
-com.apple.Photos
+# Sensitive or temporary domains
+com.apple.accountsd
+com.apple.security.*
+*.keychain*
+*.password*
+
+# Large or changing domains
+com.apple.LaunchServices*
+com.apple.spotlight*
 ```
 
-## 配置档案系统
+## Configuration Profile System
 
-### 内置配置档案
+### Profile Structure
 
-**最小配置 (minimal.toml)**
+Profiles allow you to create different configuration sets for different use cases:
+
 ```toml
-interactive = true
-enable_npm = false
-enable_pip_user = false
-enable_pipx = false
-enable_defaults = true
-enable_vscode = false
-enable_launchagents = false
-enable_mas = false
-defaults_domains_file = "config/defaults/domains.txt"
-defaults_exclude_file = "config/defaults/exclude.txt"
-```
+# config/profiles/dev-full.toml
+[profile]
+name = "Development Full"
+description = "Complete development environment backup"
 
-**完整开发环境 (dev-full.toml)**
-```toml
-interactive = true
-enable_npm = true
-enable_pip_user = true
-enable_pipx = false
-enable_defaults = true
+# Override main config settings
+enable_homebrew = true
 enable_vscode = true
-enable_launchagents = true
-enable_mas = true
-defaults_domains_file = "config/defaults/domains.txt"
-defaults_exclude_file = "config/defaults/exclude.txt"
-```
-
-### 自定义配置档案
-
-```bash
-# 创建自定义配置档案
-./bin/myconfig profile save my-config
-
-# 使用配置档案
-./bin/myconfig profile use my-config
-
-# 列出所有配置档案
-./bin/myconfig profile list
-```
-
-### 配置档案管理
-
-```bash
-# 保存当前配置为新档案
-./bin/myconfig profile save server-env
-
-# 编辑配置档案
-nano ./config/profiles/server-env.toml
-
-# 应用配置档案
-./bin/myconfig profile use server-env
-```
-
-## 环境变量
-
-### 运行时环境变量
-
-```bash
-# 强制非交互模式
-export MYCONFIG_NON_INTERACTIVE=1
-
-# 设置默认输出目录
-export MYCONFIG_DEFAULT_OUTPUT="./my-backups"
-
-# 启用调试模式
-export MYCONFIG_DEBUG=1
-```
-
-### Python 环境要求
-
-```bash
-# Python 版本要求
-python3 --version  # >= 3.8
-
-# 可选依赖
-pip install tomli  # TOML 解析库（Python < 3.11）
-```
-
-## 配置验证
-
-### 检查配置有效性
-
-```bash
-# 系统环境检查
-./bin/myconfig doctor
-
-# 配置文件语法检查
-python3 -c "
-import sys
-sys.path.insert(0, '.')
-from myconfig.utils import load_config
-cfg = load_config('./config/config.toml')
-print('配置加载成功:', cfg)
-"
-```
-
-### 常见配置错误
-
-**1. TOML 语法错误**
-```toml
-# 错误：缺少引号
 enable_npm = true
-defaults_domains_file = config/defaults/domains.txt  # 错误
-
-# 正确
-enable_npm = true
-defaults_domains_file = "config/defaults/domains.txt"  # 正确
-```
-
-**2. 路径错误**
-```toml
-# 错误：绝对路径
-defaults_domains_file = "/usr/local/domains.txt"
-
-# 正确：相对于项目根目录
-defaults_domains_file = "config/defaults/domains.txt"
-```
-
-**3. 布尔值错误**
-```toml
-# 错误：字符串
-enable_npm = "true"
-
-# 正确：布尔值
-enable_npm = true
-```
-
-## 配置示例
-
-### 开发者工作站配置
-
-```toml
-# 开发者完整配置
-interactive = false          # 自动化执行
-enable_npm = true           # Node.js 开发
-enable_pip_user = true      # Python 开发
-enable_pipx = true          # Python 工具
-enable_defaults = true      # 系统设置
-enable_vscode = true        # 编辑器配置
-enable_launchagents = true  # 开发服务
-enable_mas = true           # 开发工具应用
-enable_incremental = false  # 完整备份
-```
-
-### 服务器环境配置
-
-```toml
-# 服务器最小配置
-interactive = false
-enable_npm = false
-enable_pip_user = true      # 只需要 Python
-enable_pipx = false
-enable_defaults = false     # 不需要 GUI 设置
-enable_vscode = false       # 服务器不需要 GUI 编辑器
-enable_launchagents = false
-enable_mas = false          # 服务器没有 App Store
-```
-
-### 测试环境配置
-
-```toml
-# 测试环境配置
-interactive = true          # 测试时需要确认
-enable_npm = true
-enable_pip_user = true
-enable_pipx = false
+enable_pipx = true
 enable_defaults = true
-enable_vscode = false       # 测试环境不需要编辑器
-enable_launchagents = false
-enable_mas = false
-enable_incremental = true   # 增量测试
-base_backup_dir = "./backups/test-base"
+enable_launchagents = true
+
+# Custom settings for this profile
+[export]
+include_dev_tools = true
+include_databases = true
 ```
 
----
+```toml
+# config/profiles/minimal.toml
+[profile]
+name = "Minimal"
+description = "Essential configurations only"
 
-更多配置细节请参阅源码中的配置类定义 (`src/utils.py` 中的 `AppConfig`)。
+# Minimal feature set
+enable_homebrew = true
+enable_vscode = false
+enable_npm = false
+enable_defaults = false
+enable_launchagents = false
+```
+
+### Using Profiles
+
+```bash
+# List available profiles
+myconfig profile list
+
+# Use a specific profile
+myconfig profile use dev-full
+
+# Save current configuration as a new profile
+myconfig profile save my-custom-profile
+
+# Export with profile
+myconfig profile use minimal
+myconfig export minimal-backup
+```
+
+## Template Configuration
+
+### Custom Template Variables
+
+Add custom variables to templates by modifying the configuration:
+
+```toml
+[templates.variables]
+# Organization information
+company_name = "Acme Corporation"
+department = "Engineering"
+contact_email = "devops@acme.com"
+support_url = "https://wiki.acme.com/myconfig"
+
+# Custom metadata
+backup_policy = "Monthly full backup, weekly incremental"
+retention_days = 90
+compliance_standard = "SOX, GDPR"
+
+# Environment information
+environment = "production"  # development, staging, production
+location = "datacenter-west"
+```
+
+### Template Overrides
+
+```toml
+[templates.overrides]
+# Use custom template files
+readme_template = "custom-readme.template"
+environment_template = "custom-environment.template"
+
+# Template processing options
+enable_markdown = true
+enable_html_export = false
+include_timestamps = true
+```
+
+## Environment Variables
+
+MyConfig supports environment variable overrides:
+
+### Export Variables
+
+```bash
+# Override configuration via environment
+export MYCONFIG_INTERACTIVE=false
+export MYCONFIG_ENABLE_MAS=false
+export MYCONFIG_BASE_BACKUP_DIR="/backups"
+
+# Template variables
+export MYCONFIG_COMPANY_NAME="My Company"
+export MYCONFIG_DEPARTMENT="IT"
+
+# Run with environment overrides
+myconfig export
+```
+
+### Variable Precedence
+
+1. **Environment Variables** (highest priority)
+2. **Command Line Arguments**
+3. **Profile Configuration**
+4. **Main Configuration File**
+5. **Default Values** (lowest priority)
+
+### Common Environment Variables
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `MYCONFIG_CONFIG_FILE` | `config/config.toml` | Main config file path |
+| `MYCONFIG_INTERACTIVE` | `true` | Interactive mode |
+| `MYCONFIG_VERBOSE` | `false` | Verbose logging |
+| `MYCONFIG_DRY_RUN` | `false` | Dry run mode |
+| `MYCONFIG_ENABLE_HOMEBREW` | `true` | Enable Homebrew export |
+| `MYCONFIG_ENABLE_VSCODE` | `true` | Enable VS Code export |
+| `MYCONFIG_TEMPLATE_DIR` | `src/templates` | Template directory |
+
+## Advanced Configuration
+
+### Logging Configuration
+
+```toml
+[logging]
+# Log level: DEBUG, INFO, WARNING, ERROR
+level = "INFO"
+
+# Log to file
+enable_file_logging = true
+log_file = "logs/myconfig.log"
+
+# Log format
+format = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+# Log rotation
+max_log_size = "10MB"
+backup_count = 5
+```
+
+### Performance Settings
+
+```toml
+[performance]
+# Parallel processing
+max_workers = 4
+
+# Timeout settings (seconds)
+command_timeout = 300
+download_timeout = 30
+
+# Memory limits
+max_memory_usage = "1GB"
+
+# Compression settings
+compression_threads = 2
+buffer_size = "64KB"
+```
+
+### Plugin Configuration
+
+```toml
+[plugins]
+# Plugin directory
+plugin_dir = "src/plugins"
+
+# Enable specific plugins
+enabled_plugins = [
+    "sample",
+    "custom_exporter"
+]
+
+# Plugin-specific settings
+[plugins.custom_exporter]
+export_format = "json"
+include_metadata = true
+```
+
+### Backup Validation
+
+```toml
+[validation]
+# Enable backup verification
+enable_verification = true
+
+# Checksum algorithm
+checksum_algorithm = "sha256"
+
+# Verify file integrity
+verify_file_integrity = true
+
+# Maximum verification time (seconds)
+max_verification_time = 60
+```
+
+### Network Settings
+
+```toml
+[network]
+# Proxy settings
+http_proxy = ""
+https_proxy = ""
+
+# Timeout settings
+connect_timeout = 10
+read_timeout = 30
+
+# User agent for downloads
+user_agent = "MyConfig/2.0"
+```
+
+## Configuration Examples
+
+### Enterprise Configuration
+
+```toml
+# Enterprise-grade configuration
+interactive = false
+enable_defaults = true
+enable_launchagents = true
+
+[templates.variables]
+company_name = "Enterprise Corp"
+compliance_standard = "SOX, HIPAA"
+backup_policy = "Daily incremental, weekly full"
+
+[security]
+skip_sensitive = true
+exclude_patterns = [
+    ".*\\.key$",
+    ".*\\.p12$",
+    ".*credential.*",
+    ".*password.*"
+]
+
+[export]
+default_compression = "gzip"
+compression_level = 9
+max_archive_size = 500
+
+[logging]
+level = "INFO"
+enable_file_logging = true
+```
+
+### Developer Configuration
+
+```toml
+# Developer-focused configuration
+interactive = true
+enable_homebrew = true
+enable_vscode = true
+enable_npm = true
+enable_pipx = true
+
+[templates.variables]
+department = "Engineering"
+environment = "development"
+
+[export]
+include_dev_tools = true
+compression_level = 6
+
+[logging]
+level = "DEBUG"
+```
+
+### Minimal Configuration
+
+```toml
+# Minimal configuration for basic use
+interactive = true
+enable_homebrew = true
+enable_vscode = false
+enable_defaults = false
+
+[export]
+compression_level = 1
+max_archive_size = 100
+
+[logging]
+level = "WARNING"
+```
+
+## Configuration Validation
+
+### Validate Configuration
+
+```bash
+# Check configuration syntax
+myconfig config validate
+
+# Show current configuration
+myconfig config show
+
+# Show effective configuration (with overrides)
+myconfig config show --effective
+```
+
+### Common Configuration Errors
+
+| Error | Cause | Solution |
+|-------|-------|----------|
+| `Invalid TOML syntax` | Malformed config file | Check TOML syntax |
+| `Unknown configuration key` | Typo in key name | Check documentation |
+| `Invalid path` | File path doesn't exist | Verify file paths |
+| `Permission denied` | Insufficient permissions | Check file permissions |
+
+### Configuration Testing
+
+```bash
+# Test configuration with dry run
+myconfig --dry-run export
+
+# Validate specific profile
+myconfig profile use test-profile
+myconfig config validate
+```
+
+## Migration Guide
+
+### Upgrading Configuration
+
+When upgrading MyConfig versions:
+
+1. **Backup Current Config**
+   ```bash
+   cp config/config.toml config/config.toml.backup
+   ```
+
+2. **Check New Options**
+   ```bash
+   myconfig config show-defaults > config/new-options.toml
+   ```
+
+3. **Merge Changes**
+   ```bash
+   # Review and merge new options
+   vim config/config.toml
+   ```
+
+4. **Validate Configuration**
+   ```bash
+   myconfig config validate
+   ```
+
+For specific migration instructions, see the version-specific documentation in the [CHANGELOG.md](../CHANGELOG.md) file.

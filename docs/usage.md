@@ -1,255 +1,357 @@
-# MyConfig 使用指南
+# MyConfig Usage Guide
 
-## 📋 目录
+## 📋 Table of Contents
 
-- [基本概念](#基本概念)
-- [命令详解](#命令详解)
-- [常用场景](#常用场景)
-- [高级功能](#高级功能)
-- [故障排除](#故障排除)
+- [Basic Concepts](#basic-concepts)
+- [Command Reference](#command-reference)
+- [Common Scenarios](#common-scenarios)
+- [Advanced Features](#advanced-features)
+- [Template System](#template-system)
+- [Troubleshooting](#troubleshooting)
 
-## 基本概念
+## Basic Concepts
 
-MyConfig 是一个配置管理工具，主要功能包括：
+MyConfig is a comprehensive configuration management tool with the following core functions:
 
-- **导出 (Export)**: 将当前系统的配置和应用列表保存到备份目录
-- **恢复 (Restore)**: 从备份目录恢复配置到新系统
-- **预览 (Preview)**: 在执行前查看将要操作的内容
-- **验证 (Verify)**: 检查备份的完整性
+- **Export**: Save current system configurations and application lists to a backup directory
+- **Restore**: Restore configurations from a backup directory to a new system
+- **Preview**: View what will be processed before executing operations
+- **Compress**: Create compressed archive backups for easy storage and sharing
+- **Template System**: Generate professional documentation and metadata files
 
-## 命令详解
+## Command Reference
 
-### 导出命令
+### Export Commands
 
 ```bash
-# 基本导出（自动生成目录名）
-./bin/myconfig export
+# Basic export (auto-generates directory name)
+myconfig export
 
-# 导出到指定目录
-./bin/myconfig export ./backups/my-backup
+# Export to specific directory
+myconfig export my-backup
 
-# 预览导出内容
-./bin/myconfig --preview export
+# Export with compression
+myconfig export my-backup --compress
+# Creates: my-backup.tar.gz
 
-# 非交互模式（自动确认所有操作）
-./bin/myconfig -y export
+# Preview export contents
+myconfig --preview export
 
-# 试运行（不执行实际操作）
-./bin/myconfig --dry-run export
+# Non-interactive mode (auto-confirm all operations)
+myconfig -y export
 
-# 详细模式（显示详细日志）
-./bin/myconfig -v export
+# Dry run (show what would be done without executing)
+myconfig --dry-run export
+
+# Verbose mode (detailed logging)
+myconfig -v export
 ```
 
-**导出内容包括：**
-- 环境信息（系统版本、主机名等）
-- Homebrew 配置（Brewfile）
-- Mac App Store 应用列表
-- VS Code 扩展列表
-- npm/pip 全局包列表
-- dotfiles 和配置文件
-- 系统偏好设置 (defaults)
-- LaunchAgents 服务
+**Export Contents Include:**
+- System environment information (macOS version, hostname, etc.)
+- Homebrew configuration (Brewfile with packages, casks, taps)
+- Mac App Store application list
+- VS Code extension list
+- npm/pip global package lists
+- Configuration files (dotfiles) with security filtering
+- System preferences (defaults domains)
+- LaunchAgents services
+- Auto-generated README.md with detailed manifest
+- Metadata files (MANIFEST.json, version info)
 
-### 恢复命令
+### Restore Commands
 
 ```bash
-# 基本恢复
-./bin/myconfig restore ./backups/backup-xxx
+# Basic restore
+myconfig restore backup-directory
 
-# 预览恢复内容
-./bin/myconfig --preview restore ./backups/backup-xxx
+# Preview restore contents
+myconfig --preview restore backup-directory
 
-# 跳过 Mac App Store 应用
-./bin/myconfig --no-mas restore ./backups/backup-xxx
+# Skip Mac App Store applications
+myconfig --no-mas restore backup-directory
 ```
 
-**恢复流程：**
-1. 验证备份完整性
-2. 安装 Homebrew（如未安装）
-3. 恢复 brew 包和应用
-4. 恢复 dotfiles（自动备份现有文件）
-5. 恢复 VS Code 扩展
-6. 恢复系统偏好设置
-7. 恢复用户服务
+**Restore Process:**
+1. Verify backup integrity
+2. Install Homebrew (if not installed)
+3. Restore brew packages and applications
+4. Restore dotfiles (automatically backs up existing files)
+5. Restore VS Code extensions
+6. Restore system preferences
+7. Restore user services
 
-### 其他命令
+### Archive Management
 
 ```bash
-# 系统诊断
-./bin/myconfig doctor
+# Unpack compressed backup
+myconfig unpack backup.tar.gz
 
-# defaults 相关操作
-./bin/myconfig defaults export-all    # 导出所有 defaults 域
-./bin/myconfig defaults import <dir>  # 导入 defaults
+# Unpack to specific directory
+myconfig unpack backup.tar.gz extracted-backup
 
-# 备份管理
-./bin/myconfig diff <dir1> <dir2>     # 比较两个备份
-./bin/myconfig pack <dir> [file]      # 打包备份
-
-# 配置档案管理
-./bin/myconfig profile list           # 列出可用配置
-./bin/myconfig profile use <name>     # 使用指定配置
-./bin/myconfig profile save <name>    # 保存当前配置
+# Restore from unpacked backup
+myconfig restore extracted-backup
 ```
 
-## 常用场景
-
-### 场景1：新机器设置
+### Other Commands
 
 ```bash
-# 1. 在旧机器上导出配置
-./bin/myconfig export ./backup-$(date +%Y%m%d)
+# System diagnostics
+myconfig doctor
 
-# 2. 将备份传输到新机器
+# Defaults operations
+myconfig defaults export-all    # Export all defaults domains
+myconfig defaults import <dir>  # Import defaults
 
-# 3. 在新机器上恢复配置
-./bin/myconfig restore ./backup-20240101
+# Backup management
+myconfig diff <dir1> <dir2>     # Compare two backups
+myconfig pack <dir> [file]      # Pack backup (legacy)
+
+# Configuration profiles
+myconfig profile list           # List available profiles
+myconfig profile use <name>     # Use specified profile
+myconfig profile save <name>    # Save current config as new profile
 ```
 
-### 场景2：定期备份
+## Common Scenarios
+
+### Scenario 1: New Machine Setup
 
 ```bash
-# 创建定期备份脚本
+# 1. Export configuration from old machine
+myconfig export old-machine-backup --compress
+
+# 2. Transfer backup to new machine (copy old-machine-backup.tar.gz)
+
+# 3. On new machine, unpack and restore
+myconfig unpack old-machine-backup.tar.gz
+myconfig restore old-machine-backup
+```
+
+### Scenario 2: Regular Backups
+
+```bash
+# Create periodic backup script
 #!/bin/bash
-BACKUP_DIR="./backups/backup-$(date +%Y%m%d-%H%M%S)"
-./bin/myconfig -y export "$BACKUP_DIR"
-echo "备份已保存到: $BACKUP_DIR"
+BACKUP_DIR="./backups/daily-$(date +%Y%m%d)"
+myconfig export "$BACKUP_DIR" --compress
+echo "Backup saved to: $BACKUP_DIR.tar.gz"
 ```
 
-### 场景3：配置测试
+### Scenario 3: Configuration Testing
 
 ```bash
-# 1. 预览将要导出的内容
-./bin/myconfig --preview export
+# 1. Preview what will be exported
+myconfig --preview export
 
-# 2. 试运行模式测试
-./bin/myconfig --dry-run export ./test-backup
+# 2. Test run mode
+myconfig --dry-run export
 
-# 3. 实际导出
-./bin/myconfig export ./test-backup
+# 3. Actual export
+myconfig export test-backup
 ```
 
-### 场景4：最小化配置
+### Scenario 4: Minimal Configuration
 
 ```bash
-# 1. 使用最小配置档案
-./bin/myconfig profile use minimal
+# 1. Use minimal configuration profile
+myconfig profile use minimal
 
-# 2. 导出（只包含基本配置）
-./bin/myconfig export ./minimal-backup
+# 2. Export (only includes basic configurations)
+myconfig export minimal-backup
 
-# 3. 恢复完整配置档案
-./bin/myconfig profile use dev-full
+# 3. Restore full configuration profile
+myconfig profile use dev-full
 ```
 
-## 高级功能
+## Advanced Features
 
-### 自定义配置
+### Custom Configuration
 
-编辑 `config/config.toml` 文件：
+Edit `config/config.toml` file:
 
 ```toml
-# 启用/禁用特定功能
+# Enable/disable specific features
+enable_homebrew = true
 enable_vscode = true
-enable_mas = false
-enable_npm = true
+enable_defaults = true
 
-# 自定义 defaults 域
-defaults_domains_file = "config/defaults/my-domains.txt"
+# Custom defaults domains
+defaults_domains_file = "config/defaults/domains.txt"
 
-# 交互模式
+# Interactive mode
 interactive = true
 ```
 
-### 插件扩展
+### Plugin Extensions
 
-在 `src/plugins/` 目录下创建插件：
+Create plugins in `src/plugins/` directory:
 
 ```python
-# src/plugins/my_plugin.py
 def register(subparsers):
-    p = subparsers.add_parser("my-cmd", help="自定义命令")
-    p.add_argument("arg1")
-    # 实现命令逻辑
+    p = subparsers.add_parser("my-cmd", help="Custom command")
+    
+    def handle_command(args):
+        # Implement command logic
+        pass
 ```
 
-### 配置档案
+### Configuration Profiles
 
-创建不同用途的配置档案：
+Create different profiles for different use cases:
 
 ```bash
-# 保存当前配置为开发环境配置
-./bin/myconfig profile save dev-env
+# Save current configuration as development profile
+myconfig profile save development
 
-# 创建服务器环境配置
-./bin/myconfig profile save server-env
+# Create server environment profile
+myconfig profile save server
 
-# 切换配置
-./bin/myconfig profile use server-env
+# Switch profiles
+myconfig profile use server
 ```
 
-## 故障排除
+## Template System
 
-### 常见问题
+MyConfig uses a powerful template system for generating documentation and metadata files.
 
-**1. 权限错误**
+### Template Locations
+
+Templates are stored in `src/templates/`:
+- `README.md.template` - Export documentation template
+- `ENVIRONMENT.txt.template` - System environment template
+- `MANIFEST.json.template` - Backup metadata template
+
+### Customizing Templates
+
+You can modify templates to customize the output format:
+
 ```bash
-# 确保脚本有执行权限
-chmod +x ./bin/myconfig
+# Edit the README template
+vim src/templates/README.md.template
+
+# Next export will use your custom template
+myconfig export my-backup
 ```
 
-**2. Python 未找到**
-```bash
-# 安装 Python
-brew install python
+### Template Syntax
+
+Templates use Mustache-like syntax:
+
+```markdown
+# Export Time: {{export_time}}
+# Hostname: {{hostname}}
+
+{{#homebrew}}
+## Homebrew
+- Packages: {{brew_count}}
+- Casks: {{cask_count}}
+{{/homebrew}}
 ```
 
-**3. 备份验证失败**
+### Available Variables
+
+- `{{export_time}}` - Export timestamp
+- `{{hostname}}` - System hostname
+- `{{version}}` - MyConfig version
+- `{{total_components}}` - Number of exported components
+- `{{total_files}}` - Total number of files
+- `{{total_size_formatted}}` - Human-readable total size
+
+### Conditional Sections
+
+```markdown
+{{#system_environment}}
+### System Environment
+- File: {{filename}}
+- Size: {{size}} bytes
+{{/system_environment}}
+```
+
+## Troubleshooting
+
+### Common Issues
+
+**1. Permission Errors**
+
 ```bash
-# 检查备份目录权限和空间
-ls -la ./backups/
+# Ensure script has execution permissions
+chmod +x bin/myconfig
+```
+
+**2. Python Not Found**
+
+```bash
+# Install Python
+brew install python3
+```
+
+**3. Backup Verification Failed**
+
+```bash
+# Check backup directory permissions and disk space
+ls -la backup-directory
 df -h
 ```
 
-**4. 恢复中断**
-```bash
-# 查看日志文件
-cat ./logs/run-*.log
-```
-
-### 调试技巧
+**4. Restore Interrupted**
 
 ```bash
-# 详细模式查看完整日志
-./bin/myconfig -v export
-
-# 试运行模式测试命令
-./bin/myconfig --dry-run restore ./backup
-
-# 检查系统环境
-./bin/myconfig doctor
+# Check log files
+tail -f logs/myconfig.log
 ```
 
-### 获取帮助
+### Debugging Tips
 
 ```bash
-# 查看帮助信息
-./bin/myconfig --help
+# Verbose mode for detailed logs
+myconfig -v export
 
-# 查看子命令帮助
-./bin/myconfig export --help
-./bin/myconfig restore --help
+# Dry run mode to test commands
+myconfig --dry-run restore backup-dir
+
+# System environment check
+myconfig doctor
 ```
 
-## 最佳实践
+### Getting Help
 
-1. **定期备份**: 建议每周或每月进行一次完整备份
-2. **测试恢复**: 定期在测试环境验证备份可用性
-3. **版本控制**: 重要配置文件建议额外使用 Git 管理
-4. **安全存储**: 备份文件建议加密存储或使用安全的云存储
-5. **文档记录**: 记录自定义配置和特殊设置的含义
+```bash
+# View help information
+myconfig --help
 
----
+# View subcommand help
+myconfig export --help
+myconfig restore --help
+```
 
-更多信息请参阅其他文档文件或查看项目源码。
+## Best Practices
+
+1. **Regular Backups**: Perform weekly or monthly full backups
+2. **Test Restores**: Regularly verify backup usability in test environments
+3. **Version Control**: Use Git for important configuration files
+4. **Secure Storage**: Encrypt backup files or use secure cloud storage
+5. **Document Changes**: Record the meaning of custom configurations and special settings
+6. **Compression**: Use `--compress` flag for space-efficient storage
+7. **Template Customization**: Customize templates for your organization's needs
+
+## Performance Tips
+
+- Use `--no-mas` if Mac App Store restore is not needed
+- Compress large backups for faster transfers
+- Use profiles to create targeted backups for specific use cases
+- Regular cleanup of old backup directories
+
+For more information, refer to other documentation files or check the project source code.
+
+## File Size Reference
+
+Typical backup sizes:
+- **Homebrew config**: ~2KB (Brewfile)
+- **VS Code extensions**: ~1-2KB (extension list)
+- **Dotfiles archive**: 15-20MB (compressed configuration files)
+- **System defaults**: ~100KB (preference files)
+- **LaunchAgents**: ~10KB (service configurations)
+- **Documentation**: ~2KB (generated README.md)
+- **Total compressed**: ~16MB (typical full backup)
