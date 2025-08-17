@@ -1,8 +1,7 @@
 import argparse, importlib, pkgutil, os
-from .utils import load_config
+from .core import ConfigManager, BackupManager
 from .logger import setup_logging
-from .actions.export import do_export, preview_export
-from .actions.restore import do_restore, preview_restore
+from .utils import ts, host
 from .actions.doctor import do_doctor
 from .actions.defaults import defaults_export_all, defaults_import_dir
 from .actions.diffpack import do_diff, do_pack
@@ -64,8 +63,11 @@ def main():
     args = p.parse_args()
     if args.version:
         print(f"myconfig {VERSION}"); return
-    cfg = load_config("./config/config.toml")
-    cfg = cfg._replace(
+    
+    # Load and update configuration
+    config_manager = ConfigManager("./config/config.toml")
+    cfg = config_manager.load()
+    cfg = cfg.update(
         interactive = (not args.yes) if args.yes else cfg.interactive,
         dry_run = True if args.dry_run else cfg.dry_run,
         verbose = True if args.verbose else cfg.verbose,
@@ -76,19 +78,23 @@ def main():
     # Setup logging
     setup_logging(verbose=cfg.verbose, quiet=cfg.quiet)
     
+    # Create backup manager
+    backup_manager = BackupManager(cfg)
+    
     # Preview mode handling
     preview_mode = getattr(args, 'preview', False)
 
     if args.cmd == "export":
+        default_outdir = args.outdir or f"./backups/backup-{host()}-{ts()}"
         if preview_mode:
-            preview_export(cfg, args.outdir)
+            backup_manager.preview_export(default_outdir)
         else:
-            do_export(cfg, args.outdir)
+            backup_manager.export(default_outdir)
     elif args.cmd == "restore":
         if preview_mode:
-            preview_restore(cfg, args.srcdir)
+            backup_manager.preview_restore(args.srcdir)
         else:
-            do_restore(cfg, args.srcdir)
+            backup_manager.restore(args.srcdir)
     elif args.cmd == "doctor":
         do_doctor(cfg)
     elif args.cmd == "defaults":
