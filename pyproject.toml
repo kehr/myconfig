@@ -4,10 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "myconfig"
-dynamic = ["version"]
+version = "1.0.0"
 description = "macOS configuration backup and restore tool"
 readme = "README.md"
-license = {text = "GPL-2.0"}
+license = "GPL-2.0"
 authors = [
     {name = "Kyle", email = "kehr.dev@gmail.com"},
 ]
@@ -16,12 +16,12 @@ maintainers = [
 ]
 keywords = ["macos", "backup", "restore", "configuration", "dotfiles", "homebrew"]
 classifiers = [
-    "Development Status :: 4 - Beta",
+    "Development Status :: 5 - Production/Stable",
     "Environment :: Console",
     "Environment :: MacOS X",
     "Intended Audience :: Developers",
     "Intended Audience :: System Administrators",
-    "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
+    # "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
     "Operating System :: MacOS",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.8",
@@ -51,7 +51,7 @@ encryption = [
 ]
 
 [project.scripts]
-myconfig = "src.cli:main"
+myconfig = "cli:main"
 
 [project.urls]
 Homepage = "https://github.com/kehr/myconfig"
@@ -61,16 +61,12 @@ Repository = "https://github.com/kehr/myconfig"
 Changelog = "https://github.com/kehr/myconfig/blob/main/docs/OPTIMIZATION_SUMMARY.md"
 
 [tool.setuptools]
-package-dir = {myconfig = "src"}
-
-[tool.setuptools.packages.find]
-where = ["src"]
+packages = {find = {where = ["src"]}}
+package-dir = {"" = "src"}
+py-modules = ["cli", "logger", "utils", "template_engine", "_version", "__main__"]
 
 [tool.setuptools.package-data]
-"*" = ["*.txt", "*.toml", "*.md"]
-
-[tool.setuptools.dynamic]
-version = {attr = "src._version.VERSION"}
+"*" = ["templates/*.template", "*.txt", "*.toml", "*.md"]
 
 [tool.black]
 line-length = 88

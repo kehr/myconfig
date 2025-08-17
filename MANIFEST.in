@@ -1,28 +1,31 @@
-# 包含重要文件
+# Include important files
 include README.md
 include LICENSE
 include pyproject.toml
-include setup.py
 include MANIFEST.in
 
-# 包含配置文件
+# Include all source code
+recursive-include src *.py
+recursive-include src/templates *.template
+
+# Include configuration files
 recursive-include config *.toml *.txt
 graft config
 
-# 包含文档
+# Include documentation
 recursive-include docs *.md
 graft docs
 
-# 包含贡献文件
+# Include contribution files
 recursive-include contrib *
 
-# 排除不必要的文件
+# Exclude unnecessary files
 exclude .gitignore
 exclude .gitattributes
 exclude .gitmessage
 exclude *.code-workspace
 
-# 排除目录
+# Exclude directories
 prune .git
 prune backups
 prune logs
@@ -31,10 +34,10 @@ prune *.egg-info
 prune build
 prune dist
 
-# 排除测试文件（如果有的话）
+# Exclude test files (if any)
 prune tests
 
-# 排除开发文件
+# Exclude development files
 exclude .mypy_cache
 exclude .pytest_cache
 exclude .coverage
