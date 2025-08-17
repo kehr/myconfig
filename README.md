@@ -11,6 +11,10 @@
 
 A comprehensive macOS system configuration backup and restore tool.
 
+<div align="center">
+  <img src="./docs/assets/demo.png" alt="MyConfig Demo" width="800">
+</div>
+
 ## 🌟 Features
 
 - 🔄 **Complete Backup**: Supports Homebrew, VS Code, dotfiles, system preferences, and more
