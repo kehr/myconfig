@@ -150,8 +150,8 @@ class BackupManager:
 
     def _export_environment(self, output_dir: str) -> None:
         """Export environment information using template"""
-        from ..utils import ts, host
-        from ..template_engine import TemplateEngine
+        from utils import ts, host
+        from template_engine import TemplateEngine
         
         try:
             # Gather environment data
@@ -178,7 +178,7 @@ class BackupManager:
 
     def _export_environment_fallback(self, output_dir: str) -> None:
         """Fallback environment export without templates"""
-        from ..utils import ts, host
+        from utils import ts, host
 
         env_file = os.path.join(output_dir, "ENVIRONMENT.txt")
         with open(env_file, "w", encoding="utf-8") as f:
