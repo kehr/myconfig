@@ -1,4 +1,4 @@
-import argparse, importlib, pkgutil, os
+import argparse, importlib, pkgutil, os, logging
 from .core import ConfigManager, BackupManager
 from .logger import setup_logging
 from .utils import ts, host
@@ -22,6 +22,7 @@ def build_parser():
 
     sp = sub.add_parser("export", help="Export to backup directory")
     sp.add_argument("outdir", nargs="?")
+    sp.add_argument("--compress", action="store_true", help="Create compressed backup archive (.tar.gz)")
 
     sp = sub.add_parser("restore", help="Restore from backup directory")
     sp.add_argument("srcdir")
@@ -40,6 +41,10 @@ def build_parser():
     sp = sub.add_parser("pack", help="Pack and encrypt backup (zip/gpg optional)")
     sp.add_argument("srcdir"); sp.add_argument("outfile", nargs="?")
     sp.add_argument("--gpg", action="store_true", help="Use gpg symmetric encryption")
+    
+    sp = sub.add_parser("unpack", help="Unpack compressed backup archive")
+    sp.add_argument("archive", help="Path to backup archive (.tar.gz)")
+    sp.add_argument("outdir", nargs="?", help="Output directory (optional, will create temp dir if not specified)")
 
     sp = sub.add_parser("profile", help="Configuration profiles (profiles/*.toml)")
     s3 = sp.add_subparsers(dest="sub")
@@ -86,10 +91,11 @@ def main():
 
     if args.cmd == "export":
         default_outdir = args.outdir or f"./backups/backup-{host()}-{ts()}"
+        compress = getattr(args, 'compress', False)
         if preview_mode:
             backup_manager.preview_export(default_outdir)
         else:
-            backup_manager.export(default_outdir)
+            backup_manager.export(default_outdir, compress=compress)
     elif args.cmd == "restore":
         if preview_mode:
             backup_manager.preview_restore(args.srcdir)
@@ -105,6 +111,13 @@ def main():
         do_diff(cfg, args.a, args.b)
     elif args.cmd == "pack":
         do_pack(cfg, args.srcdir, args.outfile, use_gpg=args.gpg)
+    elif args.cmd == "unpack":
+        extracted_dir = backup_manager.unpack(args.archive, args.outdir)
+        if extracted_dir:
+            logger = logging.getLogger(__name__)
+            logger.info(f"Archive contents available at: {extracted_dir}")
+            if not args.outdir:
+                logger.info("To restore: myconfig restore " + extracted_dir)
     elif args.cmd == "profile":
         if args.sub == "list": profile_list()
         elif args.sub == "use": profile_use(args.name)
