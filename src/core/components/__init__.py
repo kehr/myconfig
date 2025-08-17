@@ -2,7 +2,7 @@
 Backup components for different macOS tools and configurations
 """
 
-from .base import BackupComponent
+from ..base import BackupComponent
 from .homebrew import HomebrewComponent
 from .mas import MASComponent
 from .vscode import VSCodeComponent

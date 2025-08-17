@@ -57,5 +57,6 @@ class MASComponent(BackupComponent):
             with open(mas_file, "r") as f:
                 app_count = len(f.readlines())
             return [f"✓ Mac App Store: {app_count} apps"]
-        except:
+        except Exception as e:
+            self.logger.debug(f"Failed to parse MAS list: {e}")
             return ["✓ Mac App Store app list"]

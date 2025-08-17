@@ -1,6 +1,7 @@
 from __future__ import annotations
 import os, json, shlex, logging
-from ..utils import AppConfig, run, run_out, ts, host, which, verify_backup, create_backup_manifest, ProgressTracker, get_secure_dotfile_list
+from ..core import AppConfig
+from ..utils import run, run_out, ts, host, which, verify_backup, create_backup_manifest, ProgressTracker, get_secure_dotfile_list
 from ..logger import log_section, log_separator, log_success, confirm_action
 
 HOME = os.path.expanduser("~")

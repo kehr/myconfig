@@ -1,6 +1,7 @@
 from __future__ import annotations
 import os, logging
-from ..utils import AppConfig, run, run_out, which, verify_backup
+from ..core import AppConfig
+from ..utils import run, run_out, which, verify_backup
 from ..logger import log_section, log_separator, log_success, confirm_action
 
 def do_restore(cfg: AppConfig, srcdir: str):
@@ -113,7 +114,8 @@ def preview_restore(cfg: AppConfig, srcdir: str):
             cask_count = len([l for l in lines if l.strip().startswith('cask ')])
             vscode_count = len([l for l in lines if l.strip().startswith('vscode ')])
             logger.info(f"  ✓ Homebrew: {brew_count} packages, {cask_count} apps, {vscode_count} VS Code extensions")
-        except:
+        except Exception as e:
+            logger.debug(f"Failed to parse Brewfile: {e}")
             logger.info("  ✓ Homebrew config file")
     else:
         logger.warning("  ✗ No Homebrew config")
@@ -124,7 +126,8 @@ def preview_restore(cfg: AppConfig, srcdir: str):
             with open(mlist, 'r') as f:
                 mas_apps = len(f.readlines())
             logger.info(f"  ✓ Mac App Store: {mas_apps} apps")
-        except:
+        except Exception as e:
+            logger.debug(f"Failed to parse MAS list: {e}")
             logger.info("  ✓ Mac App Store app list")
     else:
         logger.warning("  ✗ No MAS app list")
@@ -160,7 +163,8 @@ def preview_restore(cfg: AppConfig, srcdir: str):
             for line in content.split('\n')[:3]:  # Show first 3 lines
                 if line.strip():
                     logger.info(f"    {line}")
-        except:
+        except Exception as e:
+            logger.debug(f"Failed to read environment file: {e}")
             logger.info("  ✓ Environment info file")
     
     log_separator(logger)

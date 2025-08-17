@@ -1,6 +1,7 @@
 from __future__ import annotations
 import os, logging
-from ..utils import AppConfig, run
+from ..core import AppConfig
+from ..utils import run
 from ..logger import log_section, log_separator, log_success
 
 def do_diff(cfg: AppConfig, a: str, b: str):

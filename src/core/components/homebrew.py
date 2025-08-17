@@ -67,5 +67,6 @@ class HomebrewComponent(BackupComponent):
             brew_count = len([l for l in lines if l.strip().startswith("brew ")])
             cask_count = len([l for l in lines if l.strip().startswith("cask ")])
             return [f"✓ Homebrew: {brew_count} packages, {cask_count} apps"]
-        except:
+        except Exception as e:
+            self.logger.debug(f"Failed to parse Brewfile: {e}")
             return ["✓ Homebrew config file"]
