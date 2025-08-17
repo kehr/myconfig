@@ -21,7 +21,7 @@ dist/
 ### 1️⃣ 测试发布 (TestPyPI)
 ```bash
 # 激活虚拟环境
-source venv-pypi/bin/activate
+source .venv/bin/activate
 
 # 发布到TestPyPI (建议先测试)
 twine upload --repository testpypi dist/*

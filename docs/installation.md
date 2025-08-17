@@ -44,7 +44,31 @@ brew install mas
 
 ## Installation Methods
 
-### Method 1: Interactive Installation (Recommended)
+### Method 1: PyPI Installation (Recommended)
+
+The simplest and fastest way to install MyConfig:
+
+```bash
+# Install from PyPI
+pip install myconfig
+
+# Verify installation
+myconfig --version
+myconfig --help
+```
+
+**Advantages:**
+- ✅ One-command installation
+- ✅ Automatic dependency management  
+- ✅ Easy updates with `pip install --upgrade myconfig`
+- ✅ Works in virtual environments
+- ✅ Official stable releases only
+
+**Requirements:**
+- Python 3.8+ and pip installed
+- Internet connection
+
+### Method 2: Interactive Installation (Source)
 
 The easiest way to install MyConfig is using the interactive installer:
 
