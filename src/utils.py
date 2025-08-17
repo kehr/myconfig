@@ -9,7 +9,7 @@ except ImportError:
     try:
         import tomli as tomllib
     except ImportError:
-        raise ImportError("需要安装 tomli 库: pip install tomli")
+        raise ImportError("tomli library required: pip install tomli")
 
 # Colors
 T1="\033[1m"; DIM="\033[2m"; RED="\033[31m"; GREEN="\033[32m"; YELLOW="\033[33m"; BLUE="\033[34m"; RST="\033[0m"
