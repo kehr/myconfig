@@ -1,10 +1,10 @@
 #compdef myconfig
 _arguments -C \
-  '(-y --yes)'{-y,--yes}'[非交互]' \
-  '(-n --dry-run)'{-n,--dry-run}'[试运行]' \
-  '(-v --verbose)'{-v,--verbose}'[详细日志]' \
-  '(--quiet)--quiet[安静模式]' \
-  '(--no-mas)--no-mas[跳过 mas]' \
+  '(-y --yes)'{-y,--yes}'[non-interactive]' \
+  '(-n --dry-run)'{-n,--dry-run}'[dry run]' \
+  '(-v --verbose)'{-v,--verbose}'[verbose logging]' \
+  '(--quiet)--quiet[quiet mode]' \
+  '(--no-mas)--no-mas[skip mas]' \
   '1:cmd:(export restore doctor defaults diff pack profile help)' \
   '*::arg:->args'
 case $state in

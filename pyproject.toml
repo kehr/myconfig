@@ -5,14 +5,14 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "myconfig"
 dynamic = ["version"]
-description = "macOS 配置备份与恢复工具"
+description = "macOS configuration backup and restore tool"
 readme = "README.md"
 license = {text = "GPL-2.0"}
 authors = [
-    {name = "Kyle", email = "your.email@example.com"},
+    {name = "Kyle", email = "kehr.dev@gmail.com"},
 ]
 maintainers = [
-    {name = "Kyle", email = "your.email@example.com"},
+    {name = "Kyle", email = "kehr.dev@gmail.com"},
 ]
 keywords = ["macos", "backup", "restore", "configuration", "dotfiles", "homebrew"]
 classifiers = [

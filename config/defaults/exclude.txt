@@ -1,4 +1,4 @@
-# 排除示例：iCloud/照片/安全沙盒/WebKit缓存/临时/统计类
+# Exclusion examples: iCloud/Photos/Security Sandbox/WebKit Cache/Temporary/Statistics
 com.apple.iCloudHelper
 com.apple.cloudphotod
 com.apple.cmfsyncagent

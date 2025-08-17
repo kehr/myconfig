@@ -1,4 +1,4 @@
-# 主开关
+# Main switches
 interactive = true
 enable_npm = false
 enable_pip_user = false
@@ -8,15 +8,15 @@ enable_vscode = true
 enable_launchagents = true
 enable_mas = true
 
-# 增量备份设置
+# Incremental backup settings
 enable_incremental = false
-base_backup_dir = ""  # 基础备份目录，用于增量比较
+base_backup_dir = ""  # Base backup directory for incremental comparison
 
-# defaults 清单（精挑域）
+# defaults list (curated domains)
 defaults_domains_file = "config/defaults/domains.txt"
 
-# defaults 全量导出排除（匹配包含即跳过；支持简单子串）
+# defaults full export exclusions (skip if contains match; supports simple substrings)
 defaults_exclude_file = "config/defaults/exclude.txt"
 
-# dotfiles 采集路径白名单（相对用户HOME；支持目录/文件）
-# 空行或以#开头为注释
+# dotfiles collection path whitelist (relative to user HOME; supports directories/files)
+# Empty lines or lines starting with # are comments

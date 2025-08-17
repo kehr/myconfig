@@ -2,25 +2,25 @@
 
 .PHONY: help install install-user install-system install-dev uninstall clean build test lint format check
 
-# 默认目标
+# Default target
 help:
-	@echo "MyConfig - macOS 配置备份与恢复工具"
+	@echo "MyConfig - macOS Configuration Backup and Restore Tool"
 	@echo ""
-	@echo "可用命令:"
-	@echo "  help          显示此帮助信息"
-	@echo "  install       交互式安装"
-	@echo "  install-user  用户安装 (推荐)"
-	@echo "  install-system 系统安装 (需要 sudo)"
-	@echo "  install-dev   开发模式安装"
-	@echo "  uninstall     卸载"
-	@echo "  clean         清理构建文件"
-	@echo "  build         构建包"
-	@echo "  test          运行测试"
-	@echo "  lint          代码检查"
-	@echo "  format        代码格式化"
-	@echo "  check         完整检查 (lint + test)"
+	@echo "Available commands:"
+	@echo "  help          Show this help message"
+	@echo "  install       Interactive installation"
+	@echo "  install-user  User installation (recommended)"
+	@echo "  install-system System installation (requires sudo)"
+	@echo "  install-dev   Development mode installation"
+	@echo "  uninstall     Uninstall"
+	@echo "  clean         Clean build files"
+	@echo "  build         Build package"
+	@echo "  test          Run tests"
+	@echo "  lint          Code linting"
+	@echo "  format        Code formatting"
+	@echo "  check         Full check (lint + test)"
 
-# 安装相关
+# Installation related
 install:
 	@./install.sh
 
@@ -34,12 +34,12 @@ install-dev:
 	@./install.sh --dev
 
 uninstall:
-	@echo "卸载 MyConfig..."
-	pip3 uninstall myconfig -y || echo "未找到已安装的版本"
+	@echo "Uninstalling MyConfig..."
+	pip3 uninstall myconfig -y || echo "No installed version found"
 
-# 开发相关
+# Development related
 clean:
-	@echo "清理构建文件..."
+	@echo "Cleaning build files..."
 	@rm -rf build/ dist/ *.egg-info/
 	@find . -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
 	@find . -name "*.pyc" -delete
@@ -50,69 +50,69 @@ clean:
 	@find . -name "*.log" -delete
 
 build: clean
-	@echo "构建包..."
+	@echo "Building package..."
 	@python3 -m build
 
 test:
-	@echo "运行测试..."
+	@echo "Running tests..."
 	@if [ -d "tests" ]; then \
 		python3 -m pytest tests/ -v; \
 	else \
-		echo "暂无测试文件"; \
+		echo "No test files yet"; \
 	fi
 
 lint:
-	@echo "代码检查..."
+	@echo "Code linting..."
 	@if command -v flake8 >/dev/null 2>&1; then \
 		flake8 src/ --max-line-length=88 --extend-ignore=E203,W503; \
 	else \
-		echo "flake8 未安装，跳过检查"; \
+		echo "flake8 not installed, skipping check"; \
 	fi
 	@if command -v mypy >/dev/null 2>&1; then \
 		mypy src/ --ignore-missing-imports; \
 	else \
-		echo "mypy 未安装，跳过类型检查"; \
+		echo "mypy not installed, skipping type check"; \
 	fi
 
 format:
-	@echo "代码格式化..."
+	@echo "Code formatting..."
 	@if command -v black >/dev/null 2>&1; then \
 		black src/; \
 	else \
-		echo "black 未安装，跳过格式化"; \
+		echo "black not installed, skipping formatting"; \
 	fi
 
 check: lint test
-	@echo "完整检查完成"
+	@echo "Full check completed"
 
-# 发布相关
+# Release related
 package: clean build
-	@echo "创建发布包..."
+	@echo "Creating release package..."
 	@ls -la dist/
 
-# 开发环境设置
+# Development environment setup
 dev-setup:
-	@echo "设置开发环境..."
+	@echo "Setting up development environment..."
 	@pip3 install --user -e ".[dev]"
-	@echo "开发环境设置完成"
+	@echo "Development environment setup completed"
 
-# 验证安装
+# Verify installation
 verify:
-	@echo "验证安装..."
+	@echo "Verifying installation..."
 	@if command -v myconfig >/dev/null 2>&1; then \
-		echo "✓ myconfig 命令可用"; \
-		echo "版本: $$(myconfig --version)"; \
+		echo "✓ myconfig command available"; \
+		echo "Version: $$(myconfig --version)"; \
 		myconfig doctor; \
 	else \
-		echo "✗ myconfig 命令不可用"; \
+		echo "✗ myconfig command not available"; \
 		exit 1; \
 	fi
 
-# 显示项目信息
+# Show project information
 info:
-	@echo "项目信息:"
-	@echo "  名称: MyConfig"
-	@echo "  版本: $$(python3 -c 'import sys; sys.path.insert(0, "src"); from _version import VERSION; print(VERSION)')"
+	@echo "Project information:"
+	@echo "  Name: MyConfig"
+	@echo "  Version: $$(python3 -c 'import sys; sys.path.insert(0, "src"); from _version import VERSION; print(VERSION)')"
 	@echo "  Python: $$(python3 --version)"
-	@echo "  目录: $$(pwd)"
-	@echo "  包数量: $$(find src -name '*.py' | wc -l | tr -d ' ') 个 Python 文件"
+	@echo "  Directory: $$(pwd)"
+	@echo "  Package count: $$(find src -name '*.py' | wc -l | tr -d ' ') Python files"

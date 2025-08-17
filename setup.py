@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 """
-MyConfig - macOS 配置备份与恢复工具
+MyConfig - macOS Configuration Backup and Restore Tool
 """
 
 from setuptools import setup, find_packages
 import os
 
-# 读取 README 文件
+# Read README file
 def read_file(filename):
     with open(os.path.join(os.path.dirname(__file__), filename), encoding='utf-8') as f:
         return f.read()
 
-# 读取版本信息
+# Read version information
 def get_version():
     version_file = os.path.join(os.path.dirname(__file__), 'src', 'cli.py')
     with open(version_file, 'r', encoding='utf-8') as f:
@@ -23,31 +23,31 @@ def get_version():
 setup(
     name="myconfig",
     version=get_version(),
-    description="macOS 配置备份与恢复工具",
+    description="macOS configuration backup and restore tool",
     long_description=read_file("README.md"),
     long_description_content_type="text/markdown",
     author="Kyle",
     author_email="your.email@example.com",
     url="https://github.com/yourusername/myconfig",
     
-    # 包配置
+    # Package configuration
     packages=find_packages(where="src"),
     package_dir={"": "src"},
     
-    # 包含非 Python 文件
+    # Include non-Python files
     include_package_data=True,
     package_data={
         "": ["*.txt", "*.toml", "*.md"],
     },
     
-    # 依赖
+    # Dependencies
     python_requires=">=3.8",
     install_requires=[
-        # 可选的 TOML 解析库（Python < 3.11）
+        # Optional TOML parsing library (Python < 3.11)
         'tomli>=1.2.0; python_version<"3.11"',
     ],
     
-    # 可选依赖
+    # Optional dependencies
     extras_require={
         "dev": [
             "pytest>=7.0",
@@ -59,14 +59,14 @@ setup(
         ],
     },
     
-    # 命令行入口点
+    # Command line entry points
     entry_points={
         "console_scripts": [
             "myconfig=src.cli:main",
         ],
     },
     
-    # 分类信息
+    # Classification information
     classifiers=[
         "Development Status :: 4 - Beta",
         "Environment :: Console",
@@ -87,10 +87,10 @@ setup(
         "Topic :: Utilities",
     ],
     
-    # 关键词
+    # Keywords
     keywords="macos backup restore configuration dotfiles homebrew",
     
-    # 项目链接
+    # Project links
     project_urls={
         "Documentation": "https://github.com/yourusername/myconfig/blob/main/docs/",
         "Bug Reports": "https://github.com/yourusername/myconfig/issues",
