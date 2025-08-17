@@ -6,7 +6,7 @@ def do_restore(cfg: AppConfig, log: Logger, srcdir: str):
     if not srcdir or not os.path.isdir(srcdir):
         log.err(f"Backup directory does not exist: {srcdir}"); return
     
-    # 验证备份完整性
+    # Verify backup integrity
     log.info("Verifying backup integrity...")
     if not verify_backup(srcdir, log):
         if not log.confirm("Backup verification failed, continue with restore?"):
@@ -84,16 +84,16 @@ def do_restore(cfg: AppConfig, log: Logger, srcdir: str):
     log.hr(); log.ok("Restore completed")
 
 def preview_restore(cfg: AppConfig, log: Logger, srcdir: str):
-    """预览恢复操作将会执行的内容"""
+    """Preview what the restore operation will do"""
     if not srcdir or not os.path.isdir(srcdir):
         log.err(f"Backup directory does not exist: {srcdir}"); return
     
     log.sec(f"Preview restore operation ← {srcdir}"); log.hr()
     
-    # 检查备份内容
+    # Check backup content
     log.info("Backup content analysis:")
     
-    # 检查各种文件
+    # Check various files
     brewfile = os.path.join(srcdir, "Brewfile")
     if os.path.exists(brewfile):
         try:
@@ -140,14 +140,14 @@ def preview_restore(cfg: AppConfig, log: Logger, srcdir: str):
     else:
         log.warn("  ✗ No LaunchAgents")
     
-    # 显示环境信息
+    # Show environment info
     env_file = os.path.join(srcdir, "ENVIRONMENT.txt")
     if os.path.exists(env_file):
         try:
             with open(env_file, 'r', encoding='utf-8') as f:
                 content = f.read()
             log.info("  ✓ Source environment info:")
-            for line in content.split('\n')[:3]:  # 显示前3行
+            for line in content.split('\n')[:3]:  # Show first 3 lines
                 if line.strip():
                     log.info(f"    {line}")
         except:

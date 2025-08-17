@@ -6,7 +6,7 @@ def do_diff(cfg: AppConfig, log: Logger, a: str, b: str):
     if not (os.path.isdir(a) and os.path.isdir(b)):
         log.err("Please provide two valid directories"); return
     log.sec(f"Compare: {a} ⇄ {b}"); log.hr()
-    # 偏向可读的递归对比（忽略压缩二进制）
+    # Readable recursive comparison (ignore compressed binaries)
     run(f'diff -ruN --exclude="*.tar.gz" --exclude="*.zip" --exclude="*.log" {a} {b} || true', log, check=False)
 
 def do_pack(cfg: AppConfig, log: Logger, srcdir: str, outfile: str|None, use_gpg: bool=False):

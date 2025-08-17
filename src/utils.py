@@ -1,7 +1,7 @@
 from __future__ import annotations
 import os, sys, subprocess, shlex, time, json, pathlib, typing
 
-# 彩色
+# Colors
 T1="\033[1m"; DIM="\033[2m"; RED="\033[31m"; GREEN="\033[32m"; YELLOW="\033[33m"; BLUE="\033[34m"; RST="\033[0m"
 def color(c: str, s: str) -> str: return f"{c}{s}{RST}" if sys.stdout.isatty() else s
 
@@ -36,7 +36,7 @@ def _parse_toml(path: str) -> dict:
             import tomli
             with open(path, "rb") as f: return typing.cast(dict, tomli.load(f))
         except Exception:
-            # 退化解析：k = v，仅顶层键值
+            # Fallback parsing: k = v, top-level key-value only
             with open(path, "r", encoding="utf-8") as f:
                 for line in f:
                     s=line.strip()
@@ -127,12 +127,12 @@ def host() -> str:
     return out.strip() if rc==0 else "mac"
 
 def verify_backup(backup_dir: str, log: Logger) -> bool:
-    """验证备份目录的完整性"""
+    """Verify backup directory integrity"""
     if not os.path.isdir(backup_dir):
         log.err(f"Backup directory does not exist: {backup_dir}")
         return False
     
-    # 检查必要文件
+    # Check required files
     required_files = ["ENVIRONMENT.txt"]
     missing_files = []
     
@@ -144,12 +144,12 @@ def verify_backup(backup_dir: str, log: Logger) -> bool:
         log.warn(f"Backup incomplete, missing files: {', '.join(missing_files)}")
         return False
     
-    # 检查备份大小（基本健全性检查）
+    # Check backup size (basic sanity check)
     try:
         total_size = sum(os.path.getsize(os.path.join(dirpath, filename))
                         for dirpath, dirnames, filenames in os.walk(backup_dir)
                         for filename in filenames)
-        if total_size < 1024:  # 小于1KB可能有问题
+        if total_size < 1024:  # Less than 1KB might be problematic
             log.warn(f"Backup size unusually small: {total_size} bytes")
             return False
     except Exception as e:
@@ -159,7 +159,7 @@ def verify_backup(backup_dir: str, log: Logger) -> bool:
     return True
 
 def create_backup_manifest(backup_dir: str, log: Logger):
-    """创建备份清单文件"""
+    """Create backup manifest file"""
     manifest_file = os.path.join(backup_dir, "MANIFEST.txt")
     try:
         with open(manifest_file, "w", encoding="utf-8") as f:
@@ -174,7 +174,7 @@ def create_backup_manifest(backup_dir: str, log: Logger):
                 f.write(f"{indent}{os.path.basename(root)}/\n")
                 subindent = ' ' * 2 * (level + 1)
                 for file in files:
-                    if file != "MANIFEST.txt":  # 避免自引用
+                    if file != "MANIFEST.txt":  # Avoid self-reference
                         file_path = os.path.join(root, file)
                         size = os.path.getsize(file_path)
                         f.write(f"{subindent}{file} ({size} bytes)\n")
@@ -183,33 +183,33 @@ def create_backup_manifest(backup_dir: str, log: Logger):
         log.warn(f"Failed to create backup manifest: {e}")
 
 def is_sensitive_file(file_path: str) -> bool:
-    """检查文件是否为敏感文件"""
+    """Check if file is sensitive"""
     file_path = file_path.lower()
     
-    # 敏感文件模式
+    # Sensitive file patterns
     sensitive_patterns = [
-        # SSH 相关
+        # SSH related
         "id_rsa", "id_dsa", "id_ecdsa", "id_ed25519",
         ".pem", ".key", ".p12", ".pfx",
         "known_hosts", "authorized_keys",
         
-        # GPG 相关
+        # GPG related
         ".gnupg", "secring.gpg", "pubring.gpg",
         
-        # 密码和密钥
+        # Passwords and keys
         "password", "passwd", "secret", "token",
         "api_key", "private_key", "credential",
         
-        # 数据库文件
+        # Database files
         ".db", ".sqlite", ".sqlite3",
         
-        # 历史文件
+        # History files
         ".history", ".bash_history", ".zsh_history",
         
-        # 缓存目录
+        # Cache directories
         "cache", ".cache", "tmp", ".tmp",
         
-        # 应用特定
+        # Application specific
         ".aws/credentials", ".docker/config.json",
         "keychain", ".keychain",
     ]
@@ -217,7 +217,7 @@ def is_sensitive_file(file_path: str) -> bool:
     return any(pattern in file_path for pattern in sensitive_patterns)
 
 def get_secure_dotfile_list(log: Logger) -> list[str]:
-    """获取经过安全过滤的 dotfiles 列表"""
+    """Get security-filtered dotfiles list"""
     from .actions.export import DOT_LIST
     
     safe_dotfiles = []
@@ -240,7 +240,7 @@ def get_secure_dotfile_list(log: Logger) -> list[str]:
     return safe_dotfiles
 
 class ProgressTracker:
-    """简单的进度跟踪器"""
+    """Simple progress tracker"""
     def __init__(self, total: int, log: Logger, description: str = "Progress"):
         self.total = total
         self.current = 0

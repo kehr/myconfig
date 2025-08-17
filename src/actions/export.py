@@ -10,16 +10,16 @@ DOT_LIST = [
     "~/.wezterm.lua","~/.tmux.conf","~/.config/tmux",
     "~/.config/wezterm","~/.config/kitty","~/.config/nvim","~/.config/alacritty",
     "~/.config/karabiner","~/.config/starship.toml","~/.config/iterm2",
-    "~/.ssh/config",  # 仅配置，不复制私钥
-    # JetBrains / Xcode / Services / Fonts（可选）
+    "~/.ssh/config",  # Config only, no private keys
+    # JetBrains / Xcode / Services / Fonts (optional)
     "~/Library/Preferences/com.googlecode.iterm2.plist",
     "~/Library/Preferences/IdeaVim",
     "~/Library/Application Support/JetBrains",
     "~/Library/Preferences/IntelliJIdea*",  # patterns handled by shell via rsync
     "~/Library/Developer/Xcode/UserData",   # keybindings/snippets/themes
-    "~/Library/Services",                   # Automator 快捷动作
-    "~/Library/Fonts",                      # 自装字体
-    # VSCode 用户设置
+    "~/Library/Services",                   # Automator quick actions
+    "~/Library/Fonts",                      # Custom fonts
+    # VSCode user settings
     "~/Library/Application Support/Code/User/settings.json",
     "~/Library/Application Support/Code/User/keybindings.json",
     "~/Library/Application Support/Code/User/snippets",
@@ -33,8 +33,8 @@ def do_export(cfg: AppConfig, log: Logger, outdir: str|None):
     os.makedirs(outdir, exist_ok=True)
     log.sec(f"Exporting to: {outdir}"); log.hr()
     
-    # 计算总步骤数并创建进度跟踪器
-    total_steps = 1  # 环境信息
+    # Calculate total steps and create progress tracker
+    total_steps = 1  # Environment info
     if which("brew"): total_steps += 1
     if cfg.enable_mas and which("mas"): total_steps += 1
     if cfg.enable_vscode and which("code"): total_steps += 1
@@ -44,11 +44,11 @@ def do_export(cfg: AppConfig, log: Logger, outdir: str|None):
     total_steps += 1  # dotfiles
     if cfg.enable_defaults: total_steps += 1
     if cfg.enable_launchagents: total_steps += 1
-    total_steps += 2  # 清单和验证
+    total_steps += 2  # Manifest and verification
     
     progress = ProgressTracker(total_steps, log, "Export progress")
 
-    # 环境信息
+    # Environment info
     with open(os.path.join(outdir, "ENVIRONMENT.txt"), "w", encoding="utf-8") as f:
         f.write(f"export_time: {ts()}\nhost: {host()}\n\n")
         rc, sw = run_out("sw_vers || true"); f.write("sw_vers:\n"+sw+"\n")
@@ -88,7 +88,7 @@ def do_export(cfg: AppConfig, log: Logger, outdir: str|None):
         run(f'pip freeze --user > "{outdir}/pip_user_freeze.txt"', log, check=False, description="Export pip user packages")
         progress.update("pip user package list exported")
 
-    # dotfiles（使用安全过滤）
+    # dotfiles (using security filtering)
     safe_dotfiles = get_secure_dotfile_list(log)
     tmp = os.path.join(outdir, "dotfiles"); os.makedirs(tmp, exist_ok=True)
     
@@ -101,7 +101,7 @@ def do_export(cfg: AppConfig, log: Logger, outdir: str|None):
     run(f'rm -rf "{tmp}"', log, check=False)
     progress.update("dotfiles exported and compressed")
 
-    # 精挑 defaults
+    # Curated defaults
     if cfg.enable_defaults and os.path.exists("./" + cfg.defaults_domains_file):
         defdir = os.path.join(outdir, "defaults"); os.makedirs(defdir, exist_ok=True)
         with open("./" + cfg.defaults_domains_file, "r", encoding="utf-8") as f:
@@ -120,7 +120,7 @@ def do_export(cfg: AppConfig, log: Logger, outdir: str|None):
         run(f'cp -a "{la}"/*.plist "{outdir}/LaunchAgents/" 2>/dev/null || true', log, check=False, description="Backup LaunchAgents")
         progress.update("LaunchAgents backed up")
 
-    # 创建备份清单和验证
+    # Create backup manifest and verification
     create_backup_manifest(outdir, log)
     progress.update("Backup manifest created")
     
@@ -135,11 +135,11 @@ def do_export(cfg: AppConfig, log: Logger, outdir: str|None):
         log.warn("Recommend checking backup content or re-running export")
 
 def preview_export(cfg: AppConfig, log: Logger, outdir: str|None):
-    """预览导出操作将会执行的内容"""
+    """Preview what the export operation will do"""
     outdir = outdir or f"./backups/backup-{host()}-{ts()}"
     log.sec(f"Preview export operation → {outdir}"); log.hr()
     
-    # 显示将要导出的内容
+    # Show content to be exported
     log.info("Content to be exported:")
     log.info("  ✓ Environment info (ENVIRONMENT.txt)")
     
@@ -158,7 +158,7 @@ def preview_export(cfg: AppConfig, log: Logger, outdir: str|None):
     else:
         log.warn("  ✗ VS Code export disabled or not installed")
     
-    # dotfiles 预览
+    # dotfiles preview
     log.info("  ✓ Dotfiles and config files:")
     existing_dots = []
     for pat in DOT_LIST:
@@ -166,17 +166,17 @@ def preview_export(cfg: AppConfig, log: Logger, outdir: str|None):
         if os.path.exists(src):
             existing_dots.append(pat)
     
-    for dot in existing_dots[:5]:  # 只显示前5个
+    for dot in existing_dots[:5]:  # Only show first 5
         log.info(f"    - {dot}")
     if len(existing_dots) > 5:
         log.info(f"    ... total {len(existing_dots)} config files")
     
-    # defaults 预览
+    # defaults preview
     if cfg.enable_defaults and os.path.exists("./" + cfg.defaults_domains_file):
         log.info("  ✓ System preferences (defaults):")
         with open("./" + cfg.defaults_domains_file, "r", encoding="utf-8") as f:
             domains = [line.strip() for line in f if line.strip() and not line.startswith("#")]
-        for domain in domains[:3]:  # 只显示前3个
+        for domain in domains[:3]:  # Only show first 3
             log.info(f"    - {domain}")
         if len(domains) > 3:
             log.info(f"    ... total {len(domains)} domains")

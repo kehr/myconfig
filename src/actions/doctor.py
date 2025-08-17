@@ -16,7 +16,7 @@ def do_doctor(cfg, log: Logger):
     if run_out("command -v mas >/dev/null 2>&1; echo $?")[0]==0:
         rc,acc = run_out("mas account || true"); log.ok(f"App Store logged in: {acc.strip()}") if acc.strip() else log.warn("App Store not logged in")
     else: log.warn("mas not installed")
-    # defaults 域清单
+    # defaults domain list
     import os
     dom_file = "./config/defaults/domains.txt"
     if os.path.exists(dom_file):
