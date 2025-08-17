@@ -1,80 +1,112 @@
-# MyConfig 文档中心
+# MyConfig Documentation Center
 
-欢迎来到 MyConfig 的文档中心！这里包含了使用和扩展 MyConfig 的详细指南。
+Welcome to the MyConfig documentation center! Here you'll find comprehensive guides for using and extending MyConfig.
 
-## 📚 文档导航
+## 📚 Documentation Navigation
 
-### 基础文档
-- [🚀 安装指南](./installation.md) - 详细的安装方法、环境配置和故障排除
-- [📖 使用指南](./usage.md) - 详细的使用说明、命令参考和常用场景
-- [⚙️ 配置参考](./configuration.md) - 配置文件说明、选项详解和最佳实践
-- [🛡️ 安全特性](./security.md) - 安全机制、敏感文件保护和最佳实践
+### Getting Started
+- [Installation Guide](installation.md) - System requirements, installation methods, and troubleshooting
+- [Usage Guide](usage.md) - Complete command reference and common scenarios
 
-### 高级文档
-- [🔌 插件开发](./plugins.md) - 插件系统详解和开发指南
-- [🔧 Git 配置](./git-setup.md) - Git 配置和工作流程说明
-- [📋 优化记录](./OPTIMIZATION_SUMMARY.md) - 项目优化历史和改进记录
+### Configuration
+- [Configuration Reference](configuration.md) - TOML configuration, profiles, and environment variables
+- [Template System](templates.md) - Customizing output files with templates
 
-## 🚀 快速开始
+### Advanced Topics
+- [Security Features](security.md) - Security mechanisms and best practices (Chinese)
+- [Plugin Development](plugins.md) - Plugin system and extension development (Chinese)
+- [Git Setup](git-setup.md) - Git configuration and hooks (Chinese)
 
-如果你是第一次使用 MyConfig，建议按以下顺序阅读文档：
+### Project Information
+- [Optimization Summary](OPTIMIZATION_SUMMARY.md) - Project optimization history (Chinese)
 
-1. **[安装指南](./installation.md)** - 选择合适的安装方式
-2. **[使用指南](./usage.md)** - 了解基本概念和常用命令
-3. **[配置参考](./configuration.md)** - 根据需要自定义配置
-4. **[安全特性](./security.md)** - 了解安全机制和最佳实践
+## 🎯 Quick Links
 
-## 🔍 文档概览
+### Common Tasks
+- **First time setup**: Read [Installation Guide](installation.md)
+- **Basic usage**: Check [Usage Guide](usage.md) 
+- **Customize output**: See [Template System](templates.md)
+- **Configure MyConfig**: Reference [Configuration Guide](configuration.md)
 
-### 使用指南 (usage.md)
-- 基本概念和工作流程
-- 命令详解和参数说明
-- 常用场景和最佳实践
-- 故障排除和调试技巧
+### Advanced Users
+- **Security considerations**: Review [Security Features](security.md)
+- **Extend functionality**: Learn [Plugin Development](plugins.md)
+- **Contribute to project**: Check [Git Setup](git-setup.md)
 
-### 配置参考 (configuration.md)
-- 配置文件结构和语法
-- 主要配置选项详解
-- 配置档案系统使用
-- defaults 域管理
+## 📖 Documentation Structure
 
-### 安全特性 (security.md)
-- 敏感文件自动检测
-- 备份安全和验证
-- 加密和安全传输
-- 安全配置建议
+```
+docs/
+├── README.md                    # This file - documentation overview
+├── installation.md              # Installation and setup guide
+├── usage.md                     # Usage instructions and examples
+├── configuration.md             # Configuration reference
+├── templates.md                 # Template system documentation
+├── security.md                  # Security features (Chinese)
+├── plugins.md                   # Plugin development (Chinese)
+├── git-setup.md                 # Git configuration (Chinese)
+└── OPTIMIZATION_SUMMARY.md      # Project history (Chinese)
+```
 
-### 插件开发 (plugins.md)
-- 插件系统架构
-- 创建自定义插件
-- API 参考和示例
-- 插件开发最佳实践
+## 🆕 What's New in v2.0
 
-### 优化记录 (OPTIMIZATION_SUMMARY.md)
-- 项目优化历史
-- 功能改进记录
-- 性能和安全增强
-- 新特性说明
+- **Template System**: Professional file generation with customizable templates
+- **Compression Support**: Create and manage compressed backup archives
+- **Auto-Generated Documentation**: Every backup includes detailed README.md
+- **Class-Based Architecture**: Modern, modular codebase design
+- **Enhanced CLI**: Preview modes, dry-run options, and improved feedback
 
-## 🤝 贡献文档
+## 🛠️ Feature Documentation Status
 
-我们欢迎对文档的改进贡献！如果你发现：
+| Feature | Documentation | Status |
+|---------|---------------|--------|
+| Installation | [installation.md](installation.md) | ✅ Complete |
+| Basic Usage | [usage.md](usage.md) | ✅ Complete |
+| Configuration | [configuration.md](configuration.md) | ✅ Complete |
+| Templates | [templates.md](templates.md) | ✅ Complete |
+| Security | [security.md](security.md) | 🔄 Chinese |
+| Plugins | [plugins.md](plugins.md) | 🔄 Chinese |
+| Git Setup | [git-setup.md](git-setup.md) | 🔄 Chinese |
 
-- 文档中的错误或不准确信息
-- 缺少的使用场景或示例
-- 可以改进的说明或解释
-- 新功能需要文档支持
+## 🚀 Quick Start
 
-请提交 Issue 或 Pull Request。
+1. **Install MyConfig**
+   ```bash
+   git clone <repository-url>
+   cd myconfig
+   ./install.sh
+   ```
 
-## 📞 获取帮助
+2. **Verify Installation**
+   ```bash
+   myconfig doctor
+   ```
 
-如果文档没有解答你的问题，可以：
+3. **Create Your First Backup**
+   ```bash
+   myconfig export my-first-backup
+   ```
 
-1. 查看项目的 Issue 列表
-2. 提交新的 Issue 描述问题
-3. 查看源码中的注释和示例
+4. **Explore Template System**
+   ```bash
+   cat my-first-backup/README.md
+   ```
+
+## 📋 Help and Support
+
+### Getting Help
+- Run `myconfig --help` for command-line help
+- Check `myconfig doctor` for system diagnostics
+- Review error logs in the `logs/` directory
+
+### Community
+- Report issues on GitHub
+- Contribute improvements via pull requests
+- Share templates and configurations
+
+### Documentation Feedback
+If you find any documentation issues or have suggestions for improvement, please open an issue or submit a pull request.
 
 ---
 
-💡 **提示**: 建议将本文档加入书签，以便随时查阅参考！
+**Note**: Some documentation files are currently in Chinese and will be translated to English in future updates. The core functionality documentation (installation, usage, configuration, templates) is available in English.
