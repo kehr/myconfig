@@ -1,6 +1,6 @@
 import argparse, importlib, pkgutil, os
 from .utils import load_config
-from .logger import setup_logging, get_logger
+from .logger import setup_logging
 from .actions.export import do_export
 from .actions.restore import do_restore
 from .actions.doctor import do_doctor

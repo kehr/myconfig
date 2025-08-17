@@ -1,6 +1,6 @@
 from __future__ import annotations
 import os, sys, subprocess, shlex, time, json, pathlib, typing, logging
-from .logger import get_logger, log_success
+from .logger import log_success
 
 # Colors
 T1="\033[1m"; DIM="\033[2m"; RED="\033[31m"; GREEN="\033[32m"; YELLOW="\033[33m"; BLUE="\033[34m"; RST="\033[0m"
@@ -70,7 +70,7 @@ def load_config(path: str) -> AppConfig:
 
 
 def run(cmd: str, cfg: AppConfig, check: bool=True, description: str=""):
-    logger = get_logger(__name__)
+    logger = logging.getLogger(__name__)
     
     if cfg.dry_run:
         desc_text = f" ({description})" if description else ""
@@ -111,7 +111,7 @@ def host() -> str:
 def verify_backup(backup_dir: str) -> bool:
     """Verify backup directory integrity"""
     if not os.path.isdir(backup_dir):
-        logger = get_logger(__name__)
+        logger = logging.getLogger(__name__)
         logger.error(f"Backup directory does not exist: {backup_dir}")
         return False
     
@@ -124,7 +124,7 @@ def verify_backup(backup_dir: str) -> bool:
             missing_files.append(file)
     
     if missing_files:
-        logger = get_logger(__name__)
+        logger = logging.getLogger(__name__)
         logger.warning(f"Backup incomplete, missing files: {', '.join(missing_files)}")
         return False
     
@@ -134,14 +134,14 @@ def verify_backup(backup_dir: str) -> bool:
                         for dirpath, dirnames, filenames in os.walk(backup_dir)
                         for filename in filenames)
         if total_size < 1024:  # Less than 1KB might be problematic
-            logger = get_logger(__name__)
+            logger = logging.getLogger(__name__)
             logger.warning(f"Backup size unusually small: {total_size} bytes")
             return False
     except Exception as e:
-        logger = get_logger(__name__)
+        logger = logging.getLogger(__name__)
         logger.warning(f"Cannot calculate backup size: {e}")
     
-    logger = get_logger(__name__)
+    logger = logging.getLogger(__name__)
     log_success(logger, "Backup verification passed")
     return True
 
@@ -165,10 +165,10 @@ def create_backup_manifest(backup_dir: str):
                         file_path = os.path.join(root, file)
                         size = os.path.getsize(file_path)
                         f.write(f"{subindent}{file} ({size} bytes)\n")
-        logger = get_logger(__name__)
+        logger = logging.getLogger(__name__)
         log_success(logger, "Backup manifest created")
     except Exception as e:
-        logger = get_logger(__name__)
+        logger = logging.getLogger(__name__)
         logger.warning(f"Failed to create backup manifest: {e}")
 
 def is_sensitive_file(file_path: str) -> bool:
@@ -221,7 +221,7 @@ def get_secure_dotfile_list() -> list[str]:
                 safe_dotfiles.append(pattern)
     
     if skipped_files:
-        logger = get_logger(__name__)
+        logger = logging.getLogger(__name__)
         logger.info(f"Skipped {len(skipped_files)} sensitive files for security")
         for skip in skipped_files:
             logger.debug(f"  Skipped: {skip}")
@@ -234,7 +234,7 @@ class ProgressTracker:
         self.total = total
         self.current = 0
         self.description = description
-        self.logger = get_logger(__name__)
+        self.logger = logging.getLogger(__name__)
         self.logger.info(f"{description}: 0/{total}")
     
     def update(self, step_description: str = ""):

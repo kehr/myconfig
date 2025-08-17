@@ -1,7 +1,7 @@
 from __future__ import annotations
-import os, json, shlex
+import os, json, shlex, logging
 from ..utils import AppConfig, run, run_out, ts, host, which, verify_backup, create_backup_manifest, ProgressTracker, get_secure_dotfile_list
-from ..logger import get_logger, log_section, log_separator, log_success, confirm_action
+from ..logger import log_section, log_separator, log_success, confirm_action
 
 HOME = os.path.expanduser("~")
 
@@ -29,11 +29,11 @@ DOT_LIST = [
 def do_export(cfg: AppConfig, outdir: str|None):
     outdir = outdir or f"./backups/backup-{host()}-{ts()}"
     if os.path.exists(outdir):
-        logger = get_logger(__name__)
+        logger = logging.getLogger(__name__)
         logger.warning(f"Output directory already exists: {outdir}")
         if not confirm_action(logger, "Continue writing?", cfg.interactive): return
     os.makedirs(outdir, exist_ok=True)
-    logger = get_logger(__name__)
+    logger = logging.getLogger(__name__)
     log_section(logger, f"Exporting to: {outdir}")
     log_separator(logger)
     
@@ -143,7 +143,7 @@ def do_export(cfg: AppConfig, outdir: str|None):
 def preview_export(cfg: AppConfig, outdir: str|None):
     """Preview what the export operation will do"""
     outdir = outdir or f"./backups/backup-{host()}-{ts()}"
-    logger = get_logger(__name__)
+    logger = logging.getLogger(__name__)
     log_section(logger, f"Preview export operation → {outdir}")
     log_separator(logger)
     

@@ -1,10 +1,10 @@
 from __future__ import annotations
-import os
+import os, logging
 from ..utils import AppConfig, run, run_out, which, verify_backup
-from ..logger import get_logger, log_section, log_separator, log_success, confirm_action
+from ..logger import log_section, log_separator, log_success, confirm_action
 
 def do_restore(cfg: AppConfig, srcdir: str):
-    logger = get_logger(__name__)
+    logger = logging.getLogger(__name__)
     if not srcdir or not os.path.isdir(srcdir):
         logger.error(f"Backup directory does not exist: {srcdir}")
         return
@@ -92,7 +92,7 @@ def do_restore(cfg: AppConfig, srcdir: str):
 
 def preview_restore(cfg: AppConfig, srcdir: str):
     """Preview what the restore operation will do"""
-    logger = get_logger(__name__)
+    logger = logging.getLogger(__name__)
     if not srcdir or not os.path.isdir(srcdir):
         logger.error(f"Backup directory does not exist: {srcdir}")
         return

@@ -1,9 +1,10 @@
 from __future__ import annotations
+import logging
 from ..utils import run_out
-from ..logger import get_logger, log_section, log_separator, log_success
+from ..logger import log_section, log_separator, log_success
 
 def do_doctor(cfg):
-    logger = get_logger(__name__)
+    logger = logging.getLogger(__name__)
     log_section(logger, "System health check")
     log_separator(logger)
     # Xcode

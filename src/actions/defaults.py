@@ -1,7 +1,7 @@
 from __future__ import annotations
-import os
+import os, logging
 from ..utils import AppConfig, run, run_out, ts
-from ..logger import get_logger, log_section, log_separator, log_success
+from ..logger import log_section, log_separator, log_success
 
 def _load_list(path:str)->list[str]:
     L=[]
@@ -14,7 +14,7 @@ def _load_list(path:str)->list[str]:
     return L
 
 def defaults_export_all(cfg: AppConfig):
-    logger = get_logger(__name__)
+    logger = logging.getLogger(__name__)
     log_section(logger, "defaults full export")
     log_separator(logger)
     rc,out = run_out("defaults domains")
@@ -33,10 +33,10 @@ def defaults_export_all(cfg: AppConfig):
 
 def defaults_import_dir(cfg: AppConfig, dirpath: str):
     if not dirpath or not os.path.isdir(dirpath):
-        logger = get_logger(__name__)
+        logger = logging.getLogger(__name__)
         logger.error(f"Directory does not exist: {dirpath}")
         return
-    logger = get_logger(__name__)
+    logger = logging.getLogger(__name__)
     log_section(logger, f"Import defaults: {dirpath}")
     log_separator(logger)
     run('for p in "'+dirpath+'"/*.plist; do [[ -e "$p" ]] || continue; '

@@ -71,9 +71,7 @@ def setup_logging(verbose: bool = False, quiet: bool = False) -> None:
     root_logger.addHandler(console_handler)
 
 
-def get_logger(name: str) -> logging.Logger:
-    """Get a logger instance"""
-    return logging.getLogger(name)
+
 
 
 # Special logging functions for compatibility
