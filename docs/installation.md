@@ -54,13 +54,14 @@ pip install myconfig-osx
 
 # Verify installation
 myconfig --version
-myconfig --help
+myconfig doctor
 ```
 
 **Advantages:**
 - ✅ One-command installation
 - ✅ Automatic dependency management  
 - ✅ Easy updates with `pip install --upgrade myconfig-osx`
+- ✅ Same command works across all platforms
 - ✅ Works in virtual environments
 - ✅ Official stable releases only
 
@@ -78,7 +79,7 @@ git clone <repository-url>
 cd myconfig
 
 # Run interactive installer
-./install.sh
+./scripts/install.sh
 ```
 
 The installer will guide you through the process and offer these options:

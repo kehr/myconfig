@@ -9,6 +9,28 @@
 - [Template System](#template-system)
 - [Troubleshooting](#troubleshooting)
 
+## Installation
+
+Install MyConfig from PyPI (recommended):
+
+```bash
+# Install from PyPI
+pip install myconfig-osx
+
+# Verify installation
+myconfig --version
+myconfig doctor
+```
+
+Or install from source for development:
+
+```bash
+# Clone and install from source
+git clone https://github.com/kehr/myconfig.git
+cd myconfig
+pip install -e .
+```
+
 ## Basic Concepts
 
 MyConfig is a comprehensive configuration management tool with the following core functions:

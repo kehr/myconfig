@@ -64,9 +64,9 @@ docs/
 | Basic Usage | [usage.md](usage.md) | ✅ Complete |
 | Configuration | [configuration.md](configuration.md) | ✅ Complete |
 | Templates | [templates.md](templates.md) | ✅ Complete |
-| Security | [security.md](security.md) | 🔄 Chinese |
-| Plugins | [plugins.md](plugins.md) | 🔄 Chinese |
-| Git Setup | [git-setup.md](git-setup.md) | 🔄 Chinese |
+| Testing | [testing.md](testing.md) | ✅ Complete |
+| Security | [security.md](security.md) | ✅ Complete |
+| Plugins | [plugins.md](plugins.md) | ✅ Complete |
 
 ## 🚀 Quick Start
 
@@ -74,7 +74,7 @@ docs/
    ```bash
    git clone <repository-url>
    cd myconfig
-   ./install.sh
+   ./scripts/install.sh
    ```
 
 2. **Verify Installation**

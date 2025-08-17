@@ -6,6 +6,7 @@ include MANIFEST.in
 
 # Include all source code
 recursive-include src *.py
+recursive-include scripts *.sh
 recursive-include src/templates *.template
 
 # Include configuration files

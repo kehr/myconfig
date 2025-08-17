@@ -22,16 +22,16 @@ help:
 
 # Installation related
 install:
-	@./install.sh
+	@./scripts/install.sh
 
 install-user:
-	@./install.sh --user
+	@./scripts/install.sh --user
 
 install-system:
-	@./install.sh --system
+	@./scripts/install.sh --system
 
 install-dev:
-	@./install.sh --dev
+	@./scripts/install.sh --dev
 
 uninstall:
 	@echo "Uninstalling MyConfig..."

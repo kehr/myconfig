@@ -6,6 +6,8 @@
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![macOS](https://img.shields.io/badge/platform-macOS-lightgrey.svg)](https://www.apple.com/macos/)
 [![GitHub stars](https://img.shields.io/github/stars/kehr/myconfig.svg)](https://github.com/kehr/myconfig/stargazers)
+[![Tests](https://img.shields.io/github/workflow/status/kehr/myconfig/Tests?label=tests)](https://github.com/kehr/myconfig/actions)
+[![Coverage](https://img.shields.io/codecov/c/github/kehr/myconfig)](https://codecov.io/gh/kehr/myconfig)
 
 A comprehensive macOS system configuration backup and restore tool.
 
@@ -20,43 +22,55 @@ A comprehensive macOS system configuration backup and restore tool.
 - 📋 **Self-Documenting**: Auto-generated README.md for every backup with detailed manifests
 - 🗜️ **Compression Support**: Create compressed archives for easy storage and sharing
 - 🎨 **Template System**: Customizable file generation using professional templates
+- 🧪 **Comprehensive Testing**: Unit and integration tests ensuring reliability
+- 🏗️ **Modern Architecture**: Class-based design with proper separation of concerns
 
 ## 🚀 Quick Start
 
-### Installation Methods
+### Installation
 
-**Method 1: System Installation (Recommended)**
+**Method 1: PyPI Installation (Recommended)**
 
 ```bash
-# Clone the repository
-git clone <repository-url>
-cd myconfig
+# Install from PyPI
+pip install myconfig-osx
 
-# Interactive installation
-./install.sh
-
-# Or direct user installation
-./install.sh --user
-# Or system installation (requires sudo)
-./install.sh --system
-
-# Using Makefile
-make install-user    # User installation
-make install-system  # System installation
+# Verify installation
+myconfig --version
+myconfig doctor
 ```
 
-**Method 2: Direct Usage (No Installation Required)**
+**Method 2: Development Installation**
 
 ```bash
 # Clone the repository
-git clone <repository-url>
+git clone https://github.com/kehr/myconfig.git
+cd myconfig
+
+# Install in development mode
+pip install -e .
+
+# Verify installation
+myconfig --version
+myconfig doctor
+```
+
+**Method 3: Direct Usage (No Installation)**
+
+```bash
+# Clone the repository
+git clone https://github.com/kehr/myconfig.git
 cd myconfig
 
 # Set execution permissions
 chmod +x bin/myconfig
+chmod +x scripts/install.sh
 
 # Use directly
 ./bin/myconfig --help
+
+# Or install from source
+./scripts/install.sh
 ```
 
 ### Basic Usage
