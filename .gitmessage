@@ -1,42 +1,42 @@
-# 标题行：简洁描述 (不超过50字符)
-# |<----  50 字符以内  ---->|
+# Title line: concise description (under 50 characters)
+# |<----  Under 50 characters  ---->|
 
-# 空行
+# Empty line
 
-# 正文：详细说明 what 和 why，不是 how (72字符换行)
-# |<----   正文内容尽量在 72 字符内换行   ---->|
+# Body: detailed explanation of what and why, not how (wrap at 72 characters)
+# |<----   Body content should wrap at 72 characters   ---->|
 
-# 空行
+# Empty line
 
-# 页脚：引用相关 issue 或 PR
-# 例如：
+# Footer: reference related issues or PRs
+# Examples:
 # Fixes #123
 # Closes #456
-# Refs #789
+# Related to #789
 
-# --- 提交类型参考 ---
-# feat:     新功能
-# fix:      修复 bug
-# docs:     文档修改
-# style:    代码格式化，不影响功能
-# refactor: 重构代码
-# test:     测试相关
-# chore:    构建工具、辅助工具等
-# perf:     性能优化
-# ci:       CI/CD 相关
+# --- Commit Type Reference ---
+# feat:     new feature
+# fix:      bug fix
+# docs:     documentation changes
+# style:    code formatting, no functional impact
+# refactor: code refactoring
+# test:     test related
+# chore:    build tools, auxiliary tools, etc.
+# perf:     performance optimization
+# ci:       CI/CD related
 
-# --- 提交示例 ---
-# feat: 添加备份验证功能
-# 
-# - 新增 verify_backup() 函数检查备份完整性
-# - 导出后自动验证备份
-# - 恢复前验证备份可用性
-# 
+# --- Commit Example ---
+# feat: add backup verification functionality
+#
+# - Add verify_backup() function to check backup integrity
+# - Automatically verify backup after export
+# - Verify backup availability before restore
+#
 # Fixes #42
 
-# --- 注意事项 ---
-# 1. 标题使用现在时态："添加"而不是"已添加"
-# 2. 标题首字母小写
-# 3. 标题末尾不加句号
-# 4. 正文说明为什么做这个改动
-# 5. 如果改动复杂，请在正文详细说明
+# --- Guidelines ---
+# 1. Use present tense in title: "add" not "added"
+# 2. Lowercase first letter in title
+# 3. No period at the end of title
+# 4. Body explains why this change was made
+# 5. If the change is complex, provide detailed explanation in body

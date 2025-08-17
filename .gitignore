@@ -1,13 +1,13 @@
 # MyConfig .gitignore
 
-# 备份目录 - 包含用户个人数据，不应该提交
+# Backup directories - contain user personal data, should not be committed
 backups/
 
-# 日志文件 - 运行时生成的临时文件
+# Log files - runtime generated temporary files
 logs/
 *.log
 
-# Python 相关
+# Python related
 __pycache__/
 *.py[cod]
 *$py.class
@@ -36,11 +36,11 @@ share/python-wheels/
 *.egg
 MANIFEST
 
-# 打包文件
+# Package files
 *.whl
 *.tar.gz
 
-# IDE 和编辑器
+# IDE and editors
 .vscode/
 .idea/
 *.swp
@@ -49,13 +49,13 @@ MANIFEST
 .DS_Store
 Thumbs.db
 
-# 临时文件
+# Temporary files
 *.tmp
 *.temp
 .tmp/
 .temp/
 
-# 操作系统相关
+# OS related
 .DS_Store
 .DS_Store?
 ._*
@@ -64,18 +64,18 @@ Thumbs.db
 ehthumbs.db
 Thumbs.db
 
-# 用户特定配置 - 可能包含敏感信息
+# User specific configuration - may contain sensitive information
 config.local.toml
 .env
 .env.local
 
-# 备份和缓存
+# Backup and cache
 *.bak
 *.backup
 *.cache
 .cache/
 
-# 压缩文件 - 通常是临时生成的
+# Archive files - usually temporarily generated
 *.zip
 *.tar.gz
 *.tgz
@@ -83,7 +83,7 @@ config.local.toml
 *.rar
 *.7z
 
-# 测试相关
+# Test related
 .pytest_cache/
 .coverage
 htmlcov/
@@ -98,24 +98,27 @@ coverage.xml
 .dmypy.json
 dmypy.json
 
-# 项目特定的忽略
-# 如果用户自定义了敏感的配置文件
+# Project specific ignores
+# If users customize sensitive configuration files
 profiles/*.local.toml
 defaults/*.local.txt
 
-# 如果有加密文件
+# If there are encrypted files
 *.gpg
 *.asc
 
-# 如果有数据库文件
+# If there are database files
 *.db
 *.sqlite
 *.sqlite3
 
-# 如果有证书文件
+# If there are certificate files
 *.pem
 *.key
 *.crt
 *.csr
 *.p12
 *.pfx
+
+# ignore reddit post
+READY_TO_POST_REDDIT.md
