@@ -1,0 +1,22 @@
+# 主开关
+interactive = true
+enable_npm = false
+enable_pip_user = false
+enable_pipx = false
+enable_defaults = true
+enable_vscode = true
+enable_launchagents = true
+enable_mas = true
+
+# 增量备份设置
+enable_incremental = false
+base_backup_dir = ""  # 基础备份目录，用于增量比较
+
+# defaults 清单（精挑域）
+defaults_domains_file = "config/defaults/domains.txt"
+
+# defaults 全量导出排除（匹配包含即跳过；支持简单子串）
+defaults_exclude_file = "config/defaults/exclude.txt"
+
+# dotfiles 采集路径白名单（相对用户HOME；支持目录/文件）
+# 空行或以#开头为注释

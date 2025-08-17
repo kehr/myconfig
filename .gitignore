@@ -1,0 +1,121 @@
+# MyConfig .gitignore
+
+# 备份目录 - 包含用户个人数据，不应该提交
+backups/
+
+# 日志文件 - 运行时生成的临时文件
+logs/
+*.log
+
+# Python 相关
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# 打包文件
+*.whl
+*.tar.gz
+
+# IDE 和编辑器
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# 临时文件
+*.tmp
+*.temp
+.tmp/
+.temp/
+
+# 操作系统相关
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# 用户特定配置 - 可能包含敏感信息
+config.local.toml
+.env
+.env.local
+
+# 备份和缓存
+*.bak
+*.backup
+*.cache
+.cache/
+
+# 压缩文件 - 通常是临时生成的
+*.zip
+*.tar.gz
+*.tgz
+*.tar
+*.rar
+*.7z
+
+# 测试相关
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.coverage.*
+coverage.xml
+*.cover
+.hypothesis/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# 项目特定的忽略
+# 如果用户自定义了敏感的配置文件
+profiles/*.local.toml
+defaults/*.local.txt
+
+# 如果有加密文件
+*.gpg
+*.asc
+
+# 如果有数据库文件
+*.db
+*.sqlite
+*.sqlite3
+
+# 如果有证书文件
+*.pem
+*.key
+*.crt
+*.csr
+*.p12
+*.pfx

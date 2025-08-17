@@ -1,0 +1,41 @@
+# 包含重要文件
+include README.md
+include LICENSE
+include pyproject.toml
+include setup.py
+include MANIFEST.in
+
+# 包含配置文件
+recursive-include config *.toml *.txt
+graft config
+
+# 包含文档
+recursive-include docs *.md
+graft docs
+
+# 包含贡献文件
+recursive-include contrib *
+
+# 排除不必要的文件
+exclude .gitignore
+exclude .gitattributes
+exclude .gitmessage
+exclude *.code-workspace
+
+# 排除目录
+prune .git
+prune backups
+prune logs
+prune __pycache__
+prune *.egg-info
+prune build
+prune dist
+
+# 排除测试文件（如果有的话）
+prune tests
+
+# 排除开发文件
+exclude .mypy_cache
+exclude .pytest_cache
+exclude .coverage
+exclude tox.ini

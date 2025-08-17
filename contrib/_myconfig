@@ -1,0 +1,22 @@
+#compdef myconfig
+_arguments -C \
+  '(-y --yes)'{-y,--yes}'[非交互]' \
+  '(-n --dry-run)'{-n,--dry-run}'[试运行]' \
+  '(-v --verbose)'{-v,--verbose}'[详细日志]' \
+  '(--quiet)--quiet[安静模式]' \
+  '(--no-mas)--no-mas[跳过 mas]' \
+  '1:cmd:(export restore doctor defaults diff pack profile help)' \
+  '*::arg:->args'
+case $state in
+  args)
+    case $words[2] in
+      export) _files -/ ;;
+      restore) _files -/ ;;
+      defaults) _values 'defaults subcmd' export-all import ;;
+      diff) _files -/ ;;
+      pack) _files -/ ;;
+      profile) _values 'profile subcmd' list use save ;;
+      *) ;;
+    esac
+  ;;
+esac
