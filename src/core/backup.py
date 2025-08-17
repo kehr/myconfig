@@ -5,9 +5,9 @@ Backup management and orchestration
 from __future__ import annotations
 import os
 import logging
-from .config import AppConfig
-from .executor import CommandExecutor
-from .components import (
+from core.config import AppConfig
+from core.executor import CommandExecutor
+from core.components import (
     HomebrewComponent,
     MASComponent,
     VSCodeComponent,

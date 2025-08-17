@@ -157,7 +157,7 @@ class ExportTemplateRenderer:
 
 def create_template_context(export_dir: str) -> Dict[str, Any]:
     """Create template context by analyzing export directory"""
-    from .utils import ts, host
+    from utils import ts, host
     
     context = {
         'export_time': ts(),
