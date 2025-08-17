@@ -17,6 +17,7 @@ from .components import (
 )
 from ..logger import log_section, log_separator, log_success
 from ..utils import create_backup_manifest, ts, host
+from ..template_engine import ExportTemplateRenderer, create_template_context
 
 
 class BackupManager:
@@ -66,10 +67,10 @@ class BackupManager:
                 else:
                     self.logger.warning(f"✗ {component.name} export failed")
 
-        # Create backup manifest and README
+        # Create backup manifest and README using templates
         component_names = [comp.name for comp in self.components if comp.is_enabled()]
         create_backup_manifest(temp_dir, component_names)
-        self._create_export_readme(temp_dir)
+        self._create_templated_files(temp_dir)
         
         # Handle compression if requested
         if compress:
@@ -148,7 +149,35 @@ class BackupManager:
         )
 
     def _export_environment(self, output_dir: str) -> None:
-        """Export environment information"""
+        """Export environment information using template"""
+        from ..utils import ts, host
+        from ..template_engine import TemplateEngine
+        
+        try:
+            # Gather environment data
+            rc, sw_vers = self.executor.run_output("sw_vers || true")
+            rc, xcode_path = self.executor.run_output("xcode-select -p || true")
+            
+            # Create template context
+            env_context = {
+                'export_time': ts(),
+                'hostname': host(),
+                'sw_vers': sw_vers.strip(),
+                'xcode_path': xcode_path.strip()
+            }
+            
+            # Use template engine
+            engine = TemplateEngine()
+            env_file = os.path.join(output_dir, "ENVIRONMENT.txt")
+            engine.render_to_file("ENVIRONMENT.txt.template", env_context, env_file)
+            
+        except Exception as e:
+            self.logger.warning(f"Template-based environment export failed: {e}")
+            # Fallback to simple version
+            self._export_environment_fallback(output_dir)
+
+    def _export_environment_fallback(self, output_dir: str) -> None:
+        """Fallback environment export without templates"""
         from ..utils import ts, host
 
         env_file = os.path.join(output_dir, "ENVIRONMENT.txt")
@@ -161,120 +190,33 @@ class BackupManager:
             rc, xcp = self.executor.run_output("xcode-select -p || true")
             f.write("xcode-select -p:\n" + xcp + "\n")
 
-    def _create_export_readme(self, output_dir: str) -> None:
-        """Create detailed export README with file manifest"""
-        import os
-        from ..utils import ts, host
-        
+    def _create_templated_files(self, output_dir: str) -> None:
+        """Create templated files (README.md, etc.) using template engine"""
+        try:
+            # Create template context from exported files
+            context = create_template_context(output_dir)
+            
+            # Use template renderer to create README
+            renderer = ExportTemplateRenderer()
+            renderer.create_readme(output_dir, context)
+            
+        except Exception as e:
+            self.logger.warning(f"Template generation failed: {e}")
+            # Fallback to simple README
+            self._create_simple_readme(output_dir)
+
+    def _create_simple_readme(self, output_dir: str) -> None:
+        """Create a simple fallback README if template fails"""
         readme_file = os.path.join(output_dir, "README.md")
         
         with open(readme_file, "w", encoding="utf-8") as f:
-            f.write("# MyConfig Export Manifest\n\n")
-            f.write(f"**Export Time**: {ts()}\n")
-            f.write(f"**Hostname**: {host()}\n")
-            f.write(f"**Export Tool**: MyConfig v2.0\n\n")
-            
-            f.write("## 📋 Export Summary\n\n")
-            f.write("This backup contains the following macOS configuration components:\n\n")
-            
-            # Analyze and document each file/directory
-            self._document_export_files(f, output_dir)
-            
-            f.write("\n## 🔄 Restore Instructions\n\n")
-            f.write("To restore this configuration on a new system:\n\n")
-            f.write("1. Install MyConfig tool\n")
-            f.write("2. Run: `myconfig restore <this-directory>`\n")
-            f.write("3. Or run: `myconfig unpack <backup-archive>` (if compressed)\n\n")
-            
-            f.write("## ⚠️ Important Notes\n\n")
-            f.write("- Sensitive files (SSH keys, passwords) are automatically excluded\n")
-            f.write("- System defaults may require logout/restart to take effect\n")
-            f.write("- Homebrew installation will be prompted if not present\n")
-            f.write("- VS Code extensions will be installed automatically\n\n")
-
-    def _document_export_files(self, f, output_dir: str) -> None:
-        """Document all exported files in detail"""
+            f.write("# MyConfig Export\n\n")
+            f.write(f"Export Time: {ts()}\n")
+            f.write(f"Hostname: {host()}\n\n")
+            f.write("This directory contains a MyConfig backup.\n")
+            f.write("Use 'myconfig restore <this-directory>' to restore.\n")
         
-        # System Environment
-        env_file = os.path.join(output_dir, "ENVIRONMENT.txt")
-        if os.path.exists(env_file):
-            f.write("### 🖥️ System Environment\n")
-            f.write(f"- **File**: `ENVIRONMENT.txt`\n")
-            f.write(f"- **Size**: {os.path.getsize(env_file)} bytes\n")
-            f.write(f"- **Content**: macOS version, hostname, Xcode tools info\n\n")
-        
-        # Homebrew
-        brewfile = os.path.join(output_dir, "Brewfile")
-        if os.path.exists(brewfile):
-            f.write("### 🍺 Homebrew Configuration\n")
-            with open(brewfile, "r") as bf:
-                lines = bf.readlines()
-                brew_count = len([l for l in lines if l.strip().startswith('brew ')])
-                cask_count = len([l for l in lines if l.strip().startswith('cask ')])
-                tap_count = len([l for l in lines if l.strip().startswith('tap ')])
-            
-            f.write(f"- **File**: `Brewfile`\n")
-            f.write(f"- **Size**: {os.path.getsize(brewfile)} bytes\n")
-            f.write(f"- **Packages**: {brew_count} formulas, {cask_count} casks, {tap_count} taps\n")
-            if os.path.exists(os.path.join(output_dir, "HOMEBREW_VERSION.txt")):
-                f.write(f"- **Version Info**: `HOMEBREW_VERSION.txt`\n")
-            f.write("\n")
-        
-        # VS Code
-        vscode_file = os.path.join(output_dir, "vscode_extensions.txt")
-        if os.path.exists(vscode_file):
-            f.write("### 💻 VS Code Configuration\n")
-            with open(vscode_file, "r") as vf:
-                ext_count = len([l for l in vf.readlines() if l.strip()])
-            f.write(f"- **File**: `vscode_extensions.txt`\n")
-            f.write(f"- **Size**: {os.path.getsize(vscode_file)} bytes\n")
-            f.write(f"- **Extensions**: {ext_count} installed extensions\n\n")
-        
-        # Dotfiles
-        dotfiles_archive = os.path.join(output_dir, "dotfiles.tar.gz")
-        if os.path.exists(dotfiles_archive):
-            f.write("### 📁 Configuration Files (Dotfiles)\n")
-            f.write(f"- **Archive**: `dotfiles.tar.gz`\n")
-            f.write(f"- **Size**: {os.path.getsize(dotfiles_archive):,} bytes\n")
-            f.write(f"- **Content**: Shell configs, Git settings, application preferences\n")
-            f.write(f"- **Security**: Sensitive files automatically excluded\n\n")
-        
-        # System Defaults
-        defaults_dir = os.path.join(output_dir, "defaults")
-        if os.path.isdir(defaults_dir):
-            f.write("### ⚙️ System Preferences (Defaults)\n")
-            plist_files = [f for f in os.listdir(defaults_dir) if f.endswith('.plist')]
-            total_size = sum(os.path.getsize(os.path.join(defaults_dir, pf)) for pf in plist_files)
-            
-            f.write(f"- **Directory**: `defaults/`\n")
-            f.write(f"- **Files**: {len(plist_files)} preference domains\n")
-            f.write(f"- **Total Size**: {total_size:,} bytes\n")
-            f.write(f"- **Domains**: Dock, Finder, Safari, etc.\n\n")
-        
-        # LaunchAgents
-        la_dir = os.path.join(output_dir, "LaunchAgents")
-        if os.path.isdir(la_dir):
-            f.write("### 🚀 Launch Agents\n")
-            plist_files = [f for f in os.listdir(la_dir) if f.endswith('.plist')]
-            f.write(f"- **Directory**: `LaunchAgents/`\n")
-            f.write(f"- **Services**: {len(plist_files)} user services\n")
-            f.write(f"- **Content**: Background services and scheduled tasks\n\n")
-        
-        # MAS
-        mas_file = os.path.join(output_dir, "mas.list")
-        if os.path.exists(mas_file):
-            f.write("### 🏪 Mac App Store\n")
-            with open(mas_file, "r") as mf:
-                app_count = len([l for l in mf.readlines() if l.strip()])
-            f.write(f"- **File**: `mas.list`\n")
-            f.write(f"- **Apps**: {app_count} installed applications\n\n")
-        
-        # Metadata files
-        f.write("### 📄 Metadata Files\n")
-        manifest_file = os.path.join(output_dir, "MANIFEST.json")
-        if os.path.exists(manifest_file):
-            f.write(f"- **Manifest**: `MANIFEST.json` - Export metadata and component list\n")
-        f.write(f"- **This File**: `README.md` - Detailed export documentation\n")
+        self.logger.info("Created simple README.md")
 
     def _create_compressed_backup(self, temp_dir: str, output_path: str) -> None:
         """Create compressed backup archive"""
