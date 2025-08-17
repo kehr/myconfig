@@ -16,6 +16,7 @@ from .components import (
     LaunchAgentsComponent,
 )
 from ..logger import log_section, log_separator, log_success
+from ..utils import create_backup_manifest, ts, host
 
 
 class BackupManager:
@@ -60,6 +61,10 @@ class BackupManager:
                 else:
                     self.logger.warning(f"✗ {component.name} export failed")
 
+        # Create backup manifest
+        component_names = [comp.name for comp in self.components if comp.is_enabled()]
+        create_backup_manifest(output_dir, component_names)
+        
         log_separator(self.logger)
         log_success(
             self.logger, f"Export completed: {success_count} components exported"
