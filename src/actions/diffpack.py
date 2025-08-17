@@ -1,8 +1,8 @@
 from __future__ import annotations
 import os, logging
-from ..core import AppConfig
-from ..utils import run
-from ..logger import log_section, log_separator, log_success
+from core import AppConfig
+from utils import run
+from logger import log_section, log_separator, log_success
 
 def do_diff(cfg: AppConfig, a: str, b: str):
     if not (os.path.isdir(a) and os.path.isdir(b)):

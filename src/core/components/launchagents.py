@@ -5,7 +5,7 @@ LaunchAgents backup/restore component
 from __future__ import annotations
 import os
 from typing import List
-from ..base import BackupComponent
+from core.base import BackupComponent
 
 
 class LaunchAgentsComponent(BackupComponent):

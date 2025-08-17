@@ -1,8 +1,8 @@
 from __future__ import annotations
 import os, logging
-from ..core import AppConfig
-from ..utils import run, run_out, ts
-from ..logger import log_section, log_separator, log_success
+from core import AppConfig
+from utils import run, run_out, ts
+from logger import log_section, log_separator, log_success
 
 def _load_list(path:str)->list[str]:
     L=[]

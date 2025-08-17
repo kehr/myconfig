@@ -1,6 +1,6 @@
 from __future__ import annotations
 import os, sys, subprocess, shlex, time, json, pathlib, logging
-from .logger import log_success
+from logger import log_success
 
 # Handle TOML library imports
 try:

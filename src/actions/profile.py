@@ -1,6 +1,6 @@
 from __future__ import annotations
 import os, shutil, logging
-from ..logger import log_section, log_separator, log_success
+from logger import log_section, log_separator, log_success
 
 def profile_list():
     logger = logging.getLogger(__name__)

@@ -1,8 +1,8 @@
 from __future__ import annotations
 import os, logging
-from ..core import AppConfig
-from ..utils import run, run_out, which, verify_backup
-from ..logger import log_section, log_separator, log_success, confirm_action
+from core import AppConfig
+from utils import run, run_out, which, verify_backup
+from logger import log_section, log_separator, log_success, confirm_action
 
 def do_restore(cfg: AppConfig, srcdir: str):
     logger = logging.getLogger(__name__)

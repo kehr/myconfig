@@ -5,8 +5,8 @@ Command execution with logging and dry-run support
 from __future__ import annotations
 import subprocess
 import logging
-from .config import AppConfig
-from ..logger import confirm_action
+from core.config import AppConfig
+from logger import confirm_action
 
 
 class CommandExecutor:
