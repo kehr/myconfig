@@ -1,17 +1,26 @@
 from __future__ import annotations
 import os, shutil
-from ..utils import Logger
+from ..logger import get_logger, log_section, log_separator, log_success
 
-def profile_list(log: Logger):
-    log.sec("Available profiles"); log.hr()
+def profile_list():
+    logger = get_logger(__name__)
+    log_section(logger, "Available profiles")
+    log_separator(logger)
     for p in sorted(os.listdir("./config/profiles")):
-        if p.endswith(".toml"): log.info(p)
+        if p.endswith(".toml"): 
+            logger.info(p)
 
-def profile_use(log: Logger, name: str):
+def profile_use(name: str):
     src = f"./config/profiles/{name}.toml"
-    if not os.path.exists(src): log.err(f"Not found: {src}"); return
-    shutil.copyfile(src, "./config/config.toml"); log.ok(f"Applied: {src} → ./config/config.toml")
+    logger = get_logger(__name__)
+    if not os.path.exists(src): 
+        logger.error(f"Not found: {src}")
+        return
+    shutil.copyfile(src, "./config/config.toml")
+    log_success(logger, f"Applied: {src} → ./config/config.toml")
 
-def profile_save(log: Logger, name: str):
+def profile_save(name: str):
     dst = f"./config/profiles/{name}.toml"
-    shutil.copyfile("./config/config.toml", dst); log.ok(f"Saved current config as: {dst}")
+    logger = get_logger(__name__)
+    shutil.copyfile("./config/config.toml", dst)
+    log_success(logger, f"Saved current config as: {dst}")

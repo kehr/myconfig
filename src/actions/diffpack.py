@@ -1,25 +1,35 @@
 from __future__ import annotations
 import os
-from ..utils import AppConfig, Logger, run
+from ..utils import AppConfig, run
+from ..logger import get_logger, log_section, log_separator, log_success
 
-def do_diff(cfg: AppConfig, log: Logger, a: str, b: str):
+def do_diff(cfg: AppConfig, a: str, b: str):
     if not (os.path.isdir(a) and os.path.isdir(b)):
-        log.err("Please provide two valid directories"); return
-    log.sec(f"Compare: {a} ⇄ {b}"); log.hr()
+        logger = get_logger(__name__)
+        logger.error("Please provide two valid directories")
+        return
+    logger = get_logger(__name__)
+    log_section(logger, f"Compare: {a} ⇄ {b}")
+    log_separator(logger)
     # Readable recursive comparison (ignore compressed binaries)
-    run(f'diff -ruN --exclude="*.tar.gz" --exclude="*.zip" --exclude="*.log" {a} {b} || true', log, check=False)
+    run(f'diff -ruN --exclude="*.tar.gz" --exclude="*.zip" --exclude="*.log" {a} {b} || true', cfg, check=False)
 
-def do_pack(cfg: AppConfig, log: Logger, srcdir: str, outfile: str|None, use_gpg: bool=False):
+def do_pack(cfg: AppConfig, srcdir: str, outfile: str|None, use_gpg: bool=False):
     if not os.path.isdir(srcdir):
-        log.err(f"Directory does not exist: {srcdir}"); return
+        logger = get_logger(__name__)
+        logger.error(f"Directory does not exist: {srcdir}")
+        return
     base = outfile or (srcdir.rstrip("/").split("/")[-1] + ".zip")
-    log.sec(f"Pack: {srcdir} → {base}"); log.hr()
-    run(f'cd "{srcdir}/.." && zip -r "{base}" "{srcdir.split("/")[-1]}"', log, check=False)
+    logger = get_logger(__name__)
+    log_section(logger, f"Pack: {srcdir} → {base}")
+    log_separator(logger)
+    run(f'cd "{srcdir}/.." && zip -r "{base}" "{srcdir.split("/")[-1]}"', cfg, check=False)
     if use_gpg:
         if not which("gpg"):
-            log.warn("gpg not detected, skipping encryption"); return
-        run(f'gpg -c "{base}"', log, check=False)
-        log.ok(f"Generated encrypted package: {base}.gpg")
+            logger.warning("gpg not detected, skipping encryption")
+            return
+        run(f'gpg -c "{base}"', cfg, check=False)
+        log_success(logger, f"Generated encrypted package: {base}.gpg")
 
 def which(cmd: str)->bool:
     return os.system(f"command -v {cmd} >/dev/null 2>&1")==0

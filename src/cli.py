@@ -1,5 +1,6 @@
 import argparse, importlib, pkgutil, os
-from .utils import load_config, Logger
+from .utils import load_config
+from .logger import setup_logging, get_logger
 from .actions.export import do_export
 from .actions.restore import do_restore
 from .actions.doctor import do_doctor
@@ -72,36 +73,38 @@ def main():
         enable_mas = False if args.no_mas else cfg.enable_mas,
     )
     
+    # Setup logging
+    setup_logging(verbose=cfg.verbose, quiet=cfg.quiet)
+    
     # Preview mode handling
     preview_mode = getattr(args, 'preview', False)
-    log = Logger(cfg)
 
     if args.cmd == "export":
         if preview_mode:
             from .actions.export import preview_export
-            preview_export(cfg, log, args.outdir)
+            preview_export(cfg, args.outdir)
         else:
-            do_export(cfg, log, args.outdir)
+            do_export(cfg, args.outdir)
     elif args.cmd == "restore":
         if preview_mode:
             from .actions.restore import preview_restore
-            preview_restore(cfg, log, args.srcdir)
+            preview_restore(cfg, args.srcdir)
         else:
-            do_restore(cfg, log, args.srcdir)
+            do_restore(cfg, args.srcdir)
     elif args.cmd == "doctor":
-        do_doctor(cfg, log)
+        do_doctor(cfg)
     elif args.cmd == "defaults":
-        if args.sub == "export-all": defaults_export_all(cfg, log)
-        elif args.sub == "import":   defaults_import_dir(cfg, log, args.dir)
+        if args.sub == "export-all": defaults_export_all(cfg)
+        elif args.sub == "import":   defaults_import_dir(cfg, args.dir)
         else: p.print_help()
     elif args.cmd == "diff":
-        do_diff(cfg, log, args.a, args.b)
+        do_diff(cfg, args.a, args.b)
     elif args.cmd == "pack":
-        do_pack(cfg, log, args.srcdir, args.outfile, use_gpg=args.gpg)
+        do_pack(cfg, args.srcdir, args.outfile, use_gpg=args.gpg)
     elif args.cmd == "profile":
-        if args.sub == "list": profile_list(log)
-        elif args.sub == "use": profile_use(log, args.name)
-        elif args.sub == "save": profile_save(log, args.name)
+        if args.sub == "list": profile_list()
+        elif args.sub == "use": profile_use(args.name)
+        elif args.sub == "save": profile_save(args.name)
         else: p.print_help()
     else:
         p.print_help()

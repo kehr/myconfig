@@ -1,5 +1,6 @@
 from __future__ import annotations
-import os, sys, subprocess, shlex, time, json, pathlib, typing
+import os, sys, subprocess, shlex, time, json, pathlib, typing, logging
+from .logger import get_logger, log_success
 
 # Colors
 T1="\033[1m"; DIM="\033[2m"; RED="\033[31m"; GREEN="\033[32m"; YELLOW="\033[33m"; BLUE="\033[34m"; RST="\033[0m"
@@ -66,50 +67,31 @@ def load_config(path: str) -> AppConfig:
         defaults_exclude_file = str(g("defaults_exclude_file","config/defaults/exclude.txt")),
     )
 
-class Logger:
-    def __init__(self, cfg: AppConfig):
-        ts = time.strftime("%Y%m%d-%H%M%S")
-        pathlib.Path("./logs").mkdir(parents=True, exist_ok=True)
-        self.path = f"./logs/run-{ts}.log"
-        self.cfg = cfg
-    def _write(self, s: str, err: bool=False):
-        mode = "a"
-        with open(self.path, mode, encoding="utf-8") as f: f.write(s + ("\n" if not s.endswith("\n") else ""))
-        if not self.cfg.quiet:
-            (sys.stderr if err else sys.stdout).write(s + ("\n" if not s.endswith("\n") else ""))
-    def info(self, s: str): self._write(color(BLUE, "▸ ")+s)
-    def ok(self, s: str):   self._write(color(GREEN, "✔ ")+s)
-    def warn(self, s: str): self._write(color(YELLOW,"⚠ ")+s)
-    def err(self, s: str):  self._write(color(RED,   "✖ ")+s, err=True)
-    def hr(self):           self._write(color(DIM, "─"*60))
-    def sec(self, s: str):  self._write(color(T1, s))
-    def confirm(self, prompt: str) -> bool:
-        if not self.cfg.interactive: return True
-        self._write(prompt + " [y/N]: ")
-        try:
-            ans = input().strip().lower()
-        except EOFError:
-            return False
-        return ans in ("y","yes")
 
-def run(cmd: str, log: Logger, check: bool=True, description: str=""):
-    if log.cfg.dry_run:
+
+def run(cmd: str, cfg: AppConfig, check: bool=True, description: str=""):
+    logger = get_logger(__name__)
+    
+    if cfg.dry_run:
         desc_text = f" ({description})" if description else ""
-        log._write(f"[dry-run]{desc_text} {cmd}")
+        logger.info(f"[dry-run]{desc_text} {cmd}")
         return 0
-    if log.cfg.verbose: log._write(color(DIM, f"$ {cmd}"))
+    
+    if cfg.verbose: 
+        logger.debug(f"$ {cmd}")
+    
     try:
         rc = subprocess.call(cmd, shell=True)
         if check and rc != 0:
             desc_text = f" ({description})" if description else ""
-            log.err(f"Command failed{desc_text} (exit code: {rc}): {cmd}")
+            logger.error(f"Command failed{desc_text} (exit code: {rc}): {cmd}")
             raise SystemExit(rc)
         return rc
     except KeyboardInterrupt:
-        log.warn("Operation interrupted by user")
+        logger.warning("Operation interrupted by user")
         raise SystemExit(130)
     except Exception as e:
-        log.err(f"Exception occurred while executing command: {e}")
+        logger.error(f"Exception occurred while executing command: {e}")
         if check:
             raise SystemExit(1)
         return 1
@@ -126,10 +108,11 @@ def host() -> str:
     rc, out = run_out("scutil --get ComputerName 2>/dev/null || hostname")
     return out.strip() if rc==0 else "mac"
 
-def verify_backup(backup_dir: str, log: Logger) -> bool:
+def verify_backup(backup_dir: str) -> bool:
     """Verify backup directory integrity"""
     if not os.path.isdir(backup_dir):
-        log.err(f"Backup directory does not exist: {backup_dir}")
+        logger = get_logger(__name__)
+        logger.error(f"Backup directory does not exist: {backup_dir}")
         return False
     
     # Check required files
@@ -141,7 +124,8 @@ def verify_backup(backup_dir: str, log: Logger) -> bool:
             missing_files.append(file)
     
     if missing_files:
-        log.warn(f"Backup incomplete, missing files: {', '.join(missing_files)}")
+        logger = get_logger(__name__)
+        logger.warning(f"Backup incomplete, missing files: {', '.join(missing_files)}")
         return False
     
     # Check backup size (basic sanity check)
@@ -150,15 +134,18 @@ def verify_backup(backup_dir: str, log: Logger) -> bool:
                         for dirpath, dirnames, filenames in os.walk(backup_dir)
                         for filename in filenames)
         if total_size < 1024:  # Less than 1KB might be problematic
-            log.warn(f"Backup size unusually small: {total_size} bytes")
+            logger = get_logger(__name__)
+            logger.warning(f"Backup size unusually small: {total_size} bytes")
             return False
     except Exception as e:
-        log.warn(f"Cannot calculate backup size: {e}")
+        logger = get_logger(__name__)
+        logger.warning(f"Cannot calculate backup size: {e}")
     
-    log.ok("Backup verification passed")
+    logger = get_logger(__name__)
+    log_success(logger, "Backup verification passed")
     return True
 
-def create_backup_manifest(backup_dir: str, log: Logger):
+def create_backup_manifest(backup_dir: str):
     """Create backup manifest file"""
     manifest_file = os.path.join(backup_dir, "MANIFEST.txt")
     try:
@@ -178,9 +165,11 @@ def create_backup_manifest(backup_dir: str, log: Logger):
                         file_path = os.path.join(root, file)
                         size = os.path.getsize(file_path)
                         f.write(f"{subindent}{file} ({size} bytes)\n")
-        log.ok("Backup manifest created")
+        logger = get_logger(__name__)
+        log_success(logger, "Backup manifest created")
     except Exception as e:
-        log.warn(f"Failed to create backup manifest: {e}")
+        logger = get_logger(__name__)
+        logger.warning(f"Failed to create backup manifest: {e}")
 
 def is_sensitive_file(file_path: str) -> bool:
     """Check if file is sensitive"""
@@ -216,7 +205,7 @@ def is_sensitive_file(file_path: str) -> bool:
     
     return any(pattern in file_path for pattern in sensitive_patterns)
 
-def get_secure_dotfile_list(log: Logger) -> list[str]:
+def get_secure_dotfile_list() -> list[str]:
     """Get security-filtered dotfiles list"""
     from .actions.export import DOT_LIST
     
@@ -232,29 +221,29 @@ def get_secure_dotfile_list(log: Logger) -> list[str]:
                 safe_dotfiles.append(pattern)
     
     if skipped_files:
-        log.info(f"Skipped {len(skipped_files)} sensitive files for security")
-        if log.cfg.verbose:
-            for skip in skipped_files:
-                log.info(f"  Skipped: {skip}")
+        logger = get_logger(__name__)
+        logger.info(f"Skipped {len(skipped_files)} sensitive files for security")
+        for skip in skipped_files:
+            logger.debug(f"  Skipped: {skip}")
     
     return safe_dotfiles
 
 class ProgressTracker:
     """Simple progress tracker"""
-    def __init__(self, total: int, log: Logger, description: str = "Progress"):
+    def __init__(self, total: int, description: str = "Progress"):
         self.total = total
         self.current = 0
-        self.log = log
         self.description = description
-        self.log.info(f"{description}: 0/{total}")
+        self.logger = get_logger(__name__)
+        self.logger.info(f"{description}: 0/{total}")
     
     def update(self, step_description: str = ""):
         self.current += 1
         progress = f"{self.current}/{self.total}"
         if step_description:
-            self.log.info(f"{self.description}: {progress} - {step_description}")
+            self.logger.info(f"{self.description}: {progress} - {step_description}")
         else:
-            self.log.info(f"{self.description}: {progress}")
+            self.logger.info(f"{self.description}: {progress}")
     
     def finish(self):
-        self.log.ok(f"{self.description} completed: {self.total}/{self.total}")
+        log_success(self.logger, f"{self.description} completed: {self.total}/{self.total}")
