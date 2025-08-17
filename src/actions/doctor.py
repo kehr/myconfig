@@ -1,5 +1,5 @@
 from __future__ import annotations
-import logging
+import logging, os
 from ..utils import run_out
 from ..logger import log_section, log_separator, log_success
 
@@ -34,7 +34,6 @@ def do_doctor(cfg):
     else: 
         logger.warning("mas not installed")
     # defaults domain list
-    import os
     dom_file = "./config/defaults/domains.txt"
     if os.path.exists(dom_file):
         missing=0

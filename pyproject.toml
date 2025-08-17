@@ -54,14 +54,14 @@ encryption = [
 myconfig = "src.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/yourusername/myconfig"
-Documentation = "https://github.com/yourusername/myconfig/blob/main/docs/"
-Repository = "https://github.com/yourusername/myconfig"
-"Bug Tracker" = "https://github.com/yourusername/myconfig/issues"
-Changelog = "https://github.com/yourusername/myconfig/blob/main/docs/OPTIMIZATION_SUMMARY.md"
+Homepage = "https://github.com/kehr/myconfig"
+Documentation = "https://github.com/kehr/myconfig/blob/main/docs/"
+Repository = "https://github.com/kehr/myconfig"
+"Bug Tracker" = "https://github.com/kehr/myconfig/issues"
+Changelog = "https://github.com/kehr/myconfig/blob/main/docs/OPTIMIZATION_SUMMARY.md"
 
 [tool.setuptools]
-package-dir = {"" = "src"}
+package-dir = {myconfig = "src"}
 
 [tool.setuptools.packages.find]
 where = ["src"]

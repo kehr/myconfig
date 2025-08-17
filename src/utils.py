@@ -2,6 +2,15 @@ from __future__ import annotations
 import os, sys, subprocess, shlex, time, json, pathlib, typing, logging
 from .logger import log_success
 
+# Handle TOML library imports
+try:
+    import tomllib  # py311+
+except ImportError:
+    try:
+        import tomli as tomllib
+    except ImportError:
+        raise ImportError("需要安装 tomli 库: pip install tomli")
+
 # Colors
 T1="\033[1m"; DIM="\033[2m"; RED="\033[31m"; GREEN="\033[32m"; YELLOW="\033[33m"; BLUE="\033[34m"; RST="\033[0m"
 def color(c: str, s: str) -> str: return f"{c}{s}{RST}" if sys.stdout.isatty() else s
@@ -30,14 +39,9 @@ def _parse_toml(path: str) -> dict:
     data: dict = {}
     if not os.path.exists(path): return data
     try:
-        import tomllib  # py311+
         with open(path, "rb") as f: return typing.cast(dict, tomllib.load(f))
     except Exception:
-        try:
-            import tomli
-            with open(path, "rb") as f: return typing.cast(dict, tomli.load(f))
-        except Exception:
-            # Fallback parsing: k = v, top-level key-value only
+        # Fallback parsing: k = v, top-level key-value only
             with open(path, "r", encoding="utf-8") as f:
                 for line in f:
                     s=line.strip()
@@ -207,7 +211,13 @@ def is_sensitive_file(file_path: str) -> bool:
 
 def get_secure_dotfile_list() -> list[str]:
     """Get security-filtered dotfiles list"""
-    from .actions.export import DOT_LIST
+    # Import DOT_LIST here to avoid circular imports
+    DOT_LIST = [
+        "~/.zshrc","~/.zprofile","~/.bashrc","~/.bash_profile","~/.profile",
+        "~/.gitconfig","~/.gitignore_global","~/.vimrc","~/.tmux.conf","~/.screenrc",
+        "~/.ssh/config","~/.config/iterm2","~/.config/git","~/.config/ssh",
+        "~/.config/zsh","~/.config/nvim","~/.config/vim","~/.config/tmux"
+    ]
     
     safe_dotfiles = []
     skipped_files = []

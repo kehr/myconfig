@@ -1,8 +1,8 @@
 import argparse, importlib, pkgutil, os
 from .utils import load_config
 from .logger import setup_logging
-from .actions.export import do_export
-from .actions.restore import do_restore
+from .actions.export import do_export, preview_export
+from .actions.restore import do_restore, preview_restore
 from .actions.doctor import do_doctor
 from .actions.defaults import defaults_export_all, defaults_import_dir
 from .actions.diffpack import do_diff, do_pack
@@ -81,13 +81,11 @@ def main():
 
     if args.cmd == "export":
         if preview_mode:
-            from .actions.export import preview_export
             preview_export(cfg, args.outdir)
         else:
             do_export(cfg, args.outdir)
     elif args.cmd == "restore":
         if preview_mode:
-            from .actions.restore import preview_restore
             preview_restore(cfg, args.srcdir)
         else:
             do_restore(cfg, args.srcdir)
