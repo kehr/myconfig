@@ -5,7 +5,16 @@ Configuration management for MyConfig
 from __future__ import annotations
 import os
 import logging
-import tomllib
+
+# Handle TOML library imports
+try:
+    import tomllib  # py311+
+except ImportError:
+    try:
+        import tomli as tomllib
+    except ImportError:
+        raise ImportError("tomli library required: pip install tomli")
+
 from typing import Dict, Any
 from dataclasses import dataclass, replace
 
