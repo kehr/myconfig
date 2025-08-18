@@ -1,6 +1,6 @@
 # Plugin Development Guide
 
-## 📋 Table of Contents
+## Table of Contents
 
 - [Plugin System Overview](#plugin-system-overview)
 - [Plugin Architecture](#plugin-architecture)
@@ -38,7 +38,7 @@ MyConfig features a powerful plugin system that allows you to extend functionali
 ### Plugin Structure
 
 ```
-src/plugins/
+myconfig/plugins/
 ├── __init__.py              # Plugin registry
 ├── sample.py                # Example plugin
 └── custom_plugin/           # Complex plugin package
@@ -101,7 +101,7 @@ class BasePlugin(ABC):
 
 ### Step 1: Basic Plugin Structure
 
-Create a new file `src/plugins/hello_world.py`:
+Create a new file `myconfig/plugins/hello_world.py`:
 
 ```python
 import logging
@@ -160,7 +160,7 @@ myconfig hello --name "Developer"
 
 ### Step 3: Add Configuration
 
-Create `src/plugins/hello_world.toml`:
+Create `myconfig/plugins/hello_world.toml`:
 
 ```toml
 [plugin]
@@ -272,6 +272,64 @@ def file_operations(self):
 ```
 
 ## Advanced Plugin Features
+
+### Enhanced ApplicationsComponent
+
+The ApplicationsComponent has been significantly enhanced with CLI tools support:
+
+```python
+from ..core.base import BackupComponent
+from ..core.executor import CommandExecutor
+
+class EnhancedApplicationsComponent(BackupComponent):
+    """Enhanced applications component with CLI tools support."""
+    
+    def __init__(self, config, executor: CommandExecutor):
+        super().__init__("applications", config, executor)
+        self.applications_default = getattr(config, "applications_default", {})
+    
+    def detect_cli_tools(self) -> Dict[str, List[str]]:
+        """Detect CLI tools using multiple methods."""
+        detected_tools = {}
+        
+        # PATH-based detection
+        detected_tools.update(self._detect_from_path())
+        
+        # Package manager integration
+        detected_tools.update(self._detect_from_homebrew())
+        detected_tools.update(self._detect_from_npm())
+        detected_tools.update(self._detect_from_pip())
+        
+        return detected_tools
+    
+    def _detect_from_path(self) -> Dict[str, List[str]]:
+        """Detect CLI tools from PATH."""
+        tools = {}
+        path_dirs = os.environ.get('PATH', '').split(':')
+        
+        for tool_name, tool_config in self.applications_default.items():
+            if self.executor.which(tool_name):
+                config_paths = self._resolve_config_paths(tool_config.get('config_paths', []))
+                existing_paths = [p for p in config_paths if os.path.exists(p)]
+                if existing_paths:
+                    tools[tool_name] = existing_paths
+        
+        return tools
+    
+    def _resolve_config_paths(self, paths: List[str]) -> List[str]:
+        """Resolve configuration paths with environment variable expansion."""
+        resolved = []
+        for path in paths:
+            # Expand environment variables
+            expanded = os.path.expandvars(path)
+            expanded = os.path.expanduser(expanded)
+            resolved.append(expanded)
+        return resolved
+
+class ApplicationsPlugin(ComponentPlugin):
+    def get_component_class(self):
+        return EnhancedApplicationsComponent
+```
 
 ### Custom Backup Components
 
@@ -415,7 +473,7 @@ Create tests for your plugins:
 ```python
 import unittest
 from unittest.mock import Mock, patch
-from src.plugins.hello_world import HelloWorldPlugin
+from myconfig.plugins.hello_world import HelloWorldPlugin
 
 class TestHelloWorldPlugin(unittest.TestCase):
     
@@ -492,7 +550,7 @@ my-plugin/
 ├── README.md               # Plugin documentation
 ├── LICENSE                 # Plugin license
 ├── requirements.txt        # Plugin dependencies
-├── src/
+├── myconfig/
 │   └── myconfig_hello/     # Plugin package
 │       ├── __init__.py
 │       ├── plugin.py       # Main plugin code
@@ -513,8 +571,8 @@ setup(
     description="Hello World plugin for MyConfig",
     author="Your Name",
     author_email="your.email@example.com",
-    packages=find_packages(where="src"),
-    package_dir={"": "src"},
+    packages=find_packages(where="myconfig"),
+    package_dir={"": "myconfig"},
     install_requires=[
         "myconfig>=2.0.0",
     ],

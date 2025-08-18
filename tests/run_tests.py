@@ -50,7 +50,7 @@ def main():
         pytest_cmd += " -m 'not slow'"
     
     if args.coverage:
-        pytest_cmd += " --cov=src --cov-report=term-missing --cov-report=html"
+        pytest_cmd += " --cov=myconfig --cov-report=term-missing --cov-report=html"
     
     # Determine which tests to run
     if args.unit:

@@ -40,7 +40,9 @@ class AppConfig:
     defaults_exclude_file: str = "config/defaults/exclude.txt"
     # Applications scanning/export
     enable_applications: bool = True
-    applications_known: Dict[str, List[str]] = field(default_factory=dict)
+    applications_default: Dict[str, List[str]] = field(default_factory=dict)
+    # CLI tools configuration support
+    cli_tools_default: Dict[str, List[str]] = field(default_factory=dict)
 
     def update(self, **kwargs) -> AppConfig:
         """Create a new config with updated values"""
@@ -75,7 +77,7 @@ class ConfigManager:
         # Nested: applications
         apps_cfg = data.get("applications", {}) if isinstance(data, dict) else {}
         enable_apps = _to_bool(apps_cfg.get("enable", True), True)
-        known_map = apps_cfg.get("known", {}) if isinstance(apps_cfg, dict) else {}
+        known_map = apps_cfg.get("default", {}) if isinstance(apps_cfg, dict) else {}
         # Ensure structure Dict[str, List[str]]
         if not isinstance(known_map, dict):
             known_map = {}
@@ -87,6 +89,21 @@ class ConfigManager:
                 elif isinstance(v, str):
                     cleaned_known[str(k)] = [v]
             known_map = cleaned_known
+
+        # Nested: cli_tools
+        cli_tools_cfg = data.get("cli_tools", {}) if isinstance(data, dict) else {}
+        cli_tools_map = cli_tools_cfg.get("default", {}) if isinstance(cli_tools_cfg, dict) else {}
+        # Ensure structure Dict[str, List[str]]
+        if not isinstance(cli_tools_map, dict):
+            cli_tools_map = {}
+        else:
+            cleaned_cli_tools: Dict[str, List[str]] = {}
+            for k, v in cli_tools_map.items():
+                if isinstance(v, list):
+                    cleaned_cli_tools[str(k)] = [str(p) for p in v]
+                elif isinstance(v, str):
+                    cleaned_cli_tools[str(k)] = [v]
+            cli_tools_map = cleaned_cli_tools
 
         return AppConfig(
             interactive=get_bool("interactive", True),
@@ -106,7 +123,8 @@ class ConfigManager:
                 "defaults_exclude_file", "config/defaults/exclude.txt"
             ),
             enable_applications=enable_apps,
-            applications_known=known_map,
+            applications_default=known_map,
+            cli_tools_default=cli_tools_map,
         )
 
     def _parse_toml(self, path: str) -> Dict[str, Any]:

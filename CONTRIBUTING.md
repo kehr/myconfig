@@ -2,16 +2,16 @@
 
 Thank you for your interest in contributing to MyConfig! We welcome contributions from the community and are excited to see what you'll bring to the project.
 
-## 🚀 How to Contribute
+## How to Contribute
 
 ### 1. Ways to Contribute
 
 - **🐛 Bug Reports**: Found a bug? Let us know!
 - **💡 Feature Requests**: Have an idea for a new feature?
-- **📝 Documentation**: Help improve our documentation
-- **🔧 Code Contributions**: Submit bug fixes or new features
-- **🎨 Templates**: Contribute new template designs
-- **🔌 Plugins**: Create plugins for additional functionality
+- **Documentation**: Help improve our documentation
+- **Code Contributions**: Submit bug fixes or new features
+- **Templates**: Contribute new template designs
+- **Plugins**: Create plugins for additional functionality
 
 ### 2. Getting Started
 
@@ -65,7 +65,7 @@ git checkout -b feature/amazing-feature
 #### Test Your Changes
 ```bash
 # Run basic tests
-python -m py_compile src/**/*.py
+python -m py_compile myconfig/**/*.py
 
 # Test functionality
 myconfig --dry-run export test-backup
@@ -98,7 +98,7 @@ git commit -m "feat: add amazing new feature
 
 ### Code Structure
 - Use the existing modular architecture
-- Add new components to `src/core/components/`
+- Add new components to `myconfig/core/components/`
 - Follow the `BackupComponent` interface for new backup types
 - Use the centralized logging system
 
@@ -160,7 +160,7 @@ style: format code with Black
 refactor(utils): improve error handling in file operations
 ```
 
-## 🧪 Testing Guidelines
+##  Testing Guidelines
 
 ### Manual Testing
 ```bash
@@ -198,7 +198,7 @@ When adding new features:
 - Organize with clear headings and structure
 - Test all code examples
 
-## 🔒 Security Considerations
+##  Security Considerations
 
 ### Security Guidelines
 - Never commit sensitive data (keys, passwords, etc.)
@@ -217,7 +217,7 @@ myconfig --preview export test-backup
 rm test-password.txt
 ```
 
-## 🎯 Pull Request Process
+##  Pull Request Process
 
 ### Before Submitting
 1. **Update your branch** with latest upstream changes
@@ -255,7 +255,7 @@ Brief description of changes and motivation.
 - [ ] No sensitive data included
 ```
 
-## 🤝 Community Guidelines
+##  Community Guidelines
 
 ### Code of Conduct
 - Be respectful and inclusive
@@ -275,7 +275,7 @@ Contributors will be:
 - Mentioned in release notes for significant contributions
 - Given credit in documentation for major features
 
-## 📋 Issue Guidelines
+##  Issue Guidelines
 
 ### Bug Reports
 Include:

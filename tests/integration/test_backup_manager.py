@@ -6,8 +6,8 @@ import tempfile
 import os
 from unittest.mock import patch, MagicMock
 
-from core.backup import BackupManager
-from core.config import AppConfig
+from myconfig.core.backup import BackupManager
+from myconfig.core.config import AppConfig
 
 
 class TestBackupManagerIntegration:

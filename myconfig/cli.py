@@ -1,13 +1,13 @@
 import argparse, importlib, pkgutil, os, logging
-from core import ConfigManager, BackupManager
-from logger import setup_logging
-from utils import ts, host
-from actions.doctor import do_doctor
-from actions.defaults import defaults_export_all, defaults_import_dir
-from actions.diffpack import do_diff, do_pack
-from actions.profile import profile_list, profile_use, profile_save
+from myconfig.core import ConfigManager, BackupManager
+from myconfig.logger import setup_logging
+from myconfig.utils import ts, host
+from myconfig.actions.doctor import do_doctor
+from myconfig.actions.defaults import defaults_export_all, defaults_import_dir
+from myconfig.actions.diffpack import do_diff, do_pack
+from myconfig.actions.profile import profile_list, profile_use, profile_save
 
-from _version import VERSION
+from myconfig._version import VERSION
 
 def build_parser():
     p = argparse.ArgumentParser(prog="myconfig", description="macOS configuration export/restore tool - readable and extensible")
@@ -58,10 +58,10 @@ def build_parser():
     s3s = s3.add_parser("save", help="Save current config.toml as new profile")
     s3s.add_argument("name")
 
-    # Auto-register plugins (requires register(subparsers) in src/plugins/*.py)
+    # Auto-register plugins (requires register(subparsers) in myconfig/plugins/*.py)
     plug_dir = os.path.join(os.path.dirname(__file__), "plugins")
     for m in pkgutil.iter_modules([plug_dir]):
-        mod = importlib.import_module(f"plugins.{m.name}")
+        mod = importlib.import_module(f"myconfig.plugins.{m.name}")
         if hasattr(mod, "register"):
             mod.register(sub)
 

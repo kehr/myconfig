@@ -77,12 +77,12 @@ test:
 lint:
 	@echo "Code linting..."
 	@if command -v flake8 >/dev/null 2>&1; then \
-		flake8 src/ --max-line-length=88 --extend-ignore=E203,W503; \
+		flake8 myconfig/ --max-line-length=88 --extend-ignore=E203,W503; \
 	else \
 		echo "flake8 not installed, skipping check"; \
 	fi
 	@if command -v mypy >/dev/null 2>&1; then \
-		mypy src/ --ignore-missing-imports; \
+		mypy myconfig/ --ignore-missing-imports; \
 	else \
 		echo "mypy not installed, skipping type check"; \
 	fi
@@ -90,7 +90,7 @@ lint:
 format:
 	@echo "Code formatting..."
 	@if command -v black >/dev/null 2>&1; then \
-		black src/; \
+		black myconfig/; \
 	else \
 		echo "black not installed, skipping formatting"; \
 	fi
@@ -125,10 +125,10 @@ verify:
 info:
 	@echo "Project information:"
 	@echo "  Name: MyConfig"
-	@echo "  Version: $$(python3 -c 'import sys; sys.path.insert(0, "src"); from _version import VERSION; print(VERSION)')"
+	@echo "  Version: $$(python3 -c 'import sys; sys.path.insert(0, "myconfig"); from _version import VERSION; print(VERSION)')"
 	@echo "  Python: $$(python3 --version)"
 	@echo "  Directory: $$(pwd)"
-	@echo "  Package count: $$(find src -name '*.py' | wc -l | tr -d ' ') Python files"
+	@echo "  Package count: $$(find myconfig -name '*.py' | wc -l | tr -d ' ') Python files"
 
 # PyPI Publishing related
 publish: check-package
@@ -164,7 +164,7 @@ clean-build:
 	rm -rf build/
 	rm -rf dist/
 	rm -rf *.egg-info/
-	rm -rf src/*.egg-info/
+	rm -rf m'y'con'fi'g/*.egg-info/
 	@echo "Build directories cleaned!"
 
 clean-pyc:
@@ -192,6 +192,6 @@ test-release: clean build check-package test-publish
 # Version information
 version:
 	@echo "Current version information:"
-	@python3 -c "from src._version import VERSION; print(f'Version: {VERSION}')"
+	@python3 -c "from myconfig._version import VERSION; print(f'Version: {VERSION}')"
 	@echo "Project name: myconfig-osx"
 	@echo "Python version requirement: >=3.8"

@@ -2,10 +2,10 @@
 Core module for MyConfig - Configuration management and command execution
 """
 
-from core.config import AppConfig, ConfigManager
-from core.executor import CommandExecutor
-from core.backup import BackupManager
-from core.components import (
+from myconfig.core.config import AppConfig, ConfigManager
+from myconfig.core.executor import CommandExecutor
+from myconfig.core.backup import BackupManager
+from myconfig.core.components import (
     BackupComponent,
     HomebrewComponent,
     MASComponent,

@@ -1,6 +1,6 @@
 # Configuration Reference
 
-## 📋 Table of Contents
+## Table of Contents
 
 - [Configuration File Structure](#configuration-file-structure)
 - [Main Configuration Options](#main-configuration-options)
@@ -24,7 +24,7 @@ myconfig/
 │   └── profiles/            # Configuration profiles
 │       ├── dev-full.toml    # Full development profile
 │       └── minimal.toml     # Minimal profile
-├── src/
+├── myconfig/
 │   └── templates/           # Template files
 │       ├── README.md.template
 │       ├── ENVIRONMENT.txt.template
@@ -55,6 +55,14 @@ enable_pipx = false        # pipx packages
 
 # Advanced features
 enable_incremental = false # Incremental backups (future feature)
+
+# Enhanced application detection
+[applications]
+# Enhanced application database (renamed from applications.known)
+# Contains 89 applications across 11 categories
+enable_cli_detection = true    # Enable CLI tools detection
+enable_path_scanning = true    # Enable PATH-based tool discovery
+enable_package_managers = true # Enable package manager integration
 ```
 
 ### File Paths
@@ -73,7 +81,7 @@ defaults_exclude_file = "config/defaults/exclude.txt"
 ```toml
 # Template system configuration
 [templates]
-# Template directory (relative to src/)
+# Template directory (relative to myconfig/)
 template_dir = "templates"
 
 # Enable template processing
@@ -310,7 +318,7 @@ myconfig export
 | `MYCONFIG_DRY_RUN` | `false` | Dry run mode |
 | `MYCONFIG_ENABLE_HOMEBREW` | `true` | Enable Homebrew export |
 | `MYCONFIG_ENABLE_VSCODE` | `true` | Enable VS Code export |
-| `MYCONFIG_TEMPLATE_DIR` | `src/templates` | Template directory |
+| `MYCONFIG_TEMPLATE_DIR` | `myconfig/templates` | Template directory |
 
 ## Advanced Configuration
 
@@ -357,7 +365,7 @@ buffer_size = "64KB"
 ```toml
 [plugins]
 # Plugin directory
-plugin_dir = "src/plugins"
+plugin_dir = "myconfig/plugins"
 
 # Enable specific plugins
 enabled_plugins = [

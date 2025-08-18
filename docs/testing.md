@@ -27,7 +27,7 @@ tests/
 python -m pytest
 
 # Run with coverage report
-python -m pytest --cov=src --cov-report=html
+python -m pytest --cov=myconfig --cov-report=html
 
 # View coverage report
 open htmlcov/index.html
@@ -77,7 +77,7 @@ Tests are configured via `pyproject.toml`:
 ```toml
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = "-v --tb=short --cov=src --cov-report=term-missing"
+addopts = "-v --tb=short --cov=myconfig --cov-report=term-missing"
 markers = [
     "unit: Unit tests",
     "integration: Integration tests", 

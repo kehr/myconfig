@@ -8,12 +8,12 @@ import os
 from pathlib import Path
 from unittest.mock import patch, MagicMock
 
-# Add src to path for imports
+# Add myconfig to path for imports
 import sys
-sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
+# Import from myconfig package
 
-from core.config import AppConfig, ConfigManager
-from core.executor import CommandExecutor
+from myconfig.core.config import AppConfig, ConfigManager
+from myconfig.core.executor import CommandExecutor
 
 
 @pytest.fixture

@@ -5,7 +5,7 @@ VS Code extensions backup/restore component
 from __future__ import annotations
 import os
 from typing import List
-from core.base import BackupComponent
+from myconfig.core.base import BackupComponent
 
 
 class VSCodeComponent(BackupComponent):

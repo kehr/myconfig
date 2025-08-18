@@ -6,7 +6,7 @@ from __future__ import annotations
 import os
 import tempfile
 from typing import List
-from core.base import BackupComponent
+from myconfig.core.base import BackupComponent
 
 
 class DotfilesComponent(BackupComponent):

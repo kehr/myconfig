@@ -1,6 +1,6 @@
 from __future__ import annotations
 import os, sys, subprocess, shlex, time, json, pathlib, logging
-from logger import log_success
+from myconfig.logger import log_success
 
 # Handle TOML library imports
 try:
@@ -18,7 +18,7 @@ def color(c: str, s: str) -> str: return f"{c}{s}{RST}" if sys.stdout.isatty() e
 def which(cmd: str) -> bool:
     return subprocess.call(f"command -v {shlex.quote(cmd)} >/dev/null 2>&1", shell=True)==0
 
-# AppConfig and configuration loading moved to src/core/config.py
+# AppConfig and configuration loading moved to myconfig/core/config.py
 
 def run(cmd: str, cfg, check: bool=True, description: str=""):
     logger = logging.getLogger(__name__)

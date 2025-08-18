@@ -8,8 +8,8 @@ MyConfig uses a powerful template system to generate professional documentation 
 
 ### Template Engine Components
 
-- **Template Engine** (`src/template_engine.py`) - Core template processing logic
-- **Template Directory** (`src/templates/`) - Storage for all template files
+- **Template Engine** (`myconfig/template_engine.py`) - Core template processing logic
+- **Template Directory** (`myconfig/templates/`) - Storage for all template files
 - **Context Generation** - Automatic analysis of exported data to create template variables
 - **Fallback System** - Graceful degradation when templates fail
 
@@ -34,7 +34,7 @@ MyConfig uses a powerful template system to generate professional documentation 
 ### Template Locations
 
 ```
-src/templates/
+myconfig/templates/
 ├── README.md.template           # Primary export documentation
 ├── ENVIRONMENT.txt.template     # System environment information
 └── MANIFEST.json.template       # Backup metadata (future use)
@@ -184,12 +184,12 @@ Content displayed if section_name exists and is truthy
 
 1. **Locate Template File**
    ```bash
-   ls src/templates/
+   ls myconfig/templates/
    ```
 
 2. **Edit Template**
    ```bash
-   vim src/templates/README.md.template
+   vim myconfig/templates/README.md.template
    ```
 
 3. **Test Changes**
@@ -310,7 +310,7 @@ Create reusable template components:
 ```bash
 # Test template syntax
 python3 -c "
-from src.template_engine import TemplateEngine
+from myconfig.template_engine import TemplateEngine
 engine = TemplateEngine()
 try:
     result = engine.render_template('README.md.template', {})
@@ -326,7 +326,7 @@ except Exception as e:
 # View template context data
 myconfig export debug-test
 python3 -c "
-from src.template_engine import create_template_context
+from myconfig.template_engine import create_template_context
 import json
 context = create_template_context('debug-test')
 print(json.dumps(context, indent=2))
@@ -355,7 +355,7 @@ If template processing fails, MyConfig automatically falls back to:
 
 | Error | Cause | Solution |
 |-------|-------|----------|
-| `Template not found` | Missing template file | Check file exists in `src/templates/` |
+| `Template not found` | Missing template file | Check file exists in `myconfig/templates/` |
 | `Variable not found` | Undefined variable in template | Add variable to context or use conditional |
 | `Syntax error` | Invalid Mustache syntax | Check template syntax |
 | `Encoding error` | File encoding issues | Ensure UTF-8 encoding |
@@ -370,7 +370,7 @@ myconfig -v export debug-backup
 tail -f logs/myconfig.log
 
 # Validate template files
-python3 -m src.template_engine
+python3 -m myconfig.template_engine
 ```
 
 ## 📝 Template Development Guidelines

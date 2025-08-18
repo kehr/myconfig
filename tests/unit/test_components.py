@@ -5,10 +5,10 @@ import pytest
 from unittest.mock import patch, MagicMock, mock_open
 import os
 
-from core.components.homebrew import HomebrewComponent
-from core.components.vscode import VSCodeComponent
-from core.components.dotfiles import DotfilesComponent
-from core.components.defaults import DefaultsComponent
+from myconfig.core.components.homebrew import HomebrewComponent
+from myconfig.core.components.vscode import VSCodeComponent
+from myconfig.core.components.dotfiles import DotfilesComponent
+from myconfig.core.components.defaults import DefaultsComponent
 
 
 class TestHomebrewComponent:

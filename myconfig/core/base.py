@@ -6,7 +6,7 @@ from __future__ import annotations
 import logging
 from abc import ABC, abstractmethod
 from typing import List
-from core.executor import CommandExecutor
+from myconfig.core.executor import CommandExecutor
 
 
 class BackupComponent(ABC):

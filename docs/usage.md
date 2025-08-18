@@ -1,6 +1,6 @@
 # MyConfig Usage Guide
 
-## 📋 Table of Contents
+## Table of Contents
 
 - [Basic Concepts](#basic-concepts)
 - [Command Reference](#command-reference)
@@ -75,6 +75,11 @@ myconfig -v export
 - Mac App Store application list
 - VS Code extension list
 - npm/pip global package lists
+- **Enhanced Application Detection**: 89 applications across 11 categories
+- **CLI Tools Configuration**: Automatic detection and backup of development tools
+  - git, vim, neovim, tmux, zsh, fish, starship, oh-my-zsh configurations
+  - node.js, python, rust development environment settings
+  - Package manager configurations (npm, pip, cargo)
 - Configuration files (dotfiles) with security filtering
 - System preferences (defaults domains)
 - LaunchAgents services
@@ -187,6 +192,29 @@ myconfig export minimal-backup
 myconfig profile use dev-full
 ```
 
+### Scenario 5: CLI Tools Detection and Backup
+
+```bash
+# 1. Preview detected CLI tools
+myconfig --preview export
+
+# Example output:
+# ✓ Detected CLI Tools:
+#   - git: ~/.gitconfig, ~/.gitignore_global
+#   - vim: ~/.vimrc, ~/.vim/
+#   - tmux: ~/.tmux.conf
+#   - zsh: ~/.zshrc, ~/.oh-my-zsh/
+#   - node: ~/.npmrc, ~/.nvm/
+#   - python: ~/.pip/pip.conf, ~/.pypirc
+
+# 2. Export with CLI tools included
+myconfig export dev-backup
+
+# 3. Verify CLI tools in backup
+ls dev-backup/applications/
+# Shows: cli_tools_config.json, detected_tools.txt
+```
+
 ## Advanced Features
 
 ### Custom Configuration
@@ -208,7 +236,7 @@ interactive = true
 
 ### Plugin Extensions
 
-Create plugins in `src/plugins/` directory:
+Create plugins in `myconfig/plugins/` directory:
 
 ```python
 def register(subparsers):
@@ -240,7 +268,7 @@ MyConfig uses a powerful template system for generating documentation and metada
 
 ### Template Locations
 
-Templates are stored in `src/templates/`:
+Templates are stored in `myconfig/templates/`:
 - `README.md.template` - Export documentation template
 - `ENVIRONMENT.txt.template` - System environment template
 - `MANIFEST.json.template` - Backup metadata template
@@ -251,7 +279,7 @@ You can modify templates to customize the output format:
 
 ```bash
 # Edit the README template
-vim src/templates/README.md.template
+vim myconfig/templates/README.md.template
 
 # Next export will use your custom template
 myconfig export my-backup

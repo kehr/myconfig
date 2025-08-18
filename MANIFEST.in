@@ -5,9 +5,9 @@ include pyproject.toml
 include MANIFEST.in
 
 # Include all source code
-recursive-include src *.py
+recursive-include myconfig *.py
 recursive-include scripts *.sh
-recursive-include src/templates *.template
+recursive-include myconfig/templates *.template
 
 # Include configuration files
 recursive-include config *.toml *.txt

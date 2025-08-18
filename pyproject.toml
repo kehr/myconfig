@@ -4,15 +4,15 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "myconfig-osx"
-version = "1.2.0"
+version = "1.3.0"
 description = "macOS configuration backup and restore tool"
 readme = "README.md"
 license = "GPL-2.0"
 authors = [
-    {name = "Kyle", email = "kehr.dev@gmail.com"},
+    {name = "Kyle", email = "******************"},
 ]
 maintainers = [
-    {name = "Kyle", email = "kehr.dev@gmail.com"},
+    {name = "Kyle", email = "******************"},
 ]
 keywords = ["macos", "backup", "restore", "configuration", "dotfiles", "homebrew"]
 classifiers = [
@@ -21,7 +21,6 @@ classifiers = [
     "Environment :: MacOS X",
     "Intended Audience :: Developers",
     "Intended Audience :: System Administrators",
-    # "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
     "Operating System :: MacOS",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.8",
@@ -36,10 +35,10 @@ classifiers = [
 ]
 requires-python = ">=3.8"
 dependencies = [
-    'tomli>=1.2.0',
-    'click>=8.0.0',
-    'rich>=13.0.0',
-    'pathlib2>=2.3.0; python_version<"3.4"',
+    "tomli>=1.2.0",
+    "click>=8.0.0",
+    "rich>=13.0.0",
+    "pathlib2>=2.3.0; python_version<\"3.4\"",
 ]
 
 [project.optional-dependencies]
@@ -68,7 +67,7 @@ docs = [
 ]
 
 [project.scripts]
-myconfig = "cli:main"
+myconfig = "myconfig.cli:main"
 
 [project.urls]
 Homepage = "https://github.com/kehr/myconfig"
@@ -78,30 +77,15 @@ Repository = "https://github.com/kehr/myconfig"
 Changelog = "https://github.com/kehr/myconfig/blob/main/docs/OPTIMIZATION_SUMMARY.md"
 
 [tool.setuptools]
-packages = {find = {where = ["src"]}}
-package-dir = {"" = "src"}
-py-modules = ["cli", "logger", "utils", "template_engine", "_version", "__main__"]
+packages = ["myconfig", "myconfig.core", "myconfig.core.components", "myconfig.actions", "myconfig.plugins", "myconfig.templates"]
+include-package-data = true
 
 [tool.setuptools.package-data]
-"*" = ["templates/*.template", "*.txt", "*.toml", "*.md"]
+"myconfig" = ["templates/*.template", "*.txt", "*.toml", "*.md"]
 
 [tool.black]
 line-length = 88
-target-version = ['py38']
-include = '\.pyi?$'
-extend-exclude = '''
-/(
-  # directories
-  \.eggs
-  | \.git
-  | \.hg
-  | \.mypy_cache
-  | \.tox
-  | \.venv
-  | build
-  | dist
-)/
-'''
+target-version = ["py38"]
 
 [tool.mypy]
 python_version = "3.8"
@@ -123,7 +107,7 @@ testpaths = ["tests"]
 python_files = ["test_*.py", "*_test.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
-addopts = "-v --tb=short --cov=src --cov-report=term-missing --cov-report=html"
+addopts = "-v --tb=short --cov=myconfig --cov-report=term-missing --cov-report=html"
 markers = [
     "unit: Unit tests",
     "integration: Integration tests",

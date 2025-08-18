@@ -121,3 +121,6 @@ defaults/*.local.txt
 *.csr
 *.p12
 *.pfx
+
+# editor
+.joycode

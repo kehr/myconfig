@@ -1,7 +1,7 @@
 from __future__ import annotations
 import logging, os
-from core import AppConfig, CommandExecutor
-from logger import log_section, log_separator, log_success
+from myconfig.core import AppConfig, CommandExecutor
+from myconfig.logger import log_section, log_separator, log_success
 
 def do_doctor(cfg: AppConfig):
     executor = CommandExecutor(cfg)

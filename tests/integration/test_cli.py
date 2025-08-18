@@ -14,7 +14,7 @@ class TestCLIIntegration:
     @property
     def cli_path(self):
         """Get path to CLI module."""
-        return str(Path(__file__).parent.parent.parent / "src" / "cli.py")
+        return str(Path(__file__).parent.parent.parent / "myconfig" / "cli.py")
     
     def test_version_command(self):
         """Test --version command."""

@@ -6,7 +6,7 @@ import tempfile
 import os
 from unittest.mock import patch, mock_open
 
-from core.config import AppConfig, ConfigManager
+from myconfig.core.config import AppConfig, ConfigManager
 
 
 class TestAppConfig:

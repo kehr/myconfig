@@ -5,8 +5,8 @@ import pytest
 from unittest.mock import patch, MagicMock
 import subprocess
 
-from core.executor import CommandExecutor
-from core.config import AppConfig
+from myconfig.core.executor import CommandExecutor
+from myconfig.core.config import AppConfig
 
 
 class TestCommandExecutor:

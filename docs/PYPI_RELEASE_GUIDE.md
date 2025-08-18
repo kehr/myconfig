@@ -154,7 +154,7 @@ pip uninstall myconfig
 - **主要版本**: 2.0.0 (破坏性改动)
 
 ### 发布流程
-1. 更新版本号 (src/_version.py, pyproject.toml)
+1. 更新版本号 (myconfig/_version.py, pyproject.toml)
 2. 更新CHANGELOG
 3. 构建包 (`python -m build`)
 4. 测试验证

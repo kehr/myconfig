@@ -315,11 +315,11 @@ source venv/bin/activate
 pytest
 
 # Format code
-black src/
+black myconfig/
 
 # Check code quality
-flake8 src/
-mypy src/
+flake8 myconfig/
+mypy myconfig/
 
 # Install pre-commit hooks
 pre-commit install
