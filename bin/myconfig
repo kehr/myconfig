@@ -11,4 +11,6 @@ PY="$(command -v python3 || command -v python || true)"
 if [[ -z "$PY" ]]; then
   echo "✖ python3/python not found, please install first (brew install python)" >&2; exit 1
 fi
+# Run CLI with source tree on PYTHONPATH so absolute imports (core, actions, etc.) resolve
+export PYTHONPATH="$PROJECT_ROOT/src:${PYTHONPATH:-}"
 exec "$PY" -m src "$@"

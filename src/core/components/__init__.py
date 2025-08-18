@@ -9,6 +9,7 @@ from core.components.vscode import VSCodeComponent
 from core.components.dotfiles import DotfilesComponent
 from core.components.defaults import DefaultsComponent
 from core.components.launchagents import LaunchAgentsComponent
+from core.components.applications import ApplicationsComponent
 
 __all__ = [
     "BackupComponent",
@@ -18,4 +19,5 @@ __all__ = [
     "DotfilesComponent",
     "DefaultsComponent",
     "LaunchAgentsComponent",
+    "ApplicationsComponent",
 ]

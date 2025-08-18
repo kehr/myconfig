@@ -18,13 +18,17 @@ def build_parser():
     p.add_argument("--no-mas", action="store_true")
     p.add_argument("--preview", action="store_true", help="Preview mode, show what will be processed")
     p.add_argument("--version", action="store_true")
+    p.add_argument("-c", "--config", help="Path to config file or directory (defaults: ~/.myconfig or project config)")
     sub = p.add_subparsers(dest="cmd")
 
     sp = sub.add_parser("export", help="Export to backup directory")
     sp.add_argument("outdir", nargs="?")
     sp.add_argument("--compress", action="store_true", help="Create compressed backup archive (.tar.gz)")
 
-    sp = sub.add_parser("restore", help="Restore from backup directory")
+    sp = sub.add_parser("scan", help="Scan installed tools and applications")
+    sp.add_argument("--apps", action="store_true", help="Scan Applications folder and known configs")
+
+    sp = sub.add_parser("restore", help="Restore from backup directory or .tar.gz archive")
     sp.add_argument("srcdir")
 
     sub.add_parser("doctor", help="Health check and diagnosis")
@@ -69,8 +73,31 @@ def main():
     if args.version:
         print(f"myconfig {VERSION}"); return
     
+    # Resolve config path precedence: CLI --config → ~/.myconfig → project default
+    def _resolve_config_path() -> str:
+        # 1) CLI specified
+        if getattr(args, 'config', None):
+            cand = os.path.expanduser(args.config)
+            if os.path.isdir(cand):
+                # accept directory containing config.toml
+                inner = os.path.join(cand, "config.toml")
+                if os.path.exists(inner):
+                    return inner
+            return cand
+        # 2) ~/.myconfig (file or directory)
+        home_cand = os.path.expanduser("~/.myconfig")
+        if os.path.isfile(home_cand):
+            return home_cand
+        if os.path.isdir(home_cand):
+            inner = os.path.join(home_cand, "config.toml")
+            if os.path.exists(inner):
+                return inner
+        # 3) project default
+        return "./config/config.toml"
+
+    config_path = _resolve_config_path()
     # Load and update configuration
-    config_manager = ConfigManager("./config/config.toml")
+    config_manager = ConfigManager(config_path)
     cfg = config_manager.load()
     cfg = cfg.update(
         interactive = (not args.yes) if args.yes else cfg.interactive,
@@ -96,11 +123,24 @@ def main():
             backup_manager.preview_export(default_outdir)
         else:
             backup_manager.export(default_outdir, compress=compress)
+    elif args.cmd == "scan":
+        # Reuse preview to show what will be exported
+        logger = logging.getLogger(__name__)
+        logger.info("Starting scan of installed tools and applications...")
+        backup_manager.preview_export("./backups/preview")
+        logger.info("Scan completed.")
     elif args.cmd == "restore":
+        # Allow passing a compressed archive created by export --compress
+        restore_source = args.srcdir
+        if os.path.isfile(restore_source) and (restore_source.endswith(".tar.gz") or restore_source.endswith(".tgz")):
+            extracted_dir = backup_manager.unpack(restore_source)
+            if not extracted_dir:
+                return
+            restore_source = extracted_dir
         if preview_mode:
-            backup_manager.preview_restore(args.srcdir)
+            backup_manager.preview_restore(restore_source)
         else:
-            backup_manager.restore(args.srcdir)
+            backup_manager.restore(restore_source)
     elif args.cmd == "doctor":
         do_doctor(cfg)
     elif args.cmd == "defaults":
@@ -125,3 +165,6 @@ def main():
         else: p.print_help()
     else:
         p.print_help()
+
+if __name__ == "__main__":
+    main()

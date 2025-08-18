@@ -14,6 +14,7 @@ from core.components import (
     DotfilesComponent,
     DefaultsComponent,
     LaunchAgentsComponent,
+    ApplicationsComponent,
 )
 from logger import log_section, log_separator, log_success
 from utils import create_backup_manifest, ts, host
@@ -36,6 +37,7 @@ class BackupManager:
             DotfilesComponent(self.executor),
             DefaultsComponent(self.executor),
             LaunchAgentsComponent(self.executor),
+            ApplicationsComponent(self.executor),
         ]
 
     def export(self, output_dir: str, compress: bool = False) -> bool:

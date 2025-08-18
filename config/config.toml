@@ -20,3 +20,53 @@ defaults_exclude_file = "config/defaults/exclude.txt"
 
 # dotfiles collection path whitelist (relative to user HOME; supports directories/files)
 # Empty lines or lines starting with # are comments
+
+[applications]
+# Enable Applications scanning/export
+enable = true
+
+# Known application configuration paths mapping
+# You can add or modify entries, keys match application names (fuzzy contains)
+# Example (TOML table form):
+# [applications.known]
+# "Visual Studio Code" = ["~/Library/Application Support/Code/User"]
+# "iTerm" = [
+#   "~/Library/Preferences/com.googlecode.iterm2.plist",
+#   "~/Library/Application Support/iTerm2/DynamicProfiles"
+# ]
+
+[applications.known]
+"Visual Studio Code" = [
+  "~/Library/Application Support/Code/User"
+]
+"iTerm" = [
+  "~/Library/Preferences/com.googlecode.iterm2.plist",
+  "~/Library/Application Support/iTerm2/DynamicProfiles"
+]
+"Warp" = [
+  "~/Library/Application Support/dev.warp.Warp-Stable"
+]
+"Alacritty" = [
+  "~/.config/alacritty"
+]
+"Kitty" = [
+  "~/.config/kitty"
+]
+"Sublime Text" = [
+  "~/Library/Application Support/Sublime Text*/Packages/User"
+]
+"Docker" = [
+  "~/Library/Group Containers/group.com.docker"
+]
+"Android Studio" = [
+  "~/Library/Preferences/AndroidStudio*",
+  "~/Library/Application Support/Google/AndroidStudio*"
+]
+"IntelliJ IDEA" = [
+  "~/Library/Preferences/IntelliJIdea*",
+  "~/Library/Application Support/JetBrains/IntelliJIdea*"
+]
+"PyCharm" = [
+  "~/Library/Preferences/PyCharm*",
+  "~/Library/Application Support/JetBrains/PyCharm*"
+]
