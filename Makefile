@@ -1,6 +1,6 @@
 # MyConfig Makefile
 
-.PHONY: help install install-user install-system install-dev uninstall clean build test lint format check
+.PHONY: help install install-user install-system install-dev uninstall clean build test lint format check publish test-publish check-package clean-build clean-pyc clean-test release test-release version
 
 # Default target
 help:
@@ -19,6 +19,19 @@ help:
 	@echo "  lint          Code linting"
 	@echo "  format        Code formatting"
 	@echo "  check         Full check (lint + test)"
+	@echo ""
+	@echo "PyPI Publishing:"
+	@echo "  publish       Publish to PyPI"
+	@echo "  test-publish  Publish to Test PyPI"
+	@echo "  check-package Check built package"
+	@echo "  release       Full release process (build + check + publish)"
+	@echo "  test-release  Full test release process"
+	@echo ""
+	@echo "Utilities:"
+	@echo "  version       Show version information"
+	@echo "  clean-build   Clean build directories only"
+	@echo "  clean-pyc     Clean Python cache only"
+	@echo "  clean-test    Clean test cache only"
 
 # Installation related
 install:
@@ -116,3 +129,69 @@ info:
 	@echo "  Python: $$(python3 --version)"
 	@echo "  Directory: $$(pwd)"
 	@echo "  Package count: $$(find src -name '*.py' | wc -l | tr -d ' ') Python files"
+
+# PyPI Publishing related
+publish: check-package
+	@echo "Publishing to PyPI..."
+	@if [ -z "$$PYPI_TOKEN" ]; then \
+		echo "Error: Please set PYPI_TOKEN environment variable"; \
+		echo "Example: export PYPI_TOKEN=your_token_here"; \
+		exit 1; \
+	fi
+	TWINE_PASSWORD=$$PYPI_TOKEN twine upload dist/*
+	@echo "Successfully published to PyPI!"
+	@echo "Package URL: https://pypi.org/project/myconfig-osx/"
+
+test-publish: check-package
+	@echo "Publishing to Test PyPI..."
+	@if [ -z "$$PYPI_TOKEN" ]; then \
+		echo "Error: Please set PYPI_TOKEN environment variable"; \
+		echo "Example: export PYPI_TOKEN=your_token_here"; \
+		exit 1; \
+	fi
+	TWINE_PASSWORD=$$PYPI_TOKEN twine upload --repository testpypi dist/*
+	@echo "Successfully published to Test PyPI!"
+	@echo "Package URL: https://test.pypi.org/project/myconfig-osx/"
+
+check-package: build
+	@echo "Checking built package..."
+	twine check dist/*
+	@echo "Package check passed!"
+
+# Enhanced cleaning targets
+clean-build:
+	@echo "Cleaning build directories..."
+	rm -rf build/
+	rm -rf dist/
+	rm -rf *.egg-info/
+	rm -rf src/*.egg-info/
+	@echo "Build directories cleaned!"
+
+clean-pyc:
+	@echo "Cleaning Python cache..."
+	find . -type f -name "*.py[co]" -delete
+	find . -type d -name "__pycache__" -delete
+	find . -type d -name "*.egg-info" -delete
+	@echo "Python cache cleaned!"
+
+clean-test:
+	@echo "Cleaning test cache..."
+	rm -rf .pytest_cache/
+	rm -rf .coverage
+	rm -rf htmlcov/
+	rm -rf .mypy_cache/
+	@echo "Test cache cleaned!"
+
+# Full release process
+release: clean build check-package publish
+	@echo "Release process completed successfully!"
+
+test-release: clean build check-package test-publish
+	@echo "Test release process completed successfully!"
+
+# Version information
+version:
+	@echo "Current version information:"
+	@python3 -c "from src._version import VERSION; print(f'Version: {VERSION}')"
+	@echo "Project name: myconfig-osx"
+	@echo "Python version requirement: >=3.8"
