@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "myconfig-osx"
-version = "1.1.2"
+version = "1.2.0"
 description = "macOS configuration backup and restore tool"
 readme = "README.md"
 license = "GPL-2.0"
