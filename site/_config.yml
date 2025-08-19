@@ -1,0 +1,131 @@
+# MyConfig GitHub Pages Configuration
+title: MyConfig
+description: A comprehensive macOS system configuration backup and restore tool designed for developers and system administrators
+baseurl: ""
+url: "https://kehr.github.io/myconfig"
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+theme: minima
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+# Site settings
+author:
+  name: Kyle
+  email: contact@myconfig.dev
+
+# GitHub repository
+repository: kehr/myconfig
+
+# Navigation
+header_pages:
+  - index.md
+  - docs/installation.md
+  - docs/usage.md
+  - docs/configuration.md
+  - docs/cli-tools.md
+  - docs/plugins.md
+  - about.md
+
+# Collections
+collections:
+  docs:
+    output: true
+    permalink: /:collection/:name/
+
+# Defaults
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "page"
+  - scope:
+      path: ""
+      type: "docs"
+    values:
+      layout: "doc"
+
+# Exclude from processing
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
+  - ../myconfig/
+  - ../tests/
+  - ../scripts/
+  - ../config/
+  - ../bin/
+  - ../.pytest_cache/
+  - ../__pycache__/
+  - "../*.pyc"
+  - ../.git/
+  - ../.github/
+  - ../.gitignore
+  - ../.gitattributes
+  - ../Makefile
+  - ../pyproject.toml
+  - ../MANIFEST.in
+  - "../*.code-workspace"
+
+# Include files
+include:
+  - _pages
+  - docs/
+
+# Sass
+sass:
+  sass_dir: _sass
+  style: compressed
+
+# SEO and social
+twitter:
+  username: myconfig_dev
+  card: summary_large_image
+
+social:
+  name: MyConfig
+  links:
+    - https://github.com/kehr/myconfig
+
+# Google Analytics (optional)
+# google_analytics: UA-XXXXXXXX-X
+
+# Disqus comments (optional)
+# disqus:
+#   shortname: myconfig
+
+# Custom variables
+version: "1.3.0"
+python_version: "3.8+"
+macos_version: "10.14+"
+
+# Feature flags
+features:
+  search: true
+  dark_mode: true
+  code_copy: true
+  toc: true
+
+# Custom CSS and JS
+custom_css:
+  - /assets/css/custom.css
+  - /assets/css/syntax.css
+
+custom_js:
+  - /assets/js/search.js
+  - /assets/js/theme-toggle.js
+  - /assets/js/copy-code.js
