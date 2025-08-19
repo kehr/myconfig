@@ -8,11 +8,11 @@ permalink: /about/
 
 MyConfig is a comprehensive macOS system configuration backup and restore tool designed specifically for developers and system administrators who need reliable, automated solutions for managing their development environments.
 
-## 🎯 Project Mission
+## Project Mission
 
 Our mission is to eliminate the pain of setting up new development environments by providing a robust, secure, and intelligent backup solution that captures not just files, but the entire ecosystem of tools, configurations, and preferences that make each developer's setup unique.
 
-## 🚀 Project History
+## Project History
 
 ### The Beginning
 MyConfig started as a simple script to backup Homebrew packages and dotfiles. Over time, it evolved into a comprehensive system that understands the complex relationships between different tools and configurations in a modern development environment.
@@ -27,7 +27,7 @@ MyConfig started as a simple script to backup Homebrew packages and dotfiles. Ov
 - **Performance Optimization**: Achieved 15-23% improvements across key metrics
 - **Enhanced Security**: Advanced filtering and validation mechanisms
 
-## 🏗️ Architecture Philosophy
+## Architecture Philosophy
 
 MyConfig is built on several core principles:
 

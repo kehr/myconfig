@@ -7,16 +7,17 @@ url: "https://kehr.github.io/myconfig"
 # Build settings
 markdown: kramdown
 highlighter: rouge
-theme: minima
+remote_theme: pages-themes/cayman@v0.2.0
 plugins:
   - jekyll-feed
   - jekyll-sitemap
   - jekyll-seo-tag
+  - jekyll-remote-theme
 
 # Site settings
 author:
   name: Kyle
-  email: contact@myconfig.dev
+  email: kehr.dev@gmail.com
 
 # GitHub repository
 repository: kehr/myconfig

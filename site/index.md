@@ -3,67 +3,32 @@ layout: default
 title: Home
 ---
 
-<div class="hero-section">
-  <div class="hero-content">
-    <h1 class="hero-title">MyConfig</h1>
-    <p class="hero-subtitle">A comprehensive macOS system configuration backup and restore tool designed for developers and system administrators</p>
-    
-    <div class="hero-badges">
-      <img src="https://badge.fury.io/py/myconfig-osx.svg" alt="PyPI version">
-      <img src="https://pepy.tech/badge/myconfig-osx" alt="Downloads">
-      <img src="https://img.shields.io/badge/License-GPL%20v2-blue.svg" alt="License">
-      <img src="https://img.shields.io/badge/python-3.8+-blue.svg" alt="Python 3.8+">
-      <img src="https://img.shields.io/badge/platform-macOS-lightgrey.svg" alt="macOS">
-    </div>
-    
-    <div class="hero-actions">
-      <a href="docs/installation" class="btn btn-primary">Get Started</a>
-      <a href="https://github.com/kehr/myconfig" class="btn btn-secondary">View on GitHub</a>
-    </div>
-  </div>
-</div>
+# MyConfig
 
-## ✨ Key Features
+[![PyPI version](https://badge.fury.io/py/myconfig-osx.svg)](https://badge.fury.io/py/myconfig-osx)
+[![Downloads](https://pepy.tech/badge/myconfig-osx)](https://pepy.tech/project/myconfig-osx)
+[![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![macOS](https://img.shields.io/badge/platform-macOS-lightgrey.svg)](https://www.apple.com/macos/)
+[![GitHub stars](https://img.shields.io/github/stars/kehr/myconfig.svg)](https://github.com/kehr/myconfig/stargazers)
 
-<div class="features-grid">
-  <div class="feature-card">
-    <div class="feature-icon">🔄</div>
-    <h3>Complete System Backup</h3>
-    <p>Comprehensive backup of Homebrew packages, VS Code extensions, dotfiles, system preferences, and application configurations</p>
-  </div>
-  
-  <div class="feature-card">
-    <div class="feature-icon">🔍</div>
-    <h3>Enhanced Application Detection</h3>
-    <p>Automatic detection and backup of <strong>200+ applications</strong> across 15+ categories including development tools, design software, and productivity apps</p>
-  </div>
-  
-  <div class="feature-card">
-    <div class="feature-icon">⚡</div>
-    <h3>CLI Tools Support</h3>
-    <p>Intelligent detection and backup of <strong>50+ command-line development tools</strong> including git, vim, tmux, zsh, node.js, python, rust, and more</p>
-  </div>
-  
-  <div class="feature-card">
-    <div class="feature-icon">🔒</div>
-    <h3>Secure and Reliable</h3>
-    <p>Automatically excludes sensitive files (SSH keys, passwords) with built-in security filtering and backup integrity validation</p>
-  </div>
-  
-  <div class="feature-card">
-    <div class="feature-icon">👁️</div>
-    <h3>Preview Mode</h3>
-    <p>Preview what will be backed up or restored before executing operations</p>
-  </div>
-  
-  <div class="feature-card">
-    <div class="feature-icon">📦</div>
-    <h3>Compression Support</h3>
-    <p>Create compressed backup archives (.tar.gz) for easy storage and sharing</p>
-  </div>
-</div>
+A comprehensive macOS system configuration backup and restore tool designed for developers and system administrators.
 
-## 🚀 Quick Start
+## Features
+
+- **Complete System Backup**: Comprehensive backup of Homebrew packages, VS Code extensions, dotfiles, system preferences, and application configurations
+- **Enhanced Application Detection**: Automatic detection and backup of 200+ applications across 15+ categories including development tools, design software, productivity apps, and system utilities
+- **CLI Tools Support**: Intelligent detection and backup of 50+ command-line development tools including git, vim, tmux, zsh, node.js, python, rust, and more
+- **Secure and Reliable**: Automatically excludes sensitive files (SSH keys, passwords) with built-in security filtering and backup integrity validation
+- **Preview Mode**: Preview what will be backed up or restored before executing operations
+- **Compression Support**: Create compressed backup archives (.tar.gz) for easy storage and sharing
+- **Template System**: Professional documentation generation with customizable templates for README.md, manifests, and metadata files
+- **Configuration Profiles**: Multiple configuration profiles for different use cases (minimal, development, full)
+- **Plugin System**: Extensible architecture supporting custom plugins for additional functionality
+- **Modern Architecture**: Class-based design with proper separation of concerns and comprehensive error handling
+- **Cross-Platform Compatibility**: Optimized for macOS with support for various package managers and development environments
+
+## Quick Start
 
 ### Installation
 
@@ -93,6 +58,24 @@ myconfig --version
 myconfig doctor
 ```
 
+**Method 3: Direct Usage (No Installation)**
+
+```bash
+# Clone the repository
+git clone https://github.com/kehr/myconfig.git
+cd myconfig
+
+# Set execution permissions
+chmod +x bin/myconfig
+chmod +x scripts/install.sh
+
+# Use directly
+./bin/myconfig --help
+
+# Or install from source
+./scripts/install.sh
+```
+
 ### Basic Usage
 
 ```bash
@@ -108,6 +91,9 @@ myconfig --preview export
 # Restore configuration from backup
 myconfig restore <backup-directory>
 
+# Restore from compressed archive
+myconfig restore backup.tar.gz
+
 # System health check and diagnostics
 myconfig doctor
 
@@ -115,31 +101,24 @@ myconfig doctor
 myconfig scan
 ```
 
-## 📊 Project Statistics
+## Main Commands
 
-<div class="stats-grid">
-  <div class="stat-card">
-    <div class="stat-number">200+</div>
-    <div class="stat-label">Supported Applications</div>
-  </div>
-  
-  <div class="stat-card">
-    <div class="stat-number">50+</div>
-    <div class="stat-label">CLI Tools</div>
-  </div>
-  
-  <div class="stat-card">
-    <div class="stat-number">15+</div>
-    <div class="stat-label">Categories</div>
-  </div>
-  
-  <div class="stat-card">
-    <div class="stat-number">92%</div>
-    <div class="stat-label">Test Coverage</div>
-  </div>
-</div>
+| Command | Description |
+|---------|-------------|
+| `export [dir]` | Export configuration to specified directory (auto-generates name if not provided) |
+| `export --compress [dir]` | Create compressed backup archive (.tar.gz) |
+| `restore <dir>` | Restore configuration from backup directory or archive |
+| `unpack <archive>` | Unpack compressed backup archive |
+| `scan` | Scan and display installed applications and CLI tools |
+| `doctor` | System environment check and diagnostics |
+| `--preview` | Preview mode - show what will be processed without executing |
+| `--dry-run` | Test run mode - show operations without executing them |
+| `profile list` | List available configuration profiles |
+| `profile use <name>` | Apply specified configuration profile |
+| `defaults export-all` | Export all system defaults domains |
+| `diff <dir1> <dir2>` | Compare differences between two backup directories |
 
-## 🛠️ Supported Components
+## Supported Components
 
 ### System Tools
 - **Homebrew**: Complete package management (formulas, casks, taps) with automatic Brewfile generation
@@ -159,6 +138,8 @@ myconfig scan
 - **Productivity**: Office suites, note-taking apps, task managers, calendar applications
 - **Communication**: Slack, Discord, Zoom, Microsoft Teams, messaging apps
 - **System Utilities**: Alfred, Bartender, CleanMyMac, monitoring tools
+- **Browsers**: Chrome, Firefox, Safari, Edge with extension and bookmark support
+- **Media Tools**: VLC, IINA, Spotify, audio/video editing software
 
 ### CLI Development Tools (50+ Supported)
 - **Editors**: vim, neovim, emacs with configuration files and plugins
@@ -167,62 +148,46 @@ myconfig scan
 - **Development Languages**: node.js, python, rust, go, java, php configurations
 - **Build Tools**: make, cmake, gradle, maven, cargo, npm, yarn, pnpm
 - **Cloud Tools**: AWS CLI, Google Cloud SDK, Azure CLI, kubectl, helm
+- **Database CLI**: mysql, postgresql, mongodb, redis command-line clients
+- **Network Tools**: curl, wget, httpie, network utilities and configurations
+- **Security Tools**: gpg, ssh, vault, encryption and security utilities
 
-## 📚 Documentation
+## Security Features
 
-<div class="docs-grid">
-  <div class="doc-card">
-    <h3><a href="docs/installation">📥 Installation Guide</a></h3>
-    <p>System requirements, installation methods, and troubleshooting</p>
-  </div>
-  
-  <div class="doc-card">
-    <h3><a href="docs/usage">📖 Usage Guide</a></h3>
-    <p>Complete command reference and common scenarios</p>
-  </div>
-  
-  <div class="doc-card">
-    <h3><a href="docs/configuration">⚙️ Configuration</a></h3>
-    <p>TOML configuration, profiles, and environment variables</p>
-  </div>
-  
-  <div class="doc-card">
-    <h3><a href="docs/cli-tools">⚡ CLI Tools</a></h3>
-    <p>CLI tools detection and backup guide</p>
-  </div>
-  
-  <div class="doc-card">
-    <h3><a href="docs/plugins">🔌 Plugin Development</a></h3>
-    <p>Plugin system and extension development</p>
-  </div>
-  
-  <div class="doc-card">
-    <h3><a href="docs/templates">📝 Template System</a></h3>
-    <p>Customizing output files with templates</p>
-  </div>
-</div>
+- **Automatic Security Filtering**: Excludes sensitive files (SSH private keys, password files, authentication tokens)
+- **Backup Integrity Validation**: Verifies backup completeness and file integrity
+- **Safe Restoration**: Creates automatic backups of existing files before restoration
+- **Detailed Logging**: Comprehensive operation logging for audit trails
+- **Permission Preservation**: Maintains file permissions and symbolic links during backup/restore
 
-## 🔄 Latest Updates (v1.3.0)
+## Configuration
 
-- **8.9x Database Expansion**: Grew application coverage from 10 to 89 applications
-- **CLI Tools Integration**: Added comprehensive detection for 11 major development tools
-- **Performance Optimization**: Achieved 15-23% improvements across key metrics
-- **Documentation Excellence**: Created comprehensive guides and updated all documentation
-- **Test Coverage**: Achieved 92% code coverage with 57 comprehensive test cases
+MyConfig uses TOML configuration files with support for:
 
-[View Full Changelog](docs/CHANGELOG)
+- **Component Enablement**: Selectively enable/disable backup components
+- **Custom Application Paths**: Define custom configuration paths for applications
+- **CLI Tools Configuration**: Specify detection methods and configuration paths for command-line tools
+- **Security Settings**: Configure exclusion patterns and sensitive file handling
+- **Template Customization**: Customize generated documentation and metadata files
+- **Profile Management**: Create and manage different configuration profiles
 
-## 🤝 Contributing
+## Documentation
 
-We welcome contributions! Please see our [Contributing Guide](https://github.com/kehr/myconfig/blob/main/CONTRIBUTING.md) for details.
+- [Installation Guide](docs/installation) - System requirements, installation methods, and troubleshooting
+- [Usage Guide](docs/usage) - Complete command reference and common scenarios
+- [Configuration](docs/configuration) - TOML configuration, profiles, and environment variables
+- [CLI Tools](docs/cli-tools) - CLI tools detection and backup guide
+- [Plugin Development](docs/plugins) - Plugin system and extension development
+- [Template System](docs/templates) - Template system documentation
 
-## 📄 License
+## Contributing
 
-This project is licensed under the GPL v2 License - see the [LICENSE](https://github.com/kehr/myconfig/blob/main/LICENSE) file for details.
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
 
-## 🔗 Links
+## Security
 
-- [GitHub Repository](https://github.com/kehr/myconfig)
-- [PyPI Package](https://pypi.org/project/myconfig-osx/)
-- [Issue Tracker](https://github.com/kehr/myconfig/issues)
-- [Documentation](docs/)
+For security concerns, please see our [Security Policy](SECURITY.md).
+
+## License
+
+This project is licensed under the GPL v2 License - see the [LICENSE](LICENSE) file for details.
