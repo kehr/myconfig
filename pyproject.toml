@@ -9,10 +9,10 @@ description = "macOS configuration backup and restore tool"
 readme = "README.md"
 license = "GPL-2.0"
 authors = [
-    {name = "Kyle", email = "******************"},
+    {name = "Kyle", email = "kehr.china@gmail.com"},
 ]
 maintainers = [
-    {name = "Kyle", email = "******************"},
+    {name = "Kyle", email = "kehr.china@gmail.com"},
 ]
 keywords = ["macos", "backup", "restore", "configuration", "dotfiles", "homebrew"]
 classifiers = [
