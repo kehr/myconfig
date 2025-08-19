@@ -53,12 +53,10 @@ jobs:
           if [ -L "CONTRIBUTING.md" ]; then
             cp -L CONTRIBUTING.md CONTRIBUTING.md.tmp && mv CONTRIBUTING.md.tmp CONTRIBUTING.md
           fi
-          if [ -L "SECURITY.md" ]; then
-            cp -L SECURITY.md SECURITY.md.tmp && mv SECURITY.md.tmp SECURITY.md
-          fi
           if [ -L "LICENSE" ]; then
             cp -L LICENSE LICENSE.tmp && mv LICENSE.tmp LICENSE
           fi
+          # Skip SECURITY.md as it doesn't exist in root directory
           
           # Handle directory symlinks - copy entire directory content
           if [ -L "docs" ]; then
