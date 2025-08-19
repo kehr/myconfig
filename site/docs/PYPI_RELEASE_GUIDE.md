@@ -1,3 +1,8 @@
+---
+layout: doc
+title: PYPI RELEASE GUIDE
+description: MyConfig pypi release guide
+---
 # 🚀 MyConfig PyPI Release Guide
 
 ## ✅ 准备工作完成

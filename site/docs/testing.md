@@ -1,3 +1,9 @@
+---
+layout: doc
+title: Testing Guide
+description: Testing procedures and guidelines for MyConfig
+---
+
 # Testing Guide
 
 MyConfig includes a comprehensive test suite to ensure reliability and maintainability.

@@ -1,3 +1,9 @@
+---
+layout: doc
+title: Usage Guide
+description: Complete command reference and common scenarios for MyConfig
+---
+
 # MyConfig Usage Guide
 
 ## Table of Contents

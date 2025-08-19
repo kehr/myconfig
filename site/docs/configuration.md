@@ -1,3 +1,9 @@
+---
+layout: doc
+title: Configuration Reference
+description: TOML configuration, profiles, and environment variables for MyConfig
+---
+
 # Configuration Reference
 
 ## Table of Contents

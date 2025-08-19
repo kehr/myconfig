@@ -1,3 +1,9 @@
+---
+layout: doc
+title: CLI Tools Detection and Backup Guide
+description: CLI tools detection and backup guide for MyConfig
+---
+
 # CLI Tools Detection and Backup Guide
 
 ## Table of Contents

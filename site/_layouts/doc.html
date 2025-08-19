@@ -1,0 +1,168 @@
+---
+layout: default
+---
+
+<div class="doc-container">
+  <nav class="doc-nav">
+    <h3>Documentation</h3>
+    <ul>
+      <li><a href="{{ '/docs/' | relative_url }}">Overview</a></li>
+      <li><a href="{{ '/docs/installation' | relative_url }}">Installation</a></li>
+      <li><a href="{{ '/docs/usage' | relative_url }}">Usage</a></li>
+      <li><a href="{{ '/docs/configuration' | relative_url }}">Configuration</a></li>
+      <li><a href="{{ '/docs/cli-tools' | relative_url }}">CLI Tools</a></li>
+      <li><a href="{{ '/docs/plugins' | relative_url }}">Plugins</a></li>
+      <li><a href="{{ '/docs/templates' | relative_url }}">Templates</a></li>
+      <li><a href="{{ '/docs/testing' | relative_url }}">Testing</a></li>
+      <li><a href="{{ '/docs/security' | relative_url }}">Security</a></li>
+    </ul>
+  </nav>
+  
+  <article class="doc-content">
+    <header class="doc-header">
+      <h1>{{ page.title }}</h1>
+      {% if page.description %}
+        <p class="doc-description">{{ page.description }}</p>
+      {% endif %}
+    </header>
+    
+    <div class="doc-body">
+      {{ content }}
+    </div>
+    
+    <footer class="doc-footer">
+      <div class="doc-meta">
+        {% if page.last_modified_at %}
+          <p>Last updated: {{ page.last_modified_at | date: "%B %d, %Y" }}</p>
+        {% endif %}
+      </div>
+      
+      <div class="doc-navigation">
+        {% if page.prev_doc %}
+          <a href="{{ page.prev_doc | relative_url }}" class="prev-doc">← {{ page.prev_doc_title | default: "Previous" }}</a>
+        {% endif %}
+        {% if page.next_doc %}
+          <a href="{{ page.next_doc | relative_url }}" class="next-doc">{{ page.next_doc_title | default: "Next" }} →</a>
+        {% endif %}
+      </div>
+    </footer>
+  </article>
+</div>
+
+<style>
+.doc-container {
+  display: flex;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.doc-nav {
+  flex: 0 0 250px;
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  height: fit-content;
+  position: sticky;
+  top: 2rem;
+}
+
+.doc-nav h3 {
+  margin-top: 0;
+  color: #333;
+  border-bottom: 2px solid #157878;
+  padding-bottom: 0.5rem;
+}
+
+.doc-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 0 0;
+}
+
+.doc-nav li {
+  margin: 0.5rem 0;
+}
+
+.doc-nav a {
+  color: #666;
+  text-decoration: none;
+  padding: 0.25rem 0;
+  display: block;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.doc-nav a:hover {
+  color: #157878;
+  background: #e9ecef;
+  padding-left: 0.5rem;
+}
+
+.doc-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.doc-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.doc-header h1 {
+  margin: 0 0 0.5rem 0;
+  color: #333;
+}
+
+.doc-description {
+  color: #666;
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.doc-body {
+  line-height: 1.6;
+}
+
+.doc-footer {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid #e9ecef;
+}
+
+.doc-navigation {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.doc-navigation a {
+  padding: 0.5rem 1rem;
+  background: #157878;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.doc-navigation a:hover {
+  background: #106a5a;
+}
+
+.doc-meta {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .doc-container {
+    flex-direction: column;
+  }
+  
+  .doc-nav {
+    flex: none;
+    position: static;
+  }
+}
+</style>

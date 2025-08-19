@@ -1,3 +1,8 @@
+---
+layout: doc
+title: git-setup
+description: MyConfig git-setup
+---
 # Git Setup and Hooks
 
 ## 📋 Table of Contents

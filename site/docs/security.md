@@ -1,3 +1,8 @@
+---
+layout: doc
+title: security
+description: MyConfig security
+---
 # Security Features
 
 ## 📋 Table of Contents

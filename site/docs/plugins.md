@@ -1,3 +1,9 @@
+---
+layout: doc
+title: Plugin Development Guide
+description: Plugin system and extension development guide for MyConfig
+---
+
 # Plugin Development Guide
 
 ## Table of Contents

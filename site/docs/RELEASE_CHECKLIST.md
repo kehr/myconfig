@@ -1,3 +1,8 @@
+---
+layout: doc
+title: RELEASE CHECKLIST
+description: MyConfig release checklist
+---
 # 🚀 MyConfig v1.0.0 Release Checklist
 
 ## ✅ 已完成项目

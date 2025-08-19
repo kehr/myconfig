@@ -1,3 +1,9 @@
+---
+layout: doc
+title: Installation Guide
+description: Detailed instructions for installing and setting up MyConfig
+---
+
 # Installation Guide
 
 This document provides detailed instructions for installing and setting up MyConfig.
