@@ -1,9 +1,7 @@
 ---
 layout: default
-title: Home
+title: MyConfig
 ---
-
-# MyConfig
 
 [![PyPI version](https://badge.fury.io/py/myconfig-osx.svg)](https://badge.fury.io/py/myconfig-osx)
 [![Downloads](https://pepy.tech/badge/myconfig-osx)](https://pepy.tech/project/myconfig-osx)
