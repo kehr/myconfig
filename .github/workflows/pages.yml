@@ -46,20 +46,6 @@ jobs:
           gem install bundler
           bundle install
           
-      - name: Copy symlinked files
-        run: |
-          cd site
-          # Copy individual symlinked files to actual files for deployment
-          if [ -L "CONTRIBUTING.md" ]; then
-            cp -L CONTRIBUTING.md CONTRIBUTING.md.tmp && mv CONTRIBUTING.md.tmp CONTRIBUTING.md
-          fi
-          if [ -L "SECURITY.md" ]; then
-            cp -L SECURITY.md SECURITY.md.tmp && mv SECURITY.md.tmp SECURITY.md
-          fi
-          if [ -L "LICENSE" ]; then
-            cp -L LICENSE LICENSE.tmp && mv LICENSE.tmp LICENSE
-          fi
-          
       - name: Build with Jekyll
         run: |
           cd site
