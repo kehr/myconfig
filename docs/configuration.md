@@ -4,6 +4,8 @@
 
 - [Configuration File Structure](#configuration-file-structure)
 - [Main Configuration Options](#main-configuration-options)
+- [Applications Configuration](#applications-configuration)
+- [CLI Tools Configuration](#cli-tools-configuration)
 - [Domain Configuration Files](#domain-configuration-files)
 - [Configuration Profile System](#configuration-profile-system)
 - [Template Configuration](#template-configuration)
@@ -19,8 +21,8 @@ myconfig/
 ├── config/
 │   ├── config.toml          # Main configuration file
 │   ├── defaults/
-│   │   ├── domains.txt      # defaults domain list
-│   │   └── exclude.txt      # excluded domains list
+│   │   ├── domains.txt      # System defaults domain list
+│   │   └── exclude.txt      # Excluded domains list
 │   └── profiles/            # Configuration profiles
 │       ├── dev-full.toml    # Full development profile
 │       └── minimal.toml     # Minimal profile
@@ -42,33 +44,22 @@ myconfig/
 interactive = true
 
 # Component enablement
-enable_homebrew = true      # Homebrew packages and casks
-enable_vscode = true        # VS Code extensions
-enable_defaults = true      # System preferences (defaults)
-enable_launchagents = true  # LaunchAgents services
-enable_mas = true          # Mac App Store applications
-
-# Package managers
 enable_npm = false         # npm global packages
 enable_pip_user = false    # pip user packages
 enable_pipx = false        # pipx packages
+enable_defaults = true     # System preferences (defaults)
+enable_vscode = true       # VS Code extensions
+enable_launchagents = true # LaunchAgents services
+enable_mas = true          # Mac App Store applications
 
 # Advanced features
 enable_incremental = false # Incremental backups (future feature)
-
-# Enhanced application detection
-[applications]
-# Enhanced application database (renamed from applications.known)
-# Contains 89 applications across 11 categories
-enable_cli_detection = true    # Enable CLI tools detection
-enable_path_scanning = true    # Enable PATH-based tool discovery
-enable_package_managers = true # Enable package manager integration
 ```
 
 ### File Paths
 
 ```toml
-# Base backup directory (empty = auto-generate)
+# Base backup directory (empty = auto-generate with timestamp)
 base_backup_dir = ""
 
 # System defaults configuration
@@ -76,62 +67,168 @@ defaults_domains_file = "config/defaults/domains.txt"
 defaults_exclude_file = "config/defaults/exclude.txt"
 ```
 
-### Template Settings
+## Applications Configuration
+
+### GUI Applications Detection
 
 ```toml
-# Template system configuration
-[templates]
-# Template directory (relative to myconfig/)
-template_dir = "templates"
+[applications]
+# Enable applications scanning and export
+enable = true
 
-# Enable template processing
-enable_templates = true
+# Known GUI application configuration paths mapping
+# This section is for GUI applications with graphical interfaces
+[applications.default]
 
-# Template variables (custom context)
-[templates.variables]
-company_name = "Your Company"
-department = "IT Department"
-contact_email = "admin@company.com"
-```
-
-### Export Options
-
-```toml
-[export]
-# Default compression format
-default_compression = "gzip"  # gzip, bzip2, xz
-
-# Compression level (1-9 for gzip)
-compression_level = 6
-
-# Include hidden files in dotfiles
-include_hidden = true
-
-# Maximum archive size (MB, 0 = unlimited)
-max_archive_size = 1000
-```
-
-### Security Settings
-
-```toml
-[security]
-# Automatically skip sensitive files
-skip_sensitive = true
-
-# Additional patterns to exclude (regex)
-exclude_patterns = [
-    ".*\\.key$",
-    ".*\\.pem$",
-    ".*password.*",
-    ".*secret.*"
+# Development Tools (IDEs and Editors)
+"Visual Studio Code" = [
+  "~/Library/Application Support/Code/User"
+]
+"Sublime Text" = [
+  "~/Library/Application Support/Sublime Text*/Packages/User"
+]
+"IntelliJ IDEA" = [
+  "~/Library/Preferences/IntelliJIdea*",
+  "~/Library/Application Support/JetBrains/IntelliJIdea*"
+]
+"PyCharm" = [
+  "~/Library/Preferences/PyCharm*",
+  "~/Library/Application Support/JetBrains/PyCharm*"
+]
+"Xcode" = [
+  "~/Library/Developer/Xcode/UserData"
 ]
 
-# Directories to always exclude
-exclude_directories = [
-    ".ssh",
-    ".gnupg",
-    ".aws"
+# Design and Creative Tools
+"Sketch" = [
+  "~/Library/Application Support/com.bohemiancoding.sketch3"
 ]
+"Figma" = [
+  "~/Library/Application Support/Figma"
+]
+"Adobe Photoshop" = [
+  "~/Library/Preferences/Adobe Photoshop*/Adobe Photoshop * Settings"
+]
+
+# Database Tools
+"TablePlus" = [
+  "~/Library/Application Support/com.tinyapp.TablePlus"
+]
+"Sequel Pro" = [
+  "~/Library/Application Support/Sequel Pro"
+]
+
+# Communication Tools
+"Slack" = [
+  "~/Library/Application Support/Slack"
+]
+"Discord" = [
+  "~/Library/Application Support/discord"
+]
+
+# And many more applications...
+```
+
+## CLI Tools Configuration
+
+### CLI Tools Detection and Configuration
+
+```toml
+[cli_tools]
+# CLI tools configuration paths mapping
+# This section is dedicated to command-line tools and their configurations
+
+[cli_tools.default]
+
+# Version Control
+"git" = [
+  "~/.gitconfig",
+  "~/.gitignore_global"
+]
+
+# Text Editors
+"vim" = [
+  "~/.vimrc",
+  "~/.vim"
+]
+"neovim" = [
+  "~/.config/nvim",
+  "~/.local/share/nvim"
+]
+
+# Shell Configuration
+"zsh" = [
+  "~/.zshrc",
+  "~/.zprofile",
+  "~/.zshenv"
+]
+"fish" = [
+  "~/.config/fish"
+]
+"bash" = [
+  "~/.bashrc",
+  "~/.bash_profile",
+  "~/.profile"
+]
+
+# Terminal Multiplexers
+"tmux" = [
+  "~/.tmux.conf"
+]
+"screen" = [
+  "~/.screenrc"
+]
+
+# Development Languages
+"node" = [
+  "~/.npmrc",
+  "~/.nvm"
+]
+"python" = [
+  "~/.pip/pip.conf",
+  "~/.pypirc"
+]
+"rust" = [
+  "~/.cargo/config.toml",
+  "~/.rustup"
+]
+
+# Cloud Tools
+"aws-cli" = [
+  "~/.aws"
+]
+"gcloud" = [
+  "~/.config/gcloud"
+]
+"kubectl" = [
+  "~/.kube/config"
+]
+
+# Database CLI Tools
+"mysql" = [
+  "~/.my.cnf"
+]
+"postgresql" = [
+  "~/.psqlrc"
+]
+
+# And many more CLI tools...
+```
+
+### CLI Tools Detection Settings
+
+```toml
+[cli_tools.detection]
+# Enable different detection methods
+enable_path_detection = true      # Scan system PATH
+enable_homebrew_detection = true  # Query Homebrew packages
+enable_package_manager = true     # Check npm, pip, cargo
+enable_config_scanning = true     # Scan config directories
+
+# Detection performance settings
+max_scan_depth = 3                # Maximum directory depth for scanning
+scan_timeout = 30                 # Timeout in seconds for detection
+cache_results = true              # Cache detection results
 ```
 
 ## Domain Configuration Files
@@ -198,18 +295,27 @@ name = "Development Full"
 description = "Complete development environment backup"
 
 # Override main config settings
-enable_homebrew = true
-enable_vscode = true
+interactive = false
 enable_npm = true
+enable_pip_user = true
 enable_pipx = true
 enable_defaults = true
+enable_vscode = true
 enable_launchagents = true
+enable_mas = true
 
-# Custom settings for this profile
-[export]
-include_dev_tools = true
-include_databases = true
+[applications]
+enable = true
+
+[cli_tools]
+# Enable all CLI tools detection
+enable_path_detection = true
+enable_homebrew_detection = true
+enable_package_manager = true
+enable_config_scanning = true
 ```
+
+### Minimal Profile
 
 ```toml
 # config/profiles/minimal.toml
@@ -217,12 +323,23 @@ include_databases = true
 name = "Minimal"
 description = "Essential configurations only"
 
-# Minimal feature set
-enable_homebrew = true
-enable_vscode = false
+interactive = true
 enable_npm = false
+enable_pip_user = false
+enable_pipx = false
 enable_defaults = false
+enable_vscode = true
 enable_launchagents = false
+enable_mas = false
+
+[applications]
+enable = false
+
+[cli_tools]
+enable_path_detection = true
+enable_homebrew_detection = false
+enable_package_manager = false
+enable_config_scanning = false
 ```
 
 ### Using Profiles
@@ -231,110 +348,182 @@ enable_launchagents = false
 # List available profiles
 myconfig profile list
 
-# Use a specific profile
+# Use specific profile
 myconfig profile use dev-full
-
-# Save current configuration as a new profile
-myconfig profile save my-custom-profile
-
-# Export with profile
 myconfig profile use minimal
-myconfig export minimal-backup
+
+# Save current configuration as new profile
+myconfig profile save my-custom-profile
 ```
 
 ## Template Configuration
 
-### Custom Template Variables
-
-Add custom variables to templates by modifying the configuration:
+### Template System Settings
 
 ```toml
+[templates]
+# Template directory (relative to myconfig/)
+template_dir = "templates"
+
+# Enable template processing
+enable_templates = true
+
+# Template variables (custom context)
 [templates.variables]
-# Organization information
-company_name = "Acme Corporation"
-department = "Engineering"
-contact_email = "devops@acme.com"
-support_url = "https://wiki.acme.com/myconfig"
-
-# Custom metadata
-backup_policy = "Monthly full backup, weekly incremental"
-retention_days = 90
-compliance_standard = "SOX, GDPR"
-
-# Environment information
-environment = "production"  # development, staging, production
-location = "datacenter-west"
+company_name = "Your Company"
+department = "IT Department"
+contact_email = "admin@example.com"
 ```
 
-### Template Overrides
+### Export Options
 
 ```toml
-[templates.overrides]
-# Use custom template files
-readme_template = "custom-readme.template"
-environment_template = "custom-environment.template"
+[export]
+# Default compression format
+default_compression = "gzip"  # gzip, bzip2, xz
 
-# Template processing options
-enable_markdown = true
-enable_html_export = false
-include_timestamps = true
+# Compression level (1-9 for gzip)
+compression_level = 6
+
+# Include hidden files in dotfiles
+include_hidden = true
+
+# Maximum archive size (MB, 0 = unlimited)
+max_archive_size = 1000
+```
+
+### Security Settings
+
+```toml
+[security]
+# Automatically skip sensitive files
+skip_sensitive = true
+
+# Additional patterns to exclude (regex)
+exclude_patterns = [
+    ".*\\.key$",
+    ".*\\.pem$",
+    ".*password.*",
+    ".*secret.*"
+]
+
+# Directories to always exclude
+exclude_directories = [
+    ".ssh",
+    ".gnupg",
+    ".aws"
+]
 ```
 
 ## Environment Variables
 
-MyConfig supports environment variable overrides:
+### Supported Variables
 
-### Export Variables
+MyConfig supports environment variable expansion in configuration paths:
 
-```bash
-# Override configuration via environment
-export MYCONFIG_INTERACTIVE=false
-export MYCONFIG_ENABLE_MAS=false
-export MYCONFIG_BASE_BACKUP_DIR="/backups"
+| Variable | Purpose | Example |
+|----------|---------|---------|
+| `$HOME` | User home directory | `/Users/username` |
+| `$XDG_CONFIG_HOME` | XDG config directory | `~/.config` |
+| `$XDG_DATA_HOME` | XDG data directory | `~/.local/share` |
+| `$USER` | Current username | `username` |
 
-# Template variables
-export MYCONFIG_COMPANY_NAME="My Company"
-export MYCONFIG_DEPARTMENT="IT"
+### Usage Examples
 
-# Run with environment overrides
-myconfig export
+```toml
+[cli_tools.default]
+"custom_tool" = [
+    "$HOME/.custom_toolrc",
+    "$XDG_CONFIG_HOME/custom_tool/config.yaml",
+    "$HOME/.config/custom_tool/settings.json"
+]
 ```
 
-### Variable Precedence
-
-1. **Environment Variables** (highest priority)
-2. **Command Line Arguments**
-3. **Profile Configuration**
-4. **Main Configuration File**
-5. **Default Values** (lowest priority)
-
-### Common Environment Variables
-
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `MYCONFIG_CONFIG_FILE` | `config/config.toml` | Main config file path |
-| `MYCONFIG_INTERACTIVE` | `true` | Interactive mode |
-| `MYCONFIG_VERBOSE` | `false` | Verbose logging |
-| `MYCONFIG_DRY_RUN` | `false` | Dry run mode |
-| `MYCONFIG_ENABLE_HOMEBREW` | `true` | Enable Homebrew export |
-| `MYCONFIG_ENABLE_VSCODE` | `true` | Enable VS Code export |
-| `MYCONFIG_TEMPLATE_DIR` | `myconfig/templates` | Template directory |
-
 ## Advanced Configuration
+
+### Custom Application Detection
+
+Add custom applications to the detection system:
+
+```toml
+[applications.default]
+"My Custom App" = [
+    "~/Library/Application Support/MyCustomApp",
+    "~/Library/Preferences/com.company.mycustomapp.plist"
+]
+```
+
+### Custom CLI Tool Detection
+
+Add custom CLI tools:
+
+```toml
+[cli_tools.default]
+"my_cli_tool" = [
+    "$HOME/.my_cli_toolrc",
+    "$XDG_CONFIG_HOME/my_cli_tool/config.yaml"
+]
+```
+
+### Detection Tuning
+
+```toml
+[cli_tools.detection]
+# Performance tuning
+max_scan_depth = 2
+scan_timeout = 15
+cache_results = true
+
+# Custom detection patterns
+custom_config_patterns = [
+    ".*rc$",
+    ".*conf$",
+    "config.*"
+]
+
+# Directories to scan for configs
+config_directories = [
+    "~/.config",
+    "~/.local/share",
+    "~/Library/Application Support"
+]
+```
+
+### Backup Filtering
+
+```toml
+[backup]
+# File size limits
+max_file_size = "100MB"
+max_total_size = "10GB"
+
+# File type exclusions
+exclude_extensions = [
+    ".tmp",
+    ".cache",
+    ".log"
+]
+
+# Path exclusions (regex patterns)
+exclude_paths = [
+    ".*/node_modules/.*",
+    ".*/\\.git/.*",
+    ".*/cache/.*"
+]
+```
 
 ### Logging Configuration
 
 ```toml
 [logging]
-# Log level: DEBUG, INFO, WARNING, ERROR
+# Log level (DEBUG, INFO, WARNING, ERROR)
 level = "INFO"
 
-# Log to file
-enable_file_logging = true
-log_file = "logs/myconfig.log"
+# Log file location
+log_file = "~/.myconfig/logs/myconfig.log"
 
-# Log format
-format = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+# Enable component-specific logging
+component_logging = true
 
 # Log rotation
 max_log_size = "10MB"
@@ -348,203 +537,139 @@ backup_count = 5
 # Parallel processing
 max_workers = 4
 
-# Timeout settings (seconds)
-command_timeout = 300
-download_timeout = 30
-
 # Memory limits
 max_memory_usage = "1GB"
 
-# Compression settings
-compression_threads = 2
-buffer_size = "64KB"
-```
-
-### Plugin Configuration
-
-```toml
-[plugins]
-# Plugin directory
-plugin_dir = "myconfig/plugins"
-
-# Enable specific plugins
-enabled_plugins = [
-    "sample",
-    "custom_exporter"
-]
-
-# Plugin-specific settings
-[plugins.custom_exporter]
-export_format = "json"
-include_metadata = true
-```
-
-### Backup Validation
-
-```toml
-[validation]
-# Enable backup verification
-enable_verification = true
-
-# Checksum algorithm
-checksum_algorithm = "sha256"
-
-# Verify file integrity
-verify_file_integrity = true
-
-# Maximum verification time (seconds)
-max_verification_time = 60
-```
-
-### Network Settings
-
-```toml
-[network]
-# Proxy settings
-http_proxy = ""
-https_proxy = ""
-
 # Timeout settings
-connect_timeout = 10
-read_timeout = 30
+command_timeout = 300
+network_timeout = 30
 
-# User agent for downloads
-user_agent = "MyConfig/2.0"
-```
-
-## Configuration Examples
-
-### Enterprise Configuration
-
-```toml
-# Enterprise-grade configuration
-interactive = false
-enable_defaults = true
-enable_launchagents = true
-
-[templates.variables]
-company_name = "Enterprise Corp"
-compliance_standard = "SOX, HIPAA"
-backup_policy = "Daily incremental, weekly full"
-
-[security]
-skip_sensitive = true
-exclude_patterns = [
-    ".*\\.key$",
-    ".*\\.p12$",
-    ".*credential.*",
-    ".*password.*"
-]
-
-[export]
-default_compression = "gzip"
-compression_level = 9
-max_archive_size = 500
-
-[logging]
-level = "INFO"
-enable_file_logging = true
-```
-
-### Developer Configuration
-
-```toml
-# Developer-focused configuration
-interactive = true
-enable_homebrew = true
-enable_vscode = true
-enable_npm = true
-enable_pipx = true
-
-[templates.variables]
-department = "Engineering"
-environment = "development"
-
-[export]
-include_dev_tools = true
-compression_level = 6
-
-[logging]
-level = "DEBUG"
-```
-
-### Minimal Configuration
-
-```toml
-# Minimal configuration for basic use
-interactive = true
-enable_homebrew = true
-enable_vscode = false
-enable_defaults = false
-
-[export]
-compression_level = 1
-max_archive_size = 100
-
-[logging]
-level = "WARNING"
+# Cache settings
+enable_cache = true
+cache_ttl = 3600  # seconds
 ```
 
 ## Configuration Validation
 
-### Validate Configuration
+### Validation Rules
+
+MyConfig automatically validates configuration files:
+
+- TOML syntax validation
+- Required field checking
+- Path existence verification
+- Permission validation
+- Circular dependency detection
+
+### Validation Commands
 
 ```bash
+# Validate current configuration
+myconfig --dry-run export
+
+# Validate specific configuration file
+myconfig -c custom-config.toml --dry-run export
+
 # Check configuration syntax
-myconfig config validate
-
-# Show current configuration
-myconfig config show
-
-# Show effective configuration (with overrides)
-myconfig config show --effective
+myconfig doctor
 ```
 
 ### Common Configuration Errors
 
-| Error | Cause | Solution |
-|-------|-------|----------|
-| `Invalid TOML syntax` | Malformed config file | Check TOML syntax |
-| `Unknown configuration key` | Typo in key name | Check documentation |
-| `Invalid path` | File path doesn't exist | Verify file paths |
-| `Permission denied` | Insufficient permissions | Check file permissions |
+1. **Invalid TOML Syntax**
+   ```bash
+   # Error: Invalid TOML format
+   # Fix: Check brackets, quotes, and indentation
+   ```
 
-### Configuration Testing
+2. **Missing Required Fields**
+   ```bash
+   # Error: Missing required configuration
+   # Fix: Add required fields to config.toml
+   ```
 
-```bash
-# Test configuration with dry run
-myconfig --dry-run export
+3. **Invalid Paths**
+   ```bash
+   # Error: Configuration path does not exist
+   # Fix: Verify paths and permissions
+   ```
 
-# Validate specific profile
-myconfig profile use test-profile
-myconfig config validate
+## Configuration Examples
+
+### Developer Workstation
+
+```toml
+# Complete development environment
+interactive = false
+enable_npm = true
+enable_pip_user = true
+enable_pipx = true
+enable_defaults = true
+enable_vscode = true
+enable_launchagents = true
+enable_mas = true
+
+[applications]
+enable = true
+
+[cli_tools]
+enable_path_detection = true
+enable_homebrew_detection = true
+enable_package_manager = true
+enable_config_scanning = true
+
+[export]
+default_compression = "gzip"
+compression_level = 9
+include_hidden = true
 ```
 
-## Migration Guide
+### Server Environment
 
-### Upgrading Configuration
+```toml
+# Minimal server configuration
+interactive = false
+enable_npm = false
+enable_pip_user = true
+enable_pipx = false
+enable_defaults = false
+enable_vscode = false
+enable_launchagents = true
+enable_mas = false
 
-When upgrading MyConfig versions:
+[applications]
+enable = false
 
-1. **Backup Current Config**
-   ```bash
-   cp config/config.toml config/config.toml.backup
-   ```
+[cli_tools]
+enable_path_detection = true
+enable_homebrew_detection = true
+enable_package_manager = false
+enable_config_scanning = true
+```
 
-2. **Check New Options**
-   ```bash
-   myconfig config show-defaults > config/new-options.toml
-   ```
+### Designer Workstation
 
-3. **Merge Changes**
-   ```bash
-   # Review and merge new options
-   vim config/config.toml
-   ```
+```toml
+# Design-focused configuration
+interactive = true
+enable_npm = false
+enable_pip_user = false
+enable_pipx = false
+enable_defaults = true
+enable_vscode = true
+enable_launchagents = true
+enable_mas = true
 
-4. **Validate Configuration**
-   ```bash
-   myconfig config validate
-   ```
+[applications]
+enable = true
+# Focus on design applications
+focus_categories = ["design", "creative", "productivity"]
 
-For specific migration instructions, see the version-specific documentation in the [CHANGELOG.md](../CHANGELOG.md) file.
+[cli_tools]
+enable_path_detection = false
+enable_homebrew_detection = true
+enable_package_manager = false
+enable_config_scanning = false
+```
+
+For more configuration examples and advanced usage patterns, see the [Usage Guide](./usage.md) and [CLI Tools Guide](./cli-tools.md).

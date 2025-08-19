@@ -1,10 +1,10 @@
 # MyConfig Template System
 
-## 📋 Overview
+## Overview
 
 MyConfig uses a powerful template system to generate professional documentation and metadata files. This system allows you to customize the format and content of generated files without modifying any Python code.
 
-## 🏗️ Architecture
+## Architecture
 
 ### Template Engine Components
 
@@ -21,7 +21,7 @@ MyConfig uses a powerful template system to generate professional documentation 
 4. **Render Templates** → Apply templates with context data
 5. **Generate Files** → Create formatted output files
 
-## 📁 Template Files
+## Template Files
 
 ### Available Templates
 
@@ -40,7 +40,7 @@ myconfig/templates/
 └── MANIFEST.json.template       # Backup metadata (future use)
 ```
 
-## 🎨 Template Syntax
+## Template Syntax
 
 MyConfig uses a Mustache-like template syntax that's easy to read and write.
 
@@ -89,7 +89,7 @@ Content displayed if section_name exists and is truthy
 {{/components}}
 ```
 
-## 📊 Available Template Variables
+## Available Template Variables
 
 ### Global Variables
 
@@ -178,7 +178,7 @@ Content displayed if section_name exists and is truthy
 }
 ```
 
-## 🛠️ Customizing Templates
+## Customizing Templates
 
 ### Basic Customization
 
@@ -428,4 +428,4 @@ When updating MyConfig, template changes are handled automatically:
 | 2.0+ | v2 | Full support |
 | 1.x | v1 | Legacy fallback |
 
-For detailed information about specific template changes, see the [CHANGELOG.md](../CHANGELOG.md) file.
+For detailed information about specific template changes, see the [CHANGELOG.md](./CHANGELOG.md) file.

@@ -12,42 +12,123 @@
 
 ## Overview
 
-MyConfig now includes comprehensive CLI tools detection and backup capabilities, automatically discovering and backing up configuration files for popular command-line development tools. This feature expands MyConfig's coverage from basic GUI applications to a complete developer ecosystem.
+MyConfig includes comprehensive CLI tools detection and backup capabilities, automatically discovering and backing up configuration files for popular command-line development tools. This feature expands MyConfig's coverage from basic GUI applications to a complete developer ecosystem.
 
 ### Key Features
 
-- **Automatic Detection**: Discovers CLI tools through multiple methods
+- **Automatic Detection**: Discovers CLI tools through multiple detection methods
 - **Smart Path Resolution**: Handles environment variables and standard locations
 - **Package Manager Integration**: Works with Homebrew, npm, pip, and cargo
 - **Configuration Backup**: Preserves dotfiles, symlinks, and permissions
 - **Cross-Platform Support**: Optimized for macOS with fallback mechanisms
+- **Comprehensive Coverage**: Supports 50+ CLI development tools across multiple categories
 
 ## Supported CLI Tools
 
 MyConfig automatically detects and backs up configurations for the following CLI tools:
 
-### Development Tools
+### Version Control Systems
 | Tool | Configuration Files | Detection Method |
 |------|-------------------|------------------|
 | **git** | `~/.gitconfig`, `~/.gitignore_global` | PATH + config files |
+| **mercurial** | `~/.hgrc` | PATH + config files |
+| **subversion** | `~/.subversion/` | PATH + config files |
+
+### Text Editors and IDEs
+| Tool | Configuration Files | Detection Method |
+|------|-------------------|------------------|
 | **vim** | `~/.vimrc`, `~/.vim/` | PATH + config files |
 | **neovim** | `~/.config/nvim/`, `~/.local/share/nvim/` | PATH + XDG config |
-| **tmux** | `~/.tmux.conf`, `~/.tmux/` | PATH + config files |
+| **emacs** | `~/.emacs`, `~/.emacs.d/` | PATH + config files |
+| **nano** | `~/.nanorc` | PATH + config files |
 
 ### Shell Environments
 | Tool | Configuration Files | Detection Method |
 |------|-------------------|------------------|
 | **zsh** | `~/.zshrc`, `~/.zprofile`, `~/.zshenv` | PATH + config files |
 | **fish** | `~/.config/fish/` | PATH + XDG config |
+| **bash** | `~/.bashrc`, `~/.bash_profile`, `~/.profile` | PATH + config files |
 | **starship** | `~/.config/starship.toml` | PATH + config files |
 | **oh-my-zsh** | `~/.oh-my-zsh/`, `~/.zshrc` | Directory + config |
 
-### Development Environments
+### Terminal Multiplexers
+| Tool | Configuration Files | Detection Method |
+|------|-------------------|------------------|
+| **tmux** | `~/.tmux.conf` | PATH + config files |
+| **screen** | `~/.screenrc` | PATH + config files |
+
+### Development Languages and Runtimes
 | Tool | Configuration Files | Detection Method |
 |------|-------------------|------------------|
 | **node** | `~/.npmrc`, `~/.nvm/`, `~/.node_repl_history` | npm + config files |
 | **python** | `~/.pip/pip.conf`, `~/.pypirc`, `~/.python_history` | pip + config files |
 | **rust** | `~/.cargo/config.toml`, `~/.rustup/` | cargo + config files |
+| **go** | `~/.config/go/`, `~/go/` | PATH + config files |
+| **java** | `~/.java/`, `~/.m2/` | PATH + config files |
+| **php** | `~/.composer/` | PATH + config files |
+| **ruby** | `~/.gemrc`, `~/.rvm/` | PATH + config files |
+
+### Build Tools and Package Managers
+| Tool | Configuration Files | Detection Method |
+|------|-------------------|------------------|
+| **npm** | `~/.npmrc` | npm + config files |
+| **yarn** | `~/.yarnrc` | PATH + config files |
+| **pnpm** | `~/.pnpmrc` | PATH + config files |
+| **pip** | `~/.pip/pip.conf` | pip + config files |
+| **cargo** | `~/.cargo/config.toml` | cargo + config files |
+| **maven** | `~/.m2/settings.xml` | PATH + config files |
+| **gradle** | `~/.gradle/` | PATH + config files |
+
+### Cloud and Infrastructure Tools
+| Tool | Configuration Files | Detection Method |
+|------|-------------------|------------------|
+| **aws-cli** | `~/.aws/` | PATH + config files |
+| **gcloud** | `~/.config/gcloud/` | PATH + XDG config |
+| **azure-cli** | `~/.azure/` | PATH + config files |
+| **kubectl** | `~/.kube/config` | PATH + config files |
+| **helm** | `~/.config/helm/` | PATH + XDG config |
+| **terraform** | `~/.terraformrc` | PATH + config files |
+| **ansible** | `~/.ansible.cfg` | PATH + config files |
+
+### Container Tools
+| Tool | Configuration Files | Detection Method |
+|------|-------------------|------------------|
+| **docker** | `~/.docker/config.json` | PATH + config files |
+| **podman** | `~/.config/containers/` | PATH + XDG config |
+| **vagrant** | `~/.vagrant.d/` | PATH + config files |
+
+### Database CLI Tools
+| Tool | Configuration Files | Detection Method |
+|------|-------------------|------------------|
+| **mysql** | `~/.my.cnf` | PATH + config files |
+| **postgresql** | `~/.psqlrc` | PATH + config files |
+| **mongodb** | `~/.mongorc.js` | PATH + config files |
+| **redis-cli** | `~/.rediscli_history` | PATH + config files |
+| **sqlite3** | `~/.sqlite_history` | PATH + config files |
+
+### Network and System Tools
+| Tool | Configuration Files | Detection Method |
+|------|-------------------|------------------|
+| **curl** | `~/.curlrc` | PATH + config files |
+| **wget** | `~/.wgetrc` | PATH + config files |
+| **httpie** | `~/.config/httpie/` | PATH + XDG config |
+| **ssh** | `~/.ssh/config`, `~/.ssh/known_hosts` | PATH + config files |
+
+### File and Text Processing
+| Tool | Configuration Files | Detection Method |
+|------|-------------------|------------------|
+| **ripgrep** | `~/.config/rg/` | PATH + XDG config |
+| **fd** | `~/.config/fd/` | PATH + XDG config |
+| **bat** | `~/.config/bat/` | PATH + XDG config |
+| **exa** | `~/.config/exa/` | PATH + XDG config |
+| **lsd** | `~/.config/lsd/` | PATH + XDG config |
+
+### Security Tools
+| Tool | Configuration Files | Detection Method |
+|------|-------------------|------------------|
+| **gpg** | `~/.gnupg/` | PATH + config files |
+| **age** | `~/.config/age/` | PATH + XDG config |
+| **vault** | `~/.vault-token` | PATH + config files |
 
 ## Detection Methods
 
@@ -63,6 +144,11 @@ which git  # /usr/bin/git or /usr/local/bin/git
 # Then checks for ~/.gitconfig, ~/.gitignore_global
 ```
 
+**Advantages:**
+- Fast and reliable
+- Detects system-installed tools
+- Works with custom installations
+
 ### 2. Homebrew Integration
 
 Queries Homebrew for installed packages and maps them to configuration files.
@@ -73,9 +159,14 @@ brew list --formula | grep -E "(git|vim|tmux|zsh)"
 # Maps to corresponding config files
 ```
 
+**Advantages:**
+- Comprehensive package information
+- Version tracking
+- Dependency mapping
+
 ### 3. Package Manager Detection
 
-Checks npm global packages and pip user packages for CLI tools.
+Checks npm global packages, pip user packages, and cargo packages for CLI tools.
 
 ```bash
 # npm global packages
@@ -83,7 +174,15 @@ npm list -g --depth=0
 
 # pip user packages  
 pip list --user
+
+# cargo packages
+cargo install --list
 ```
+
+**Advantages:**
+- Language-specific tool detection
+- Package manager integration
+- Development environment awareness
 
 ### 4. Configuration File Scanning
 
@@ -96,6 +195,11 @@ Directly scans common configuration directories for tool-specific files.
 ~/.*rc              # RC files (dotfiles)
 ```
 
+**Advantages:**
+- Finds tools without PATH presence
+- Detects configuration-only installations
+- Comprehensive coverage
+
 ## Configuration Paths
 
 MyConfig handles various configuration path patterns with intelligent resolution:
@@ -103,9 +207,9 @@ MyConfig handles various configuration path patterns with intelligent resolution
 ### Environment Variable Expansion
 
 ```toml
-# Example configuration in applications.default
-[git]
-config_paths = [
+# Example configuration in cli_tools.default
+[cli_tools.default]
+git = [
     "$HOME/.gitconfig",
     "$HOME/.gitignore_global",
     "$XDG_CONFIG_HOME/git/config"
@@ -132,6 +236,28 @@ paths = [
 | `$XDG_DATA_HOME` | XDG data directory | `~/.local/share` |
 | `$USER` | Current username | `username` |
 
+### Path Pattern Examples
+
+```toml
+[cli_tools.default]
+# Simple home directory paths
+vim = ["~/.vimrc", "~/.vim/"]
+
+# XDG-compliant paths with fallbacks
+neovim = [
+    "$XDG_CONFIG_HOME/nvim/",
+    "~/.config/nvim/",
+    "$XDG_DATA_HOME/nvim/",
+    "~/.local/share/nvim/"
+]
+
+# Complex patterns with wildcards
+"IntelliJ IDEA" = [
+    "~/Library/Preferences/IntelliJIdea*",
+    "~/Library/Application Support/JetBrains/IntelliJIdea*"
+]
+```
+
 ## Usage Examples
 
 ### Basic CLI Tools Detection
@@ -141,7 +267,7 @@ paths = [
 myconfig --preview export
 
 # Example output:
-# ✓ Detected CLI Tools (11 found):
+# Detected CLI Tools (25 found):
 #   git: ~/.gitconfig, ~/.gitignore_global
 #   vim: ~/.vimrc, ~/.vim/vimrc
 #   tmux: ~/.tmux.conf
@@ -149,6 +275,9 @@ myconfig --preview export
 #   node: ~/.npmrc, ~/.nvm/default-packages
 #   python: ~/.pip/pip.conf
 #   starship: ~/.config/starship.toml
+#   kubectl: ~/.kube/config
+#   docker: ~/.docker/config.json
+#   aws-cli: ~/.aws/config, ~/.aws/credentials
 ```
 
 ### Export with CLI Tools
@@ -160,6 +289,10 @@ myconfig export dev-backup
 # Verify CLI tools backup
 ls dev-backup/applications/
 # Output: cli_tools_config.json, detected_tools.txt, tool_configs/
+
+# Check specific tool configurations
+ls dev-backup/applications/tool_configs/
+# Output: git/, vim/, tmux/, zsh/, node/, python/, etc.
 ```
 
 ### Restore CLI Tools
@@ -169,15 +302,17 @@ ls dev-backup/applications/
 myconfig restore dev-backup
 
 # CLI tools are automatically restored with proper permissions
+# Symlinks and file permissions are preserved
 ```
 
-### Selective CLI Tools Backup
+### Scan Only CLI Tools
 
 ```bash
-# Configure specific tools in config.toml
-[applications]
-cli_tools_whitelist = ["git", "vim", "tmux"]  # Only backup these
-cli_tools_blacklist = ["node", "python"]      # Exclude these
+# Scan and display detected CLI tools
+myconfig scan
+
+# Focus on applications (includes CLI tools)
+myconfig scan --apps
 ```
 
 ## Advanced Configuration
@@ -188,46 +323,84 @@ Add custom CLI tools to the detection system:
 
 ```toml
 # config/config.toml
-[applications.default.custom_tool]
-config_paths = [
-    "$HOME/.custom_toolrc",
-    "$XDG_CONFIG_HOME/custom_tool/config.yaml"
+[cli_tools.default]
+my_custom_tool = [
+    "$HOME/.my_custom_toolrc",
+    "$XDG_CONFIG_HOME/my_custom_tool/config.yaml"
 ]
-detection_command = "custom_tool --version"
-backup_permissions = true
 ```
 
-### Detection Tuning
+### Detection Method Configuration
 
 ```toml
-[applications]
+[cli_tools.detection]
+# Enable/disable detection methods
+enable_path_detection = true
+enable_homebrew_detection = true
+enable_package_manager = true
+enable_config_scanning = true
+
 # Performance tuning
-max_detection_time = 30        # seconds
-parallel_detection = true      # enable parallel scanning
-cache_detection_results = true # cache results for session
-
-# Path scanning options
-scan_hidden_dirs = true        # scan .hidden directories
-follow_symlinks = false        # don't follow symbolic links
-max_scan_depth = 3            # maximum directory depth
+max_scan_depth = 3
+scan_timeout = 30
+cache_results = true
 ```
 
-### Backup Options
+### Selective Tool Backup
 
 ```toml
-[applications.cli_tools]
-# Backup behavior
-preserve_permissions = true    # maintain file permissions
-preserve_symlinks = true      # maintain symbolic links
-compress_configs = true       # compress large config directories
-exclude_cache_dirs = true     # skip cache directories
+# Include only specific tools
+[cli_tools]
+whitelist = ["git", "vim", "tmux", "zsh"]
 
-# Exclusion patterns
-exclude_patterns = [
-    "*.log",
-    "*.cache",
-    "node_modules/",
-    "__pycache__/"
+# Exclude specific tools
+blacklist = ["node", "python"]
+
+# Category-based selection
+categories = ["version_control", "editors", "shell"]
+```
+
+### Custom Configuration Paths
+
+```toml
+[cli_tools.default]
+# Override default paths for specific tools
+git = [
+    "~/custom-git/.gitconfig",
+    "~/custom-git/.gitignore_global"
+]
+
+# Add additional paths
+vim = [
+    "~/.vimrc",
+    "~/.vim/",
+    "~/custom-vim-config/"
+]
+```
+
+### Detection Performance Tuning
+
+```toml
+[cli_tools.detection]
+# Scan performance
+max_scan_depth = 2          # Reduce depth for faster scanning
+scan_timeout = 15           # Shorter timeout
+parallel_detection = true   # Enable parallel processing
+cache_ttl = 3600           # Cache results for 1 hour
+
+# Custom patterns
+config_patterns = [
+    ".*rc$",
+    ".*conf$",
+    "config.*",
+    ".*\.toml$"
+]
+
+# Directories to scan
+scan_directories = [
+    "~/.config",
+    "~/.local/share",
+    "~/Library/Application Support"
 ]
 ```
 
@@ -239,105 +412,123 @@ exclude_patterns = [
 
 ```bash
 # Check if tool is in PATH
-which tool_name
+which my-tool
 
-# Check if config files exist
-ls -la ~/.toolrc ~/.config/tool/
+# Verify configuration paths exist
+ls ~/.my-toolrc
 
-# Enable debug logging
-myconfig -v --preview export
+# Add custom detection
+# Edit config/config.toml:
+[cli_tools.default]
+my-tool = ["~/.my-toolrc"]
 ```
 
-**2. Configuration Files Not Found**
+**2. Configuration Files Not Backed Up**
 
 ```bash
-# Verify environment variables
-echo $HOME $XDG_CONFIG_HOME
-
 # Check file permissions
-ls -la ~/.config/
+ls -la ~/.config/my-tool/
 
-# Test path expansion
-python3 -c "import os; print(os.path.expandvars('$XDG_CONFIG_HOME/tool'))"
+# Verify paths in preview
+myconfig --preview export | grep my-tool
+
+# Check for symlinks
+ls -la ~/.my-toolrc
 ```
 
-**3. Backup/Restore Issues**
+**3. Detection Performance Issues**
 
 ```bash
-# Check backup contents
-ls -la backup-dir/applications/tool_configs/
+# Reduce scan depth
+# Edit config/config.toml:
+[cli_tools.detection]
+max_scan_depth = 2
+scan_timeout = 15
 
-# Verify permissions
-ls -la ~/.toolrc
-
-# Check restore logs
-tail -f logs/myconfig.log
+# Enable caching
+cache_results = true
 ```
 
-### Debug Commands
+**4. Missing Environment Variables**
 
 ```bash
-# Enable verbose CLI tools detection
-export MYCONFIG_DEBUG_CLI_TOOLS=true
-myconfig --preview export
+# Check environment variables
+echo $XDG_CONFIG_HOME
+echo $HOME
+
+# Set missing variables
+export XDG_CONFIG_HOME="$HOME/.config"
+```
+
+### Debug Mode
+
+```bash
+# Enable verbose logging for CLI tools detection
+myconfig -v --preview export
+
+# Check detection methods
+myconfig doctor
 
 # Test specific tool detection
-myconfig debug detect-tool git
-
-# Validate configuration paths
-myconfig debug validate-paths
+myconfig --dry-run export
 ```
 
 ### Performance Optimization
 
 ```bash
-# Reduce detection time
-[applications]
-enable_path_scanning = false      # disable PATH scanning
-enable_package_managers = false   # disable package manager queries
-cli_tools_whitelist = ["git", "vim"]  # limit to essential tools
+# Use minimal detection for faster scanning
+myconfig profile use minimal
 
-# Cache detection results
-cache_detection_results = true
-detection_cache_ttl = 3600  # 1 hour cache
+# Disable expensive detection methods
+# Edit config/config.toml:
+[cli_tools.detection]
+enable_config_scanning = false
+enable_package_manager = false
+```
+
+### Validation
+
+```bash
+# Validate CLI tools configuration
+myconfig --dry-run export
+
+# Check for configuration errors
+myconfig doctor
+
+# Verify backup integrity
+myconfig restore --preview backup-directory
 ```
 
 ## Integration with Other Components
 
-### Dotfiles Component
+### Homebrew Integration
 
-CLI tools configurations are automatically integrated with the dotfiles component:
-
-```bash
-# Dotfiles backup includes CLI tool configs
-myconfig export --component dotfiles
-# Includes: ~/.vimrc, ~/.tmux.conf, ~/.zshrc, etc.
-```
-
-### Homebrew Component
-
-CLI tools installed via Homebrew are cross-referenced:
+CLI tools detected through Homebrew are automatically included in the Brewfile:
 
 ```bash
-# Homebrew Brewfile includes CLI tools
-brew bundle dump --file=Brewfile
-# Includes: git, vim, tmux, etc.
+# Brewfile includes CLI tools
+cat backup/Brewfile | grep -E "(git|vim|tmux)"
 ```
 
-### Template System
+### Package Manager Integration
 
-CLI tools information is available in templates:
+Package manager configurations are backed up alongside CLI tools:
 
-```mustache
-{{#cli_tools}}
-## Detected CLI Tools
-{{#tools}}
-- **{{name}}**: {{config_files}}
-{{/tools}}
-{{/cli_tools}}
+```bash
+# npm configuration
+cat backup/applications/tool_configs/node/.npmrc
+
+# pip configuration  
+cat backup/applications/tool_configs/python/pip.conf
 ```
 
-For more information about MyConfig's architecture and other components, see:
-- [Configuration Reference](configuration.md)
-- [Usage Guide](usage.md)
-- [Plugin Development](plugins.md)
+### Dotfiles Integration
+
+CLI tool configurations are included in dotfiles backup:
+
+```bash
+# Dotfiles include CLI configurations
+tar -tzf backup/dotfiles.tar.gz | grep -E "(\.vimrc|\.tmux\.conf)"
+```
+
+For additional information and advanced usage patterns, see the [Configuration Reference](./configuration.md) and [Usage Guide](./usage.md).

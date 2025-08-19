@@ -2,16 +2,18 @@
 
 ## Table of Contents
 
+- [Installation](#installation)
 - [Basic Concepts](#basic-concepts)
 - [Command Reference](#command-reference)
 - [Common Scenarios](#common-scenarios)
 - [Advanced Features](#advanced-features)
+- [CLI Tools Detection](#cli-tools-detection)
 - [Template System](#template-system)
 - [Troubleshooting](#troubleshooting)
 
 ## Installation
 
-Install MyConfig from PyPI (recommended):
+### PyPI Installation (Recommended)
 
 ```bash
 # Install from PyPI
@@ -22,23 +24,40 @@ myconfig --version
 myconfig doctor
 ```
 
-Or install from source for development:
+### Development Installation
 
 ```bash
 # Clone and install from source
 git clone https://github.com/kehr/myconfig.git
 cd myconfig
 pip install -e .
+
+# Verify installation
+myconfig --version
+myconfig doctor
+```
+
+### Direct Usage (No Installation)
+
+```bash
+# Clone repository
+git clone https://github.com/kehr/myconfig.git
+cd myconfig
+
+# Set permissions and use directly
+chmod +x bin/myconfig
+./bin/myconfig --help
 ```
 
 ## Basic Concepts
 
 MyConfig is a comprehensive configuration management tool with the following core functions:
 
-- **Export**: Save current system configurations and application lists to a backup directory
+- **Export**: Save current system configurations, applications, and CLI tools to a backup directory
 - **Restore**: Restore configurations from a backup directory to a new system
 - **Preview**: View what will be processed before executing operations
 - **Compress**: Create compressed archive backups for easy storage and sharing
+- **Scan**: Detect and display installed applications and CLI tools
 - **Template System**: Generate professional documentation and metadata files
 
 ## Command Reference
@@ -46,17 +65,16 @@ MyConfig is a comprehensive configuration management tool with the following cor
 ### Export Commands
 
 ```bash
-# Basic export (auto-generates directory name)
+# Basic export (auto-generates directory name with timestamp)
 myconfig export
 
 # Export to specific directory
 myconfig export my-backup
 
-# Export with compression
+# Export with compression (creates .tar.gz archive)
 myconfig export my-backup --compress
-# Creates: my-backup.tar.gz
 
-# Preview export contents
+# Preview export contents (shows what will be backed up)
 myconfig --preview export
 
 # Non-interactive mode (auto-confirm all operations)
@@ -67,78 +85,154 @@ myconfig --dry-run export
 
 # Verbose mode (detailed logging)
 myconfig -v export
+
+# Quiet mode (minimal output)
+myconfig --quiet export
 ```
 
 **Export Contents Include:**
-- System environment information (macOS version, hostname, etc.)
-- Homebrew configuration (Brewfile with packages, casks, taps)
-- Mac App Store application list
-- VS Code extension list
+- System environment information (macOS version, hostname, Xcode tools)
+- Homebrew configuration (Brewfile with packages, casks, taps, version info)
+- Mac App Store application list (with mas integration)
+- VS Code extensions and settings
 - npm/pip global package lists
-- **Enhanced Application Detection**: 89 applications across 11 categories
-- **CLI Tools Configuration**: Automatic detection and backup of development tools
-  - git, vim, neovim, tmux, zsh, fish, starship, oh-my-zsh configurations
-  - node.js, python, rust development environment settings
-  - Package manager configurations (npm, pip, cargo)
+- **Enhanced Application Detection**: 200+ applications across 15+ categories
+- **CLI Tools Configuration**: Automatic detection and backup of 50+ development tools
+  - Shell configurations: zsh, fish, bash, starship, oh-my-zsh
+  - Development tools: git, vim, neovim, tmux, screen
+  - Language environments: node.js, python, rust, go, java, php
+  - Cloud tools: AWS CLI, Google Cloud SDK, Azure CLI, kubectl, helm
+  - Database clients: mysql, postgresql, mongodb, redis
 - Configuration files (dotfiles) with security filtering
-- System preferences (defaults domains)
-- LaunchAgents services
-- Auto-generated README.md with detailed manifest
-- Metadata files (MANIFEST.json, version info)
+- System preferences (defaults domains with curated lists)
+- LaunchAgents user services
+- Auto-generated README.md with detailed manifest and statistics
+- Metadata files (MANIFEST.json, version info, component summaries)
 
 ### Restore Commands
 
 ```bash
-# Basic restore
+# Basic restore from directory
 myconfig restore backup-directory
 
-# Preview restore contents
+# Restore from compressed archive
+myconfig restore backup.tar.gz
+
+# Preview restore contents (shows what will be restored)
 myconfig --preview restore backup-directory
 
-# Skip Mac App Store applications
+# Skip Mac App Store applications during restore
 myconfig --no-mas restore backup-directory
+
+# Non-interactive restore
+myconfig -y restore backup-directory
+
+# Verbose restore with detailed logging
+myconfig -v restore backup-directory
 ```
 
 **Restore Process:**
-1. Verify backup integrity
-2. Install Homebrew (if not installed)
-3. Restore brew packages and applications
+1. Verify backup integrity and compatibility
+2. Install Homebrew (if not installed and required)
+3. Restore brew packages, casks, and taps
 4. Restore dotfiles (automatically backs up existing files)
-5. Restore VS Code extensions
-6. Restore system preferences
-7. Restore user services
+5. Restore VS Code extensions and settings
+6. Restore system preferences (defaults domains)
+7. Restore LaunchAgents user services
+8. Restore CLI tools configurations with proper permissions
+9. Generate restoration report and summary
 
 ### Archive Management
 
 ```bash
-# Unpack compressed backup
+# Unpack compressed backup archive
 myconfig unpack backup.tar.gz
 
 # Unpack to specific directory
 myconfig unpack backup.tar.gz extracted-backup
 
-# Restore from unpacked backup
-myconfig restore extracted-backup
+# Unpack and then restore
+myconfig unpack backup.tar.gz
+myconfig restore backup  # Uses extracted directory name
 ```
 
-### Other Commands
+### Scanning and Detection
 
 ```bash
-# System diagnostics
+# Scan installed applications and CLI tools
+myconfig scan
+
+# Scan with applications focus
+myconfig scan --apps
+
+# Preview scan results (same as scan)
+myconfig --preview export
+```
+
+### System Diagnostics
+
+```bash
+# System health check and environment diagnostics
 myconfig doctor
 
-# Defaults operations
-myconfig defaults export-all    # Export all defaults domains
-myconfig defaults import <dir>  # Import defaults
+# Check specific components
+myconfig doctor --verbose
+```
 
-# Backup management
-myconfig diff <dir1> <dir2>     # Compare two backups
-myconfig pack <dir> [file]      # Pack backup (legacy)
+### Configuration Management
 
-# Configuration profiles
-myconfig profile list           # List available profiles
-myconfig profile use <name>     # Use specified profile
-myconfig profile save <name>    # Save current config as new profile
+```bash
+# List available configuration profiles
+myconfig profile list
+
+# Use specific configuration profile
+myconfig profile use dev-full
+myconfig profile use minimal
+
+# Save current configuration as new profile
+myconfig profile save my-custom-profile
+```
+
+### System Defaults Operations
+
+```bash
+# Export all system defaults domains
+myconfig defaults export-all
+
+# Import defaults from directory
+myconfig defaults import backup-directory/defaults
+```
+
+### Backup Comparison and Management
+
+```bash
+# Compare differences between two backups
+myconfig diff backup1 backup2
+
+# Pack backup with optional encryption
+myconfig pack backup-directory
+myconfig pack backup-directory --gpg  # With GPG encryption
+```
+
+### Global Options
+
+```bash
+# Configuration file options
+myconfig -c ~/.myconfig/config.toml export    # Custom config file
+myconfig -c ~/dev-config/ export              # Config directory
+
+# Output control
+myconfig -v export          # Verbose output
+myconfig --quiet export     # Minimal output
+myconfig -y export          # Non-interactive (yes to all)
+
+# Operation modes
+myconfig --dry-run export   # Test mode (no actual changes)
+myconfig --preview export   # Preview mode (show what will be done)
+
+# Version and help
+myconfig --version          # Show version information
+myconfig --help            # Show help message
 ```
 
 ## Common Scenarios
@@ -146,177 +240,236 @@ myconfig profile save <name>    # Save current config as new profile
 ### Scenario 1: New Machine Setup
 
 ```bash
-# 1. Export configuration from old machine
-myconfig export old-machine-backup --compress
+# On old machine: create comprehensive backup
+myconfig export machine-backup --compress
 
-# 2. Transfer backup to new machine (copy old-machine-backup.tar.gz)
+# Transfer backup.tar.gz to new machine
 
-# 3. On new machine, unpack and restore
-myconfig unpack old-machine-backup.tar.gz
-myconfig restore old-machine-backup
+# On new machine: restore complete environment
+myconfig unpack machine-backup.tar.gz
+myconfig restore machine-backup
 ```
 
-### Scenario 2: Regular Backups
+### Scenario 2: Regular Development Environment Backups
 
 ```bash
-# Create periodic backup script
+# Create timestamped backup
+myconfig export "dev-backup-$(date +%Y%m%d-%H%M%S)"
+
+# Automated backup script
 #!/bin/bash
-BACKUP_DIR="./backups/daily-$(date +%Y%m%d)"
-myconfig export "$BACKUP_DIR" --compress
-echo "Backup saved to: $BACKUP_DIR.tar.gz"
+BACKUP_NAME="automated-backup-$(date +%Y%m%d)"
+myconfig export "$BACKUP_NAME" --compress
+echo "Backup completed: $BACKUP_NAME.tar.gz"
 ```
 
-### Scenario 3: Configuration Testing
+### Scenario 3: Configuration Testing and Validation
 
 ```bash
-# 1. Preview what will be exported
+# Preview what will be backed up
 myconfig --preview export
 
-# 2. Test run mode
-myconfig --dry-run export
+# Test backup process without making changes
+myconfig --dry-run export test-backup
 
-# 3. Actual export
-myconfig export test-backup
+# Actual backup after validation
+myconfig export production-backup --compress
 ```
 
-### Scenario 4: Minimal Configuration
+### Scenario 4: Selective Configuration Management
 
 ```bash
-# 1. Use minimal configuration profile
+# Use minimal configuration profile
 myconfig profile use minimal
-
-# 2. Export (only includes basic configurations)
 myconfig export minimal-backup
 
-# 3. Restore full configuration profile
+# Switch to full development profile
 myconfig profile use dev-full
+myconfig export full-dev-backup
+
+# Create custom profile
+myconfig profile save my-workflow
 ```
 
-### Scenario 5: CLI Tools Detection and Backup
+### Scenario 5: CLI Tools Migration
 
 ```bash
-# 1. Preview detected CLI tools
+# Preview detected CLI tools and configurations
 myconfig --preview export
 
-# Example output:
-# ✓ Detected CLI Tools:
-#   - git: ~/.gitconfig, ~/.gitignore_global
-#   - vim: ~/.vimrc, ~/.vim/
-#   - tmux: ~/.tmux.conf
-#   - zsh: ~/.zshrc, ~/.oh-my-zsh/
-#   - node: ~/.npmrc, ~/.nvm/
-#   - python: ~/.pip/pip.conf, ~/.pypirc
+# Export development environment with CLI tools
+myconfig export dev-environment
 
-# 2. Export with CLI tools included
-myconfig export dev-backup
+# On new machine: restore CLI tools and configurations
+myconfig restore dev-environment
 
-# 3. Verify CLI tools in backup
-ls dev-backup/applications/
-# Shows: cli_tools_config.json, detected_tools.txt
+# Verify CLI tools restoration
+myconfig scan
+```
+
+### Scenario 6: Team Environment Standardization
+
+```bash
+# Create team standard configuration
+myconfig profile use team-standard
+myconfig export team-config --compress
+
+# Team members restore standard environment
+myconfig restore team-config.tar.gz
+
+# Verify environment consistency
+myconfig doctor
 ```
 
 ## Advanced Features
 
-### Custom Configuration
-
-Edit `config/config.toml` file:
-
-```toml
-# Enable/disable specific features
-enable_homebrew = true
-enable_vscode = true
-enable_defaults = true
-
-# Custom defaults domains
-defaults_domains_file = "config/defaults/domains.txt"
-
-# Interactive mode
-interactive = true
-```
-
-### Plugin Extensions
-
-Create plugins in `myconfig/plugins/` directory:
-
-```python
-def register(subparsers):
-    p = subparsers.add_parser("my-cmd", help="Custom command")
-    
-    def handle_command(args):
-        # Implement command logic
-        pass
-```
-
 ### Configuration Profiles
 
-Create different profiles for different use cases:
+MyConfig supports multiple configuration profiles for different use cases:
 
 ```bash
-# Save current configuration as development profile
-myconfig profile save development
+# Available profiles
+myconfig profile list
 
-# Create server environment profile
-myconfig profile save server
+# Development profiles
+myconfig profile use dev-full      # Complete development environment
+myconfig profile use dev-minimal   # Essential development tools only
 
-# Switch profiles
-myconfig profile use server
+# Specialized profiles
+myconfig profile use designer      # Design and creative tools focus
+myconfig profile use sysadmin      # System administration tools
+```
+
+### Custom Configuration Paths
+
+```bash
+# Use custom configuration file
+myconfig -c ~/custom-config.toml export
+
+# Use configuration directory
+myconfig -c ~/.myconfig-custom/ export
+
+# Configuration precedence:
+# 1. CLI --config parameter
+# 2. ~/.myconfig (file or directory)
+# 3. ./config/config.toml (project default)
+```
+
+### Template Customization
+
+```bash
+# Templates are located in myconfig/templates/
+# Customize README.md generation
+vim myconfig/templates/README.md.template
+
+# Customize environment information
+vim myconfig/templates/ENVIRONMENT.txt.template
+
+# Test template changes
+myconfig export test-templates
+cat test-templates/README.md
+```
+
+### Plugin System
+
+```bash
+# Plugins are auto-loaded from myconfig/plugins/
+# Example: custom plugin adds new command
+myconfig custom-command --help
+
+# Plugin development
+# Create myconfig/plugins/my_plugin.py
+# Implement register() function
+```
+
+## CLI Tools Detection
+
+MyConfig automatically detects and backs up configurations for 50+ CLI development tools:
+
+### Detection Methods
+
+1. **PATH-based Detection**: Scans system PATH for executables
+2. **Homebrew Integration**: Queries installed Homebrew packages
+3. **Package Manager Detection**: Checks npm, pip, cargo packages
+4. **Configuration File Scanning**: Directly scans common config locations
+
+### Supported Tool Categories
+
+**Shell and Terminal**
+- zsh, fish, bash configurations
+- tmux, screen session managers
+- starship, oh-my-zsh prompt customizations
+
+**Development Tools**
+- git version control settings
+- vim, neovim, emacs editor configurations
+- Language-specific tools (node, python, rust, go, java, php)
+
+**Cloud and Infrastructure**
+- AWS CLI, Google Cloud SDK, Azure CLI
+- Kubernetes tools (kubectl, helm, kustomize)
+- Container tools (docker, podman)
+
+**Database Tools**
+- mysql, postgresql, mongodb clients
+- Redis, InfluxDB, Cassandra configurations
+
+### CLI Tools Usage Examples
+
+```bash
+# Preview detected CLI tools
+myconfig --preview export
+# Shows: git, vim, tmux, zsh, node, python configurations found
+
+# Export with CLI tools
+myconfig export dev-backup
+# Includes: ~/.gitconfig, ~/.vimrc, ~/.tmux.conf, ~/.zshrc, etc.
+
+# Restore CLI tools (maintains permissions and symlinks)
+myconfig restore dev-backup
 ```
 
 ## Template System
 
-MyConfig uses a powerful template system for generating documentation and metadata files.
+MyConfig uses a powerful template system for generating documentation:
 
-### Template Locations
+### Available Templates
 
-Templates are stored in `myconfig/templates/`:
-- `README.md.template` - Export documentation template
-- `ENVIRONMENT.txt.template` - System environment template
-- `MANIFEST.json.template` - Backup metadata template
+- `README.md.template`: Backup documentation with statistics
+- `ENVIRONMENT.txt.template`: System environment information
+- `MANIFEST.json.template`: Backup metadata and component details
 
-### Customizing Templates
+### Template Variables
 
-You can modify templates to customize the output format:
+Templates have access to comprehensive context data:
+
+```mustache
+# Global variables
+{{export_time}}           # Timestamp
+{{hostname}}              # System hostname
+{{total_components}}      # Number of components
+{{total_files}}          # Total files backed up
+{{total_size_formatted}} # Human-readable size
+
+# Component-specific data
+{{#homebrew}}
+Homebrew: {{brew_count}} packages, {{cask_count}} casks
+{{/homebrew}}
+
+{{#vscode}}
+VS Code: {{extension_count}} extensions
+{{/vscode}}
+```
+
+### Template Customization
 
 ```bash
-# Edit the README template
+# Edit templates
 vim myconfig/templates/README.md.template
 
-# Next export will use your custom template
-myconfig export my-backup
-```
-
-### Template Syntax
-
-Templates use Mustache-like syntax:
-
-```markdown
-# Export Time: {{export_time}}
-# Hostname: {{hostname}}
-
-{{#homebrew}}
-## Homebrew
-- Packages: {{brew_count}}
-- Casks: {{cask_count}}
-{{/homebrew}}
-```
-
-### Available Variables
-
-- `{{export_time}}` - Export timestamp
-- `{{hostname}}` - System hostname
-- `{{version}}` - MyConfig version
-- `{{total_components}}` - Number of exported components
-- `{{total_files}}` - Total number of files
-- `{{total_size_formatted}}` - Human-readable total size
-
-### Conditional Sections
-
-```markdown
-{{#system_environment}}
-### System Environment
-- File: {{filename}}
-- Size: {{size}} bytes
-{{/system_environment}}
+# Test changes
+myconfig export test-output
+cat test-output/README.md
 ```
 
 ## Troubleshooting
@@ -324,84 +477,90 @@ Templates use Mustache-like syntax:
 ### Common Issues
 
 **1. Permission Errors**
-
 ```bash
-# Ensure script has execution permissions
+# Fix permissions for executable
 chmod +x bin/myconfig
+
+# Fix Python path issues
+export PYTHONPATH="$(pwd):$PYTHONPATH"
 ```
 
-**2. Python Not Found**
-
+**2. Missing Dependencies**
 ```bash
-# Install Python
-brew install python3
+# Install required packages
+pip install tomli click rich
+
+# Check system requirements
+myconfig doctor
 ```
 
-**3. Backup Verification Failed**
-
+**3. Homebrew Issues**
 ```bash
-# Check backup directory permissions and disk space
-ls -la backup-directory
-df -h
+# Install Homebrew if missing
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# Update Homebrew
+brew update && brew upgrade
 ```
 
-**4. Restore Interrupted**
-
+**4. Configuration Issues**
 ```bash
-# Check log files
-tail -f logs/myconfig.log
+# Validate configuration
+myconfig --dry-run export
+
+# Use default configuration
+myconfig -c config/config.toml export
+
+# Reset to minimal configuration
+myconfig profile use minimal
 ```
 
-### Debugging Tips
+### Debug Mode
 
 ```bash
-# Verbose mode for detailed logs
+# Enable verbose logging
 myconfig -v export
 
-# Dry run mode to test commands
-myconfig --dry-run restore backup-dir
+# Dry run for testing
+myconfig --dry-run export
 
-# System environment check
-myconfig doctor
+# Preview mode for inspection
+myconfig --preview export
 ```
 
 ### Getting Help
 
 ```bash
-# View help information
+# General help
 myconfig --help
 
-# View subcommand help
+# Command-specific help
 myconfig export --help
 myconfig restore --help
+
+# System diagnostics
+myconfig doctor
 ```
 
-## Best Practices
+### Log Files
 
-1. **Regular Backups**: Perform weekly or monthly full backups
-2. **Test Restores**: Regularly verify backup usability in test environments
-3. **Version Control**: Use Git for important configuration files
-4. **Secure Storage**: Encrypt backup files or use secure cloud storage
-5. **Document Changes**: Record the meaning of custom configurations and special settings
-6. **Compression**: Use `--compress` flag for space-efficient storage
-7. **Template Customization**: Customize templates for your organization's needs
+MyConfig generates detailed logs during operations:
 
-## Performance Tips
+- Console output with progress indicators
+- Error messages with context
+- Component-specific status reports
+- File operation summaries
 
-- Use `--no-mas` if Mac App Store restore is not needed
-- Compress large backups for faster transfers
-- Use profiles to create targeted backups for specific use cases
-- Regular cleanup of old backup directories
+### Performance Optimization
 
-For more information, refer to other documentation files or check the project source code.
+```bash
+# Skip large components if needed
+myconfig profile use minimal
 
-## File Size Reference
+# Use compression for large backups
+myconfig export --compress
 
-Typical backup sizes:
-- **Homebrew config**: ~2KB (Brewfile)
-- **VS Code extensions**: ~1-2KB (extension list)
-- **Dotfiles archive**: 15-20MB (compressed configuration files)
-- **System defaults**: ~100KB (preference files)
-- **LaunchAgents**: ~10KB (service configurations)
-- **Documentation**: ~2KB (generated README.md)
-- **Total compressed**: ~16MB (typical full backup)
+# Exclude specific directories in config.toml
+```
+
+For additional support, see the [GitHub Issues](https://github.com/kehr/myconfig/issues) page or consult the comprehensive documentation in the [docs](../docs/) directory.

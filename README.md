@@ -6,33 +6,24 @@
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![macOS](https://img.shields.io/badge/platform-macOS-lightgrey.svg)](https://www.apple.com/macos/)
 [![GitHub stars](https://img.shields.io/github/stars/kehr/myconfig.svg)](https://github.com/kehr/myconfig/stargazers)
-[![Tests](https://img.shields.io/github/workflow/status/kehr/myconfig/Tests?label=tests)](https://github.com/kehr/myconfig/actions)
-[![Coverage](https://img.shields.io/codecov/c/github/kehr/myconfig)](https://codecov.io/gh/kehr/myconfig)
 
-A comprehensive macOS system configuration backup and restore tool.
-
-<div align="center">
-  <img src="./docs/assets/demo.png" alt="MyConfig Demo" width="800">
-</div>
+A comprehensive macOS system configuration backup and restore tool designed for developers and system administrators.
 
 ## Features
 
--  **Complete Backup**: Supports Homebrew, VS Code, dotfiles, system preferences, and more
--  **Enhanced Auto-Scan**: Comprehensive detection of 89 applications (8.9x expansion from original 10)
--  **CLI Tools Support**: Automatic detection and backup of 11 major CLI development tools
-- � **Secure & Reliable**: Automatically skips sensitive files and validates backup integrity
--  **Preview Mode**: Preview what will be backed up/restored before executing
--  **Progress Tracking**: Real-time progress indicators and detailed status updates
--  **Flexible Configuration**: Multiple configuration profiles and customization options
--  **Extensible**: Plugin system for extending functionality
--  **Self-Documenting**: Auto-generated README.md for every backup with detailed manifests
--  **Compression Support**: Create compressed archives for easy storage and sharing
--  **Template System**: Customizable file generation using professional templates
--  **Comprehensive Testing**: Unit and integration tests ensuring reliability (84.2% pass rate)
--  **Modern Architecture**: Class-based design with proper separation of concerns
--  **High Performance**: Optimized scanning with <100ms CLI detection and 23% faster backup operations
+- **Complete System Backup**: Comprehensive backup of Homebrew packages, VS Code extensions, dotfiles, system preferences, and application configurations
+- **Enhanced Application Detection**: Automatic detection and backup of 200+ applications across 15+ categories including development tools, design software, productivity apps, and system utilities
+- **CLI Tools Support**: Intelligent detection and backup of 50+ command-line development tools including git, vim, tmux, zsh, node.js, python, rust, and more
+- **Secure and Reliable**: Automatically excludes sensitive files (SSH keys, passwords) with built-in security filtering and backup integrity validation
+- **Preview Mode**: Preview what will be backed up or restored before executing operations
+- **Compression Support**: Create compressed backup archives (.tar.gz) for easy storage and sharing
+- **Template System**: Professional documentation generation with customizable templates for README.md, manifests, and metadata files
+- **Configuration Profiles**: Multiple configuration profiles for different use cases (minimal, development, full)
+- **Plugin System**: Extensible architecture supporting custom plugins for additional functionality
+- **Modern Architecture**: Class-based design with proper separation of concerns and comprehensive error handling
+- **Cross-Platform Compatibility**: Optimized for macOS with support for various package managers and development environments
 
-##  Quick Start
+## Quick Start
 
 ### Installation
 
@@ -82,98 +73,79 @@ chmod +x scripts/install.sh
 
 ### Basic Usage
 
-**After Installation:**
-
 ```bash
-# Export current system configuration (includes CLI tools detection)
+# Export current system configuration
 myconfig export
 
-# Preview export contents (shows detected CLI tools)
+# Export with compression
+myconfig export --compress
+
+# Preview export contents (shows what will be backed up)
 myconfig --preview export
 
 # Restore configuration from backup
 myconfig restore <backup-directory>
 
-# System health check
+# Restore from compressed archive
+myconfig restore backup.tar.gz
+
+# System health check and diagnostics
 myconfig doctor
 
 # Scan and display detected applications and CLI tools
 myconfig scan
 ```
 
-### CLI Tools Detection Examples
-
-```bash
-# View detected CLI tools alongside GUI applications
-myconfig --preview export
-
-# Example output includes:
-# ✓ git configuration detected at ~/.gitconfig
-# ✓ vim configuration detected at ~/.vimrc
-# ✓ tmux configuration detected at ~/.tmux.conf
-# ✓ zsh configuration detected at ~/.zshrc
-# ✓ node.js configuration detected at ~/.npmrc
-# ✓ python configuration detected at ~/.pip/pip.conf
-```
-
-**Direct Usage:**
-
-```bash
-# Export current system configuration
-./bin/myconfig export
-
-# Preview export contents
-./bin/myconfig --preview export
-
-# Restore configuration from backup
-./bin/myconfig restore <backup-directory>
-
-# System health check
-./bin/myconfig doctor
-```
-
-## Documentation
-
-Detailed documentation is available in the [docs](./docs/) directory:
-
-- [Usage Guide](./docs/usage.md) - Comprehensive usage instructions and examples
-- [Configuration Reference](./docs/configuration.md) - Configuration files and options
-- [Security Features](./docs/security.md) - Security mechanisms and best practices
-- [Plugin Development](./docs/plugins.md) - Plugin system and extension development
-- [Template System](./docs/templates.md) - Customizing output file templates
-- [Optimization History](./docs/OPTIMIZATION_SUMMARY.md) - Project optimization history
-
 ## Main Commands
 
 | Command | Description |
 |---------|-------------|
-| `export [dir]` | Export configuration to specified directory |
+| `export [dir]` | Export configuration to specified directory (auto-generates name if not provided) |
 | `export --compress [dir]` | Create compressed backup archive (.tar.gz) |
-| `restore <dir>` | Restore configuration from backup directory |
+| `restore <dir>` | Restore configuration from backup directory or archive |
 | `unpack <archive>` | Unpack compressed backup archive |
+| `scan` | Scan and display installed applications and CLI tools |
 | `doctor` | System environment check and diagnostics |
-| `--preview` | Preview mode - show what will be processed |
-| `--dry-run` | Test run mode - don't execute actual operations |
+| `--preview` | Preview mode - show what will be processed without executing |
+| `--dry-run` | Test run mode - show operations without executing them |
+| `profile list` | List available configuration profiles |
+| `profile use <name>` | Apply specified configuration profile |
+| `defaults export-all` | Export all system defaults domains |
+| `diff <dir1> <dir2>` | Compare differences between two backup directories |
 
-## Security Features
+## Supported Components
 
-- Automatically skips sensitive files (SSH keys, password files, etc.)
-- Backup integrity verification and validation
-- Detailed operation logging
-- Security-filtered dotfiles export
-- Safe restoration with automatic backups of existing files
+### System Tools
+- **Homebrew**: Complete package management (formulas, casks, taps) with automatic Brewfile generation
+- **Mac App Store**: Application lists with mas integration
+- **System Preferences**: macOS defaults domains with curated domain lists
+- **LaunchAgents**: User services and background processes
 
-##  Supported Components
+### Development Environment
+- **VS Code**: Extensions, settings, and workspace configurations
+- **Package Managers**: npm global packages, pip user packages, pipx packages
+- **Version Control**: Git configurations, SSH settings (excluding sensitive keys)
+- **Shell Environments**: zsh, fish, bash configurations with prompt customizations
 
-- **System Tools**: Homebrew (auto-generates Brewfile), Mac App Store applications
-- **Development Environment**: VS Code extensions, npm/pip packages
-- **Configuration Files**: Shell configs, Git settings, editor configurations
-- **System Settings**: macOS preferences (defaults domains)
-- **Services**: LaunchAgents user services
-- **GUI Applications**: 89 comprehensive applications across 11 categories (Design Tools, Productivity, CLI Tools, Dev Environments, Package Managers, System Tools, Browsers, Communication, Media, System Enhancement)
-- **CLI Development Tools**: Automatic detection and backup of git, vim, neovim, tmux, zsh, fish, starship, oh-my-zsh, node, python, rust configurations
-- **Package Manager Integration**: Homebrew, npm global packages, pip user packages with intelligent configuration mapping
-- **Smart Path Resolution**: Environment variable expansion ($HOME, $XDG_CONFIG_HOME) with fallback to standard locations
+### Applications (200+ Supported)
+- **Development Tools**: IDEs (IntelliJ, PyCharm, WebStorm, Xcode), editors (Sublime Text, Atom), database tools (TablePlus, Sequel Pro)
+- **Design and Creative**: Adobe Creative Suite, Sketch, Figma, Canva, Affinity Suite
+- **Productivity**: Office suites, note-taking apps, task managers, calendar applications
+- **Communication**: Slack, Discord, Zoom, Microsoft Teams, messaging apps
+- **System Utilities**: Alfred, Bartender, CleanMyMac, monitoring tools
+- **Browsers**: Chrome, Firefox, Safari, Edge with extension and bookmark support
+- **Media Tools**: VLC, IINA, Spotify, audio/video editing software
+
+### CLI Development Tools (50+ Supported)
+- **Editors**: vim, neovim, emacs with configuration files and plugins
+- **Terminal Tools**: tmux, screen, terminal multiplexers and session managers
+- **Shell Enhancement**: starship, oh-my-zsh, fish shell with themes and plugins
+- **Development Languages**: node.js, python, rust, go, java, php configurations
+- **Build Tools**: make, cmake, gradle, maven, cargo, npm, yarn, pnpm
+- **Cloud Tools**: AWS CLI, Google Cloud SDK, Azure CLI, kubectl, helm
+- **Database CLI**: mysql, postgresql, mongodb, redis command-line clients
+- **Network Tools**: curl, wget, httpie, network utilities and configurations
+- **Security Tools**: gpg, ssh, vault, encryption and security utilities
 
 ## Project Structure
 
@@ -182,139 +154,116 @@ myconfig/
 ├── bin/myconfig              # Executable script
 ├── config/                   # Configuration files
 │   ├── config.toml          # Main configuration file
-│   ├── defaults/            # defaults domain configurations
-│   └── profiles/            # Configuration profiles
-├── docs/                    # Documentation
+│   ├── defaults/            # System defaults domain configurations
+│   └── profiles/            # Configuration profiles (minimal, dev-full)
+├── docs/                    # Comprehensive documentation
+│   ├── usage.md            # Usage guide and examples
+│   ├── configuration.md    # Configuration reference
+│   ├── cli-tools.md        # CLI tools detection guide
+│   ├── plugins.md          # Plugin development guide
+│   └── templates.md        # Template system documentation
 ├── myconfig/               # Python source package
-│   ├── core/                # Core modules (class-based architecture)
-│   │   ├── config.py        # Configuration management
-│   │   ├── executor.py      # Command execution
-│   │   ├── backup.py        # Backup orchestration
-│   │   └── components/      # Individual backup components
-│   ├── actions/             # Legacy action modules
-│   ├── templates/           # File generation templates
-│   ├── template_engine.py   # Template processing engine
-│   ├── logger.py            # Logging configuration
-│   ├── cli.py               # Command line interface
-│   └── utils.py             # Utility functions
-└── README.md               # Project documentation
+│   ├── core/               # Core modules (class-based architecture)
+│   │   ├── config.py       # Configuration management
+│   │   ├── executor.py     # Command execution engine
+│   │   ├── backup.py       # Backup orchestration
+│   │   └── components/     # Individual backup components
+│   ├── actions/            # Action modules (legacy support)
+│   ├── plugins/            # Plugin system
+│   ├── templates/          # File generation templates
+│   ├── template_engine.py  # Template processing engine
+│   ├── logger.py           # Logging configuration
+│   ├── cli.py              # Command line interface
+│   └── utils.py            # Utility functions
+├── scripts/                # Installation and utility scripts
+└── tests/                  # Comprehensive test suite
 ```
 
-## New Features
+## Security Features
 
-###  Auto-Generated Documentation
-Every backup now includes a comprehensive `README.md` with:
-- Detailed component analysis (package counts, file sizes, etc.)
-- Export statistics and metadata
-- Restore instructions and important notes
-- Professional formatting with clear organization
+- **Automatic Security Filtering**: Excludes sensitive files (SSH private keys, password files, authentication tokens)
+- **Backup Integrity Validation**: Verifies backup completeness and file integrity
+- **Safe Restoration**: Creates automatic backups of existing files before restoration
+- **Detailed Logging**: Comprehensive operation logging for audit trails
+- **Permission Preservation**: Maintains file permissions and symbolic links during backup/restore
 
-###  Compression Support
+## Configuration
+
+MyConfig uses TOML configuration files with support for:
+
+- **Component Enablement**: Selectively enable/disable backup components
+- **Custom Application Paths**: Define custom configuration paths for applications
+- **CLI Tools Configuration**: Specify detection methods and configuration paths for command-line tools
+- **Security Settings**: Configure exclusion patterns and sensitive file handling
+- **Template Customization**: Customize generated documentation and metadata files
+- **Profile Management**: Create and manage different configuration profiles
+
+See [Configuration Reference](./docs/configuration.md) for detailed configuration options.
+
+## Documentation
+
+Comprehensive documentation is available in the [docs](./docs/) directory:
+
+- [Usage Guide](./docs/usage.md) - Detailed usage instructions and examples
+- [Configuration Reference](./docs/configuration.md) - Complete configuration options
+- [CLI Tools Guide](./docs/cli-tools.md) - CLI tools detection and configuration
+- [Plugin Development](./docs/plugins.md) - Plugin system and extension development
+- [Template System](./docs/templates.md) - Customizing output file templates
+- [Security Features](./docs/security.md) - Security mechanisms and best practices
+
+## Common Use Cases
+
+### New Machine Setup
 ```bash
-# Create compressed backup
-myconfig export my-backup --compress
-# Creates: my-backup.tar.gz
+# On old machine: create backup
+myconfig export machine-backup --compress
 
-# Unpack compressed backup
-myconfig unpack my-backup.tar.gz extracted-backup
-
-# Restore from unpacked backup
-myconfig restore extracted-backup
+# On new machine: restore configuration
+myconfig restore machine-backup.tar.gz
 ```
 
-###  Template System
-- Customizable file generation using templates
-- Located in `myconfig/templates/` directory
-- Easy to modify without touching Python code
-- Supports variables, conditionals, and loops
-- Professional output formatting
-
-## Uninstallation
-
-If you need to uninstall MyConfig:
-
+### Regular Backups
 ```bash
-# Use uninstall script
-./uninstall.sh
+# Create timestamped backup
+myconfig export "backup-$(date +%Y%m%d)"
 
-# Or use pip directly
-pip3 uninstall myconfig
-
-# Using Makefile
-make uninstall
+# Automated backup script
+myconfig export --compress && echo "Backup completed"
 ```
 
-##  Development
-
+### Development Environment Migration
 ```bash
-# Development mode installation (editable)
-pip3 install -e .
+# Preview what will be backed up
+myconfig --preview export
 
-# Code formatting
-make format
+# Export development environment
+myconfig export dev-environment
 
-# Code checking
-make lint
-
-# Build package
-make build
-
-# Clean up
-make clean
+# Restore on new development machine
+myconfig restore dev-environment
 ```
+
+## Requirements
+
+- **Operating System**: macOS 10.14 (Mojave) or later
+- **Python**: Python 3.8 or later
+- **Dependencies**: tomli, click, rich (automatically installed)
+- **Optional**: Homebrew (for package management), mas (for App Store apps)
 
 ## Contributing
 
-Issues and Pull Requests are welcome!
+Contributions are welcome! Please see [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the GNU General Public License v2.0 - see the [LICENSE](./LICENSE) file for details.
 
----
+## Support
 
-**Note**: Run `myconfig doctor` (if installed) or `./bin/myconfig doctor` (direct usage) to check your system environment before first use.
+- **Issues**: Report bugs and feature requests on [GitHub Issues](https://github.com/kehr/myconfig/issues)
+- **Documentation**: Comprehensive guides available in the [docs](./docs/) directory
+- **Community**: Join discussions and get help from the community
 
-##  Architecture
+## Changelog
 
-MyConfig uses a modern, class-based architecture:
-
-- **Modular Design**: Each component (Homebrew, VS Code, etc.) is a separate module
-- **Abstract Base Classes**: Consistent interface for all backup components
-- **Template Engine**: Flexible file generation system
-- **Error Handling**: Comprehensive error handling with graceful fallbacks
-- **Logging System**: Centralized logging with configurable levels
-- **Configuration Management**: TOML-based configuration with profiles
-
-##  Export Example
-
-A typical backup contains:
-- System environment information
-- Homebrew configuration (Brewfile with 16 packages, 5 casks)
-- VS Code extensions (55+ extensions)
-- Configuration files (16MB+ compressed dotfiles)
-- System preferences (15+ domains)
-- LaunchAgents (8+ services)
-- **Enhanced Application Detection**: 89 applications across 11 categories
-- **CLI Tools Configuration**: 11 development tools with automatic detection
-- Auto-generated README.md with complete manifest
-- Metadata files (MANIFEST.json, version info)
-
-##  Performance Benchmarks
-
-MyConfig has been optimized for high performance:
-
-| Operation | Performance | Improvement |
-|-----------|-------------|-------------|
-| Configuration Loading | <5ms average | Baseline |
-| CLI Tools Detection | <100ms comprehensive scan | New feature |
-| Memory Usage | 15% reduction | 15% improvement |
-| Backup Operations | 23% faster I/O | 23% improvement |
-| Application Database | 89 apps (8.9x expansion) | 790% increase |
-| Test Coverage | 84.2% pass rate | 57 test cases |
-
-**Validation Results:**
-- ✅ 100% functionality verification across all components
-- ✅ Cross-platform compatibility validated for macOS
-- ✅ 92% code coverage on core modules
-- ✅ Complete developer and power user ecosystem coverage
+See [CHANGELOG.md](docs/CHANGELOG.md) for version history and release notes.
