@@ -49,7 +49,7 @@ jobs:
       - name: Copy symlinked files
         run: |
           cd site
-          # Copy symlinked files to actual files for deployment
+          # Copy individual symlinked files to actual files for deployment
           if [ -L "CONTRIBUTING.md" ]; then
             cp -L CONTRIBUTING.md CONTRIBUTING.md.tmp && mv CONTRIBUTING.md.tmp CONTRIBUTING.md
           fi
@@ -59,8 +59,27 @@ jobs:
           if [ -L "LICENSE" ]; then
             cp -L LICENSE LICENSE.tmp && mv LICENSE.tmp LICENSE
           fi
-          # Copy docs symlinked files
-          find docs -type l -name "*.md" -exec sh -c 'for link; do cp -L "$link" "$link.tmp" && mv "$link.tmp" "$link"; done' _ {} +
+          
+          # Handle directory symlinks - copy entire directory content
+          if [ -L "docs" ]; then
+            echo "Converting docs directory symlink to actual directory..."
+            # Get the symlink target
+            DOCS_TARGET=$(readlink docs)
+            echo "Docs symlink points to: $DOCS_TARGET"
+            # Remove the symlink
+            rm docs
+            # Copy the entire directory content
+            cp -r "$DOCS_TARGET" docs
+            echo "Successfully converted docs symlink to directory"
+            # List the copied files for verification
+            echo "Files in docs directory:"
+            ls -la docs/
+          fi
+          
+          # Copy any remaining symlinked files within docs (if any)
+          if [ -d "docs" ]; then
+            find docs -type l -name "*.md" -exec sh -c 'for link; do cp -L "$link" "$link.tmp" && mv "$link.tmp" "$link"; done' _ {} +
+          fi
           
       - name: Build with Jekyll
         run: |
