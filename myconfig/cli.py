@@ -1,4 +1,8 @@
 import argparse, importlib, pkgutil, os, logging
+try:
+    from importlib import resources as importlib_resources  # py3.9+
+except Exception:  # pragma: no cover
+    import importlib_resources  # type: ignore
 from myconfig.core import ConfigManager, BackupManager
 from myconfig.logger import setup_logging
 from myconfig.utils import ts, host
@@ -67,13 +71,13 @@ def build_parser():
 
     return p
 
-def main():
+def _main_impl():
     p = build_parser()
     args = p.parse_args()
     if args.version:
         print(f"myconfig {VERSION}"); return
     
-    # Resolve config path precedence: CLI --config → ~/.myconfig → project default
+    # Resolve config path precedence: CLI --config → ~/.myconfig → myconfig/config/config.toml
     def _resolve_config_path() -> str:
         # 1) CLI specified
         if getattr(args, 'config', None):
@@ -92,8 +96,16 @@ def main():
             inner = os.path.join(home_cand, "config.toml")
             if os.path.exists(inner):
                 return inner
-        # 3) project default
-        return "./config/config.toml"
+        # 3) packaged default in myconfig/config
+        try:
+            res = importlib_resources.files("myconfig").joinpath("config/config.toml")
+            if res.is_file():
+                with importlib_resources.as_file(res) as p:
+                    return str(p)
+        except Exception:
+            pass
+        # fallback (should not hit in normal install)
+        return "myconfig/config/config.toml"
 
     config_path = _resolve_config_path()
     # Load and update configuration
@@ -165,6 +177,17 @@ def main():
         else: p.print_help()
     else:
         p.print_help()
+
+def main():
+    try:
+        _main_impl()
+    except KeyboardInterrupt:
+        try:
+            print("\nInterrupted (Ctrl-C). Press Enter to exit...", end="", flush=True)
+            input()
+        except Exception:
+            pass
+        return
 
 if __name__ == "__main__":
     main()

@@ -52,7 +52,7 @@ class AppConfig:
 class ConfigManager:
     """Manages configuration loading, validation and updates"""
 
-    def __init__(self, config_path: str = "./config/config.toml"):
+    def __init__(self, config_path: str = "myconfig/config/config.toml"):
         self.config_path = config_path
         self.logger = logging.getLogger(__name__)
 

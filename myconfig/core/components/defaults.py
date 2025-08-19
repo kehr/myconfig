@@ -6,6 +6,10 @@ from __future__ import annotations
 import os
 from typing import List
 from myconfig.core.base import BackupComponent
+try:
+    from importlib import resources as importlib_resources  # py3.9+
+except Exception:  # pragma: no cover - fallback
+    import importlib_resources  # type: ignore
 
 
 class DefaultsComponent(BackupComponent):
@@ -21,18 +25,26 @@ class DefaultsComponent(BackupComponent):
         if not self.is_enabled() or not self.is_available():
             return False
 
-        domains_file = "./" + self.config.defaults_domains_file
-        if not os.path.exists(domains_file):
-            self.logger.warning(f"Domains file not found: {domains_file}")
-            return False
-
-        # Load domains list
-        domains = []
-        with open(domains_file, "r", encoding="utf-8") as f:
-            for line in f:
-                domain = line.strip()
-                if domain and not domain.startswith("#"):
-                    domains.append(domain)
+        # Load domains list (local path or packaged fallback)
+        domains_file = "myconfig/" + self.config.defaults_domains_file
+        domains: List[str] = []
+        if os.path.exists(domains_file):
+            with open(domains_file, "r", encoding="utf-8") as f:
+                for line in f:
+                    s = line.strip()
+                    if s and not s.startswith("#"):
+                        domains.append(s)
+        else:
+            # packaged (single source of truth)
+            rel = self.config.defaults_domains_file
+            res = importlib_resources.files("myconfig").joinpath(rel)
+            if res.is_file():
+                with importlib_resources.as_file(res) as p:
+                    with open(p, "r", encoding="utf-8") as f:
+                        for line in f:
+                            s = line.strip()
+                            if s and not s.startswith("#"):
+                                domains.append(s)
 
         if not domains:
             self.logger.warning("No domains found in domains file")
@@ -85,7 +97,9 @@ class DefaultsComponent(BackupComponent):
         if not self.is_enabled() or not self.is_available():
             return ["✗ Defaults export disabled"]
 
-        domains_file = "./" + self.config.defaults_domains_file
+        # Try local then packaged
+        domains: List[str] = []
+        domains_file = "myconfig/" + self.config.defaults_domains_file
         if os.path.exists(domains_file):
             with open(domains_file, "r", encoding="utf-8") as f:
                 domains = [
@@ -93,8 +107,20 @@ class DefaultsComponent(BackupComponent):
                     for line in f
                     if line.strip() and not line.startswith("#")
                 ]
+        else:
+            rel = self.config.defaults_domains_file
+            res = importlib_resources.files("myconfig").joinpath(rel)
+            if res.is_file():
+                with importlib_resources.as_file(res) as p:
+                    with open(p, "r", encoding="utf-8") as f:
+                        domains = [
+                            line.strip()
+                            for line in f
+                            if line.strip() and not line.startswith("#")
+                        ]
+        if domains:
             return [
-                f"✓ System preferences (defaults):",
+                "✓ System preferences (defaults):",
                 *[f"    - {domain}" for domain in domains[:5]],
                 f"    ... total {len(domains)} domains" if len(domains) > 5 else "",
             ]

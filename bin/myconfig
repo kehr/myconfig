@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 # Ensure execution in project root
-if [[ -f "./config/config.toml" && -d "./myconfig" ]]; then
+if [[ -f "./myconfig/config/config.toml" && -d "./myconfig" ]]; then
   PROJECT_ROOT="$(pwd)"
 else
   PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"

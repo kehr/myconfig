@@ -1,6 +1,10 @@
 from __future__ import annotations
 import os, logging
 from myconfig.core import AppConfig
+try:
+    from importlib import resources as importlib_resources  # py3.9+
+except Exception:  # pragma: no cover
+    import importlib_resources  # type: ignore
 from myconfig.utils import run, run_out, ts
 from myconfig.logger import log_section, log_separator, log_success
 
@@ -12,6 +16,22 @@ def _load_list(path:str)->list[str]:
                 s=line.strip()
                 if not s or s.startswith("#"): continue
                 L.append(s)
+        return L
+    # fallback to packaged myconfig/config
+    rel = path
+    if rel.startswith("./"): rel = rel[2:]
+    if rel.startswith("config/"): rel = rel
+    try:
+        res = importlib_resources.files("myconfig").joinpath(rel)
+        if res.is_file():
+            with importlib_resources.as_file(res) as p:
+                with open(p, "r", encoding="utf-8") as f:
+                    for line in f:
+                        s = line.strip()
+                        if not s or s.startswith("#"): continue
+                        L.append(s)
+    except Exception:
+        pass
     return L
 
 def defaults_export_all(cfg: AppConfig):

@@ -100,14 +100,25 @@ def log_success(logger: logging.Logger, message: str) -> None:
 
 
 def confirm_action(logger: logging.Logger, prompt: str, interactive: bool = True) -> bool:
-    """Ask for user confirmation"""
+    """Ask for user confirmation.
+
+    Ctrl-C behavior: ask for Enter to confirm and then exit gracefully (exit code 130).
+    """
     if not interactive:
         return True
-    
+
     try:
         print(f"▸ {prompt} [y/N]: ", end="", flush=True)
         answer = input().strip().lower()
         return answer in ("y", "yes")
-    except (EOFError, KeyboardInterrupt):
-        print()  # New line after interrupt
+    except KeyboardInterrupt:
+        # 优雅退出：提示并等待回车
+        try:
+            print("\nInterrupted (Ctrl-C). Press Enter to exit...", end="", flush=True)
+            input()
+        except Exception:
+            pass
+        raise SystemExit(130)
+    except EOFError:
+        print()
         return False

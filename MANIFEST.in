@@ -4,14 +4,13 @@ include LICENSE
 include pyproject.toml
 include MANIFEST.in
 
-# Include all source code
+# Include all source code and packaged config
 recursive-include myconfig *.py
 recursive-include scripts *.sh
 recursive-include myconfig/templates *.template
 
-# Include configuration files
-recursive-include config *.toml *.txt
-graft config
+# Include configuration files inside the package
+recursive-include myconfig/config *
 
 # Include documentation
 recursive-include docs *.md

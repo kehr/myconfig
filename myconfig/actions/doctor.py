@@ -41,7 +41,7 @@ def do_doctor(cfg: AppConfig):
         logger.warning("mas not installed")
     
     # defaults domain list
-    dom_file = "./config/defaults/domains.txt"
+    dom_file = "myconfig/config/defaults/domains.txt"
     if os.path.exists(dom_file):
         missing = 0
         with open(dom_file, "r", encoding="utf-8") as f:
